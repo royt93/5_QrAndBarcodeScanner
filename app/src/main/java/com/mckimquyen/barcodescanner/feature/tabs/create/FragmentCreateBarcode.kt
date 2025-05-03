@@ -4,8 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.google.android.gms.ads.AdError
+import com.google.android.gms.ads.LoadAdError
+import com.google.zxing.BarcodeFormat
+import com.mckimquyen.barcodescanner.BuildConfig
 import com.mckimquyen.barcodescanner.R
 import com.mckimquyen.barcodescanner.extension.applySystemWindowInsets
 import com.mckimquyen.barcodescanner.extension.clipboardManager
@@ -13,10 +16,10 @@ import com.mckimquyen.barcodescanner.extension.orZero
 import com.mckimquyen.barcodescanner.feature.tabs.create.barcode.ActivityCreateBarcodeAll
 import com.mckimquyen.barcodescanner.feature.tabs.create.qr.ActivityCreateQrCodeAll
 import com.mckimquyen.barcodescanner.model.schema.BarcodeSchema
-import com.google.zxing.BarcodeFormat
+import com.mckimquyen.barcodescanner.sdkadbmob.AdMobManager
 import kotlinx.android.synthetic.main.f_create_barcode.*
 
-class FragmentCreateBarcode : Fragment() {
+class FragmentCreateBarcode : Fragment(), AdMobManager.InterstitialAdListener {
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -28,7 +31,11 @@ class FragmentCreateBarcode : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //TODO roy93~ admob inter
+
+        AdMobManager.setCurrentActivity(requireActivity())
+        AdMobManager.interstitialListener = this
+
+        AdMobManager.loadInterstitial(requireContext(), BuildConfig.ADMOB_INTERSTITIAL_ID)
 //        createAdInter()
         supportEdgeToEdge()
         handleButtonsClicked()
@@ -84,18 +91,20 @@ class FragmentCreateBarcode : Fragment() {
             )
         }
         buttonShowAllQrCode.setOnClickListener {
-            //TODO roy93~ admob inter
 //            showAd {
 //                ActivityCreateQrCodeAll.start(requireActivity())
 //            }
+            ActivityCreateQrCodeAll.start(requireActivity())
+            AdMobManager.showInterstitial(requireActivity())
         }
 
         // Barcode
         buttonCreateBarcode.setOnClickListener {
-            //TODO roy93~ admob inter
 //            showAd {
 //                ActivityCreateBarcodeAll.start(requireActivity())
 //            }
+            ActivityCreateBarcodeAll.start(requireActivity())
+            AdMobManager.showInterstitial(requireActivity())
         }
     }
 
@@ -107,7 +116,27 @@ class FragmentCreateBarcode : Fragment() {
         }
     }
 
-    //TODO roy93~ admob inter
+    override fun onAdLoaded() {
+    }
+
+    override fun onAdFailedToLoad(error: LoadAdError) {
+    }
+
+    override fun onAdShowed() {
+    }
+
+    override fun onAdDismissed() {
+    }
+
+    override fun onAdClicked() {
+    }
+
+    override fun onAdFailedToShow(error: AdError) {
+    }
+
+    override fun onAdNotAvailable() {
+    }
+
 //    private var interstitialAd: MaxInterstitialAd? = null
 //
 //    private fun createAdInter() {
