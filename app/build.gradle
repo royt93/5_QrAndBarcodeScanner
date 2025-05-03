@@ -99,6 +99,12 @@ android {
 //            resValue("string", "EnableAdBanner", "true")
         }
     }
+
+    buildFeatures {
+//        compose = true
+        viewBinding = true
+//        buildConfig = true
+    }
 }
 
 dependencies {
