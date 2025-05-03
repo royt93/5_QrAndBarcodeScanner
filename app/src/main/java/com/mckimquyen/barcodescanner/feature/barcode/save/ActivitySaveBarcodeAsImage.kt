@@ -63,12 +63,12 @@ class ActivitySaveBarcodeAsImage : ActivityBase() {
         grantResults: IntArray,
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        Log.d("roy93~", "onRequestPermissionsResult")
+//        Log.d("roy93~", "onRequestPermissionsResult")
         if (permissionsHelper.areAllPermissionsGranted(grantResults)) {
-            Log.d("roy93~", "if")
+//            Log.d("roy93~", "if")
             saveBarcode()
         } else {
-            Log.d("roy93~", "else")
+//            Log.d("roy93~", "else")
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 saveBarcode()
             } else {
@@ -104,13 +104,13 @@ class ActivitySaveBarcodeAsImage : ActivityBase() {
 
     private fun initSaveButton() {
         buttonSave.setOnClickListener {
-            Log.d("roy93~", "setOnClickListener")
+//            Log.d("roy93~", "setOnClickListener")
             requestPermissions()
         }
     }
 
     private fun requestPermissions() {
-        Log.d("roy93~", "requestPermissions")
+//        Log.d("roy93~", "requestPermissions")
         permissionsHelper.requestPermissions(
             activity = this,
             permissions = PERMISSIONS,

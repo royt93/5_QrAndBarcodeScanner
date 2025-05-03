@@ -56,7 +56,7 @@ class ActivityScanBarcodeFromFile : ActivityBase() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.a_scan_barcode_from_file)
 
-        Log.d("roy93~", "onCreate")
+//        Log.d("roy93~", "onCreate")
 
         supportEdgeToEdge()
         handleToolbarBackPressed()
@@ -65,10 +65,10 @@ class ActivityScanBarcodeFromFile : ActivityBase() {
         handleScanButtonClicked()
 
         if (showImageFromIntent().not()) {
-            Log.d("roy93~", "if")
+//            Log.d("roy93~", "if")
             startChooseImageActivity(savedInstanceState)
         } else {
-            Log.d("roy93~", "else")
+//            Log.d("roy93~", "else")
         }
     }
 
@@ -95,7 +95,7 @@ class ActivityScanBarcodeFromFile : ActivityBase() {
         grantResults: IntArray,
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        Log.d("roy93~", "onRequestPermissionsResult")
+//        Log.d("roy93~", "onRequestPermissionsResult")
         if (requestCode == PERMISSIONS_REQUEST_CODE && permissionsHelper.areAllPermissionsGranted(grantResults)) {
             imageUri?.apply(::showImage)
         } else {
@@ -145,7 +145,7 @@ class ActivityScanBarcodeFromFile : ActivityBase() {
         savedInstanceState: Bundle?,
     ) {
         if (savedInstanceState != null) {
-            Log.d("roy93~", "startChooseImageActivity return")
+//            Log.d("roy93~", "startChooseImageActivity return")
             return
         }
 
@@ -210,7 +210,7 @@ class ActivityScanBarcodeFromFile : ActivityBase() {
     }
 
     private fun showErrorOrRequestPermissions(error: Throwable) {
-        Log.d("roy93~", "showErrorOrRequestPermissions error $error")
+//        Log.d("roy93~", "showErrorOrRequestPermissions error $error")
         when (error) {
             is SecurityException -> permissionsHelper.requestPermissions(this, PERMISSIONS, PERMISSIONS_REQUEST_CODE)
             else -> showError(error)
