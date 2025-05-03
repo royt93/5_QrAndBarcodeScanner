@@ -7,6 +7,8 @@ import android.util.Log
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.google.android.gms.ads.AdSize
+import com.google.android.gms.ads.AdView
 import com.mckimquyen.barcodescanner.BuildConfig
 import com.mckimquyen.barcodescanner.R
 import com.mckimquyen.barcodescanner.extension.applySystemWindowInsets
@@ -17,6 +19,7 @@ import com.mckimquyen.barcodescanner.feature.tabs.scan.FragmentScanBarcodeFromCa
 import com.mckimquyen.barcodescanner.feature.tabs.setting.SettingsFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.mckimquyen.barcodescanner.feature.rateAppInApp
+import com.mckimquyen.barcodescanner.sdkadbmob.AdMobManager
 import kotlinx.android.synthetic.main.a_bottom_tabs.*
 
 class ActivityBottomTabs : ActivityBase(), BottomNavigationView.OnNavigationItemSelectedListener {
@@ -26,8 +29,18 @@ class ActivityBottomTabs : ActivityBase(), BottomNavigationView.OnNavigationItem
         private const val ACTION_HISTORY = "${BuildConfig.APPLICATION_ID}.HISTORY"
     }
 
-    //TODO roy93~ admob banner
-//    private var adView: MaxAdView? = null
+    //    private var adView: MaxAdView? = null
+    private var adView: AdView? = null
+
+    override fun onResume() {
+        super.onResume()
+        adView?.resume()
+    }
+
+    override fun onPause() {
+        adView?.pause()
+        super.onPause()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,17 +52,22 @@ class ActivityBottomTabs : ActivityBase(), BottomNavigationView.OnNavigationItem
         if (savedInstanceState == null) {
             showInitialFragment()
         }
-        //TODO roy93~ admob
 //        adView = this.createAdBanner(
 //            logTag = ActivityBottomTabs::class.simpleName,
 //            viewGroup = flAd,
 //            isAdaptiveBanner = true,
 //        )
+        adView = AdMobManager.loadBanner(
+            context = this,
+            adUnitId = BuildConfig.ADMOB_BANNER_ID,
+            container = flAd,
+            adSize = AdSize.BANNER,
+        )
     }
 
     override fun onDestroy() {
-        //TODO roy93~ admob
 //        flAd.destroyAdBanner(adView)
+        adView?.destroy()
         super.onDestroy()
     }
 
