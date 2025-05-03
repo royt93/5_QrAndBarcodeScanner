@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.google.android.gms.ads.AdError
+import com.google.android.gms.ads.LoadAdError
 import com.mckimquyen.barcodescanner.BuildConfig
 import com.mckimquyen.barcodescanner.R
 import com.mckimquyen.barcodescanner.di.barcodeDatabase
@@ -26,14 +28,14 @@ import com.mckimquyen.barcodescanner.feature.tabs.setting.formats.SupportedForma
 import com.mckimquyen.barcodescanner.feature.tabs.setting.permissions.AllPermissionsActivityBase
 import com.mckimquyen.barcodescanner.feature.tabs.setting.search.ChooseSearchEngineActivityBase
 import com.mckimquyen.barcodescanner.feature.tabs.setting.theme.ChooseThemeActivityBase
+import com.mckimquyen.barcodescanner.sdkadbmob.AdMobManager
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.f_settings.*
 
-
-class SettingsFragment : Fragment(), DialogFragmentDeleteConfirmation.Listener {
+class SettingsFragment : Fragment(), DialogFragmentDeleteConfirmation.Listener, AdMobManager.InterstitialAdListener {
     private val disposable = CompositeDisposable()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -42,8 +44,12 @@ class SettingsFragment : Fragment(), DialogFragmentDeleteConfirmation.Listener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //TODO roy93~ admob inter
+
+        AdMobManager.setCurrentActivity(requireActivity())
+        AdMobManager.interstitialListener = this
+
 //        createAdInter()
+        AdMobManager.loadInterstitial(requireContext(), BuildConfig.ADMOB_INTERSTITIAL_ID)
         supportEdgeToEdge()
     }
 
@@ -85,19 +91,22 @@ class SettingsFragment : Fragment(), DialogFragmentDeleteConfirmation.Listener {
 
     private fun handleButtonClicks() {
         buttonChooseTheme.setOnClickListener {
-            //TODO roy93~ admob inter
+            ChooseThemeActivityBase.start(requireActivity())
+            AdMobManager.showInterstitial(requireActivity())
 //            showAd {
 //                ChooseThemeActivityBase.start(requireActivity())
 //            }
         }
         buttonChooseCamera.setOnClickListener {
-            //TODO roy93~ admob inter
+            ChooseCameraActivityBase.start(requireActivity())
+            AdMobManager.showInterstitial(requireActivity())
 //            showAd {
 //                ChooseCameraActivityBase.start(requireActivity())
 //            }
         }
         buttonSelectSupportedFormats.setOnClickListener {
-            //TODO roy93~ admob inter
+            SupportedFormatsActivityBase.start(requireActivity())
+            AdMobManager.showInterstitial(requireActivity())
 //            showAd {
 //                SupportedFormatsActivityBase.start(requireActivity())
 //            }
@@ -107,7 +116,8 @@ class SettingsFragment : Fragment(), DialogFragmentDeleteConfirmation.Listener {
             showDeleteHistoryConfirmationDialog()
         }
         buttonChooseSearchEngine.setOnClickListener {
-            //TODO roy93~ admob inter
+            ChooseSearchEngineActivityBase.start(requireContext())
+            AdMobManager.showInterstitial(requireActivity())
 //            showAd {
 //                ChooseSearchEngineActivityBase.start(requireContext())
 //            }
@@ -193,7 +203,27 @@ class SettingsFragment : Fragment(), DialogFragmentDeleteConfirmation.Listener {
         buttonAppVersion.hint = BuildConfig.VERSION_NAME
     }
 
-    //TODO roy93~ admob inter
+    override fun onAdLoaded() {
+    }
+
+    override fun onAdFailedToLoad(error: LoadAdError) {
+    }
+
+    override fun onAdShowed() {
+    }
+
+    override fun onAdDismissed() {
+    }
+
+    override fun onAdClicked() {
+    }
+
+    override fun onAdFailedToShow(error: AdError) {
+    }
+
+    override fun onAdNotAvailable() {
+    }
+
 //    private var interstitialAd: MaxInterstitialAd? = null
 //
 //    private fun createAdInter() {
