@@ -7,7 +7,6 @@ import android.util.Log
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.applovin.mediation.ads.MaxAdView
 import com.mckimquyen.barcodescanner.BuildConfig
 import com.mckimquyen.barcodescanner.R
 import com.mckimquyen.barcodescanner.extension.applySystemWindowInsets
@@ -17,8 +16,6 @@ import com.mckimquyen.barcodescanner.feature.tabs.history.FragmentBarcodeHistory
 import com.mckimquyen.barcodescanner.feature.tabs.scan.FragmentScanBarcodeFromCamera
 import com.mckimquyen.barcodescanner.feature.tabs.setting.SettingsFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.mckimquyen.barcodescanner.extension.ext.createAdBanner
-import com.mckimquyen.barcodescanner.extension.ext.destroyAdBanner
 import com.mckimquyen.barcodescanner.feature.rateAppInApp
 import kotlinx.android.synthetic.main.a_bottom_tabs.*
 
@@ -29,7 +26,8 @@ class ActivityBottomTabs : ActivityBase(), BottomNavigationView.OnNavigationItem
         private const val ACTION_HISTORY = "${BuildConfig.APPLICATION_ID}.HISTORY"
     }
 
-    private var adView: MaxAdView? = null
+    //TODO roy93~ admob banner
+//    private var adView: MaxAdView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,15 +39,17 @@ class ActivityBottomTabs : ActivityBase(), BottomNavigationView.OnNavigationItem
         if (savedInstanceState == null) {
             showInitialFragment()
         }
-        adView = this.createAdBanner(
-            logTag = ActivityBottomTabs::class.simpleName,
-            viewGroup = flAd,
-            isAdaptiveBanner = true,
-        )
+        //TODO roy93~ admob
+//        adView = this.createAdBanner(
+//            logTag = ActivityBottomTabs::class.simpleName,
+//            viewGroup = flAd,
+//            isAdaptiveBanner = true,
+//        )
     }
 
     override fun onDestroy() {
-        flAd.destroyAdBanner(adView)
+        //TODO roy93~ admob
+//        flAd.destroyAdBanner(adView)
         super.onDestroy()
     }
 

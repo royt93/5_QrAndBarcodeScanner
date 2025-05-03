@@ -2,7 +2,6 @@ package com.mckimquyen.barcodescanner
 
 import androidx.multidex.MultiDexApplication
 import com.mckimquyen.barcodescanner.di.settings
-import com.mckimquyen.barcodescanner.extension.ext.setupApplovinAd
 import com.mckimquyen.barcodescanner.usecase.Logger
 import io.reactivex.plugins.RxJavaPlugins
 
@@ -35,7 +34,8 @@ class RApp : MultiDexApplication() {
         handleUnhandledRxJavaErrors()
         applyTheme()
         super.onCreate()
-        this.setupApplovinAd()
+//        this.setupApplovinAd()
+        //TODO roy93~ admob setup
     }
 
     private fun applyTheme() {
