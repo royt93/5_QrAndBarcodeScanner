@@ -4,15 +4,12 @@ import android.util.Log
 import androidx.multidex.MultiDexApplication
 import com.google.android.gms.ads.MobileAds
 import com.mckimquyen.barcodescanner.di.settings
-import com.mckimquyen.barcodescanner.feature.SplashActivity
 import com.mckimquyen.barcodescanner.sdkadbmob.AdMobManager
-import com.mckimquyen.barcodescanner.sdkadbmob.AppLifecycleListener
 import com.mckimquyen.barcodescanner.usecase.Logger
 import io.reactivex.plugins.RxJavaPlugins
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlin.jvm.java
 
 //TODO roy93~ finger print
 //TODO roy93~ why you see ad
