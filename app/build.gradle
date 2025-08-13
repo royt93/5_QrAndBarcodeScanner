@@ -13,14 +13,13 @@ plugins {
 
 android {
     compileSdk 34
-
+    namespace "com.mckimquyen.barcodescanner"
     defaultConfig {
         applicationId "com.mckimquyen.barcodescanner"
         minSdkVersion 23
-        //noinspection OldTargetApi
         targetSdkVersion 34
-        versionCode 20250523
-        versionName "2025.05.23"
+        versionCode 20250813
+        versionName "2025.08.13"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
