@@ -1,6 +1,7 @@
 package com.mckimquyen.barcodescanner.feature.tabs.create
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -91,20 +92,26 @@ class FragmentCreateBarcode : Fragment(), AdMobManager.InterstitialAdListener {
             )
         }
         buttonShowAllQrCode.setOnClickListener {
-//            showAd {
-//                ActivityCreateQrCodeAll.start(requireActivity())
-//            }
-            ActivityCreateQrCodeAll.start(requireActivity())
-            AdMobManager.showInterstitial(requireActivity())
+            AdMobManager.showInterstitial(requireActivity()) { success ->
+                if (success) {
+                    Log.d("roy93~", "Ad đã hiển thị và đóng thành công")
+                } else {
+                    Log.d("roy93~", "Ad không hiển thị được hoặc có lỗi")
+                }
+                ActivityCreateQrCodeAll.start(requireActivity())
+            }
         }
 
         // Barcode
         buttonCreateBarcode.setOnClickListener {
-//            showAd {
-//                ActivityCreateBarcodeAll.start(requireActivity())
-//            }
-            ActivityCreateBarcodeAll.start(requireActivity())
-            AdMobManager.showInterstitial(requireActivity())
+            AdMobManager.showInterstitial(requireActivity()) { success ->
+                if (success) {
+                    Log.d("roy93~", "Ad đã hiển thị và đóng thành công")
+                } else {
+                    Log.d("roy93~", "Ad không hiển thị được hoặc có lỗi")
+                }
+                ActivityCreateBarcodeAll.start(requireActivity())
+            }
         }
     }
 

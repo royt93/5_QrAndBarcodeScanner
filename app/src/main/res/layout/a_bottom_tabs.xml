@@ -18,15 +18,10 @@
         android:paddingTop="0dp"
         android:paddingBottom="0dp">
 
-        <FrameLayout
-            android:id="@+id/flAd"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/transparent"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp">
+        <include
+            android:id="@+id/layoutAdBanner"
+            layout="@layout/layout_ad_banner" />
 
-        </FrameLayout>
     </LinearLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView

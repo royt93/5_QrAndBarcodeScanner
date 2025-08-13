@@ -5,6 +5,8 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.MenuItem
+import android.widget.FrameLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.android.gms.ads.AdSize
@@ -52,16 +54,14 @@ class ActivityBottomTabs : ActivityBase(), BottomNavigationView.OnNavigationItem
         if (savedInstanceState == null) {
             showInitialFragment()
         }
-//        adView = this.createAdBanner(
-//            logTag = ActivityBottomTabs::class.simpleName,
-//            viewGroup = flAd,
-//            isAdaptiveBanner = true,
-//        )
+        val bannerContainer = findViewById<FrameLayout>(R.id.bannerContainer)
+        val tvLabelAd = findViewById<TextView>(R.id.tvLabelAd)
         adView = AdMobManager.loadBanner(
             context = this,
             adUnitId = BuildConfig.ADMOB_BANNER_ID,
-            container = flAd,
-            adSize = AdSize.BANNER,
+            container = bannerContainer,
+            tvLabelAd = tvLabelAd,
+            adSize = AdSize.FULL_BANNER,
         )
     }
 

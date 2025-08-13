@@ -3,6 +3,7 @@ package com.mckimquyen.barcodescanner.feature.tabs.setting
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,6 +24,7 @@ import com.mckimquyen.barcodescanner.extension.ext.shareApp
 import com.mckimquyen.barcodescanner.extension.packageManager
 import com.mckimquyen.barcodescanner.extension.showError
 import com.mckimquyen.barcodescanner.feature.common.dlg.DialogFragmentDeleteConfirmation
+import com.mckimquyen.barcodescanner.feature.tabs.create.barcode.ActivityCreateBarcodeAll
 import com.mckimquyen.barcodescanner.feature.tabs.setting.camera.ChooseCameraActivityBase
 import com.mckimquyen.barcodescanner.feature.tabs.setting.formats.SupportedFormatsActivityBase
 import com.mckimquyen.barcodescanner.feature.tabs.setting.permissions.AllPermissionsActivityBase
@@ -91,36 +93,48 @@ class SettingsFragment : Fragment(), DialogFragmentDeleteConfirmation.Listener, 
 
     private fun handleButtonClicks() {
         buttonChooseTheme.setOnClickListener {
-            ChooseThemeActivityBase.start(requireActivity())
-            AdMobManager.showInterstitial(requireActivity())
-//            showAd {
-//                ChooseThemeActivityBase.start(requireActivity())
-//            }
+            AdMobManager.showInterstitial(requireActivity()) { success ->
+                if (success) {
+                    Log.d("roy93~", "Ad đã hiển thị và đóng thành công")
+                } else {
+                    Log.d("roy93~", "Ad không hiển thị được hoặc có lỗi")
+                }
+                ChooseThemeActivityBase.start(requireActivity())
+            }
         }
         buttonChooseCamera.setOnClickListener {
-            ChooseCameraActivityBase.start(requireActivity())
-            AdMobManager.showInterstitial(requireActivity())
-//            showAd {
-//                ChooseCameraActivityBase.start(requireActivity())
-//            }
+            AdMobManager.showInterstitial(requireActivity()) { success ->
+                if (success) {
+                    Log.d("roy93~", "Ad đã hiển thị và đóng thành công")
+                } else {
+                    Log.d("roy93~", "Ad không hiển thị được hoặc có lỗi")
+                }
+                ChooseCameraActivityBase.start(requireActivity())
+            }
         }
         buttonSelectSupportedFormats.setOnClickListener {
-            SupportedFormatsActivityBase.start(requireActivity())
-            AdMobManager.showInterstitial(requireActivity())
-//            showAd {
-//                SupportedFormatsActivityBase.start(requireActivity())
-//            }
+            AdMobManager.showInterstitial(requireActivity()) { success ->
+                if (success) {
+                    Log.d("roy93~", "Ad đã hiển thị và đóng thành công")
+                } else {
+                    Log.d("roy93~", "Ad không hiển thị được hoặc có lỗi")
+                }
+                SupportedFormatsActivityBase.start(requireActivity())
+            }
         }
         buttonClearHistory.setOnClickListener {
             //TODO roy93~ update dialog material 3
             showDeleteHistoryConfirmationDialog()
         }
         buttonChooseSearchEngine.setOnClickListener {
-            ChooseSearchEngineActivityBase.start(requireContext())
-            AdMobManager.showInterstitial(requireActivity())
-//            showAd {
-//                ChooseSearchEngineActivityBase.start(requireContext())
-//            }
+            AdMobManager.showInterstitial(requireActivity()) { success ->
+                if (success) {
+                    Log.d("roy93~", "Ad đã hiển thị và đóng thành công")
+                } else {
+                    Log.d("roy93~", "Ad không hiển thị được hoặc có lỗi")
+                }
+                ChooseSearchEngineActivityBase.start(requireContext())
+            }
         }
         buttonPermissions.setOnClickListener {
             AllPermissionsActivityBase.start(requireActivity())
