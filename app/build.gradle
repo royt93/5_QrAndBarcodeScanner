@@ -12,12 +12,12 @@ plugins {
 //}
 
 android {
-    compileSdk 34
+    compileSdk 36
     namespace "com.mckimquyen.barcodescanner"
     defaultConfig {
         applicationId "com.mckimquyen.barcodescanner"
         minSdkVersion 23
-        targetSdkVersion 34
+        targetSdkVersion 36
         versionCode 20250813
         versionName "2025.08.13"
         multiDexEnabled true
@@ -102,7 +102,7 @@ android {
     buildFeatures {
 //        compose = true
         viewBinding = true
-//        buildConfig = true
+        buildConfig = true
     }
 }
 
