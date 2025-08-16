@@ -53,7 +53,7 @@ gen-external-apklibs
 /out/
 
 # User-specific configurations
-#.idea/
+.idea/
 
 # Keystore files
 *.jks
