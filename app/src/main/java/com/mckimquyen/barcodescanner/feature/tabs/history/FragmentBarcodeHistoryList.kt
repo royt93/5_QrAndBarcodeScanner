@@ -94,9 +94,17 @@ class FragmentBarcodeHistoryList : Fragment(), AdapterBarcodeHistory.Listener {
             .buildFlowable(BackpressureStrategy.LATEST)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
-                scanHistoryAdapter::submitList,
+                { list ->
+                    scanHistoryAdapter.submitList(list)
+                    updateEmptyState(list.isEmpty())
+                },
                 ::showError
             )
             .addTo(disposable)
+    }
+
+    private fun updateEmptyState(isEmpty: Boolean) {
+        layoutEmptyState?.visibility = if (isEmpty) View.VISIBLE else View.GONE
+        recyclerViewHistory?.visibility = if (isEmpty) View.GONE else View.VISIBLE
     }
 }
