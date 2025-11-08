@@ -43,6 +43,13 @@
                 app:text="@string/fragment_settings_theme" />
 
             <com.mckimquyen.barcodescanner.feature.common.view.ButtonSettings
+                android:id="@+id/buttonChooseLanguage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:isSwitchVisible="false"
+                app:text="@string/fragment_settings_language" />
+
+            <com.mckimquyen.barcodescanner.feature.common.view.ButtonSettings
                 android:id="@+id/buttonInverseBarcodeColorsInDarkTheme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

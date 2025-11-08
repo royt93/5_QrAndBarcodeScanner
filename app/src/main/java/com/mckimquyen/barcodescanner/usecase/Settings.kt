@@ -30,6 +30,7 @@ class Settings(private val context: Context) {
 
     private enum class Key {
         THEME,
+        LANGUAGE,
         INVERSE_BARCODE_COLORS,
         OPEN_LINKS_AUTOMATICALLY,
         COPY_TO_CLIPBOARD,
@@ -129,6 +130,14 @@ class Settings(private val context: Context) {
         set(value) {
             set(Key.ERROR_REPORTS, value)
             Logger.isEnabled = value
+        }
+
+    var language: String
+        get() = sharedPreferences.getString(Key.LANGUAGE.name, "system") ?: "system"
+        set(value) {
+            sharedPreferences.edit()
+                .putString(Key.LANGUAGE.name, value)
+                .apply()
         }
 
     fun isFormatSelected(format: BarcodeFormat): Boolean {

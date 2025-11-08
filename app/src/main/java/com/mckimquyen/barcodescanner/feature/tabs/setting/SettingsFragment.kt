@@ -30,6 +30,7 @@ import com.mckimquyen.barcodescanner.feature.tabs.setting.formats.SupportedForma
 import com.mckimquyen.barcodescanner.feature.tabs.setting.permissions.AllPermissionsActivityBase
 import com.mckimquyen.barcodescanner.feature.tabs.setting.search.ChooseSearchEngineActivityBase
 import com.mckimquyen.barcodescanner.feature.tabs.setting.theme.ChooseThemeActivityBase
+import com.mckimquyen.barcodescanner.feature.tabs.setting.language.ChooseLanguageActivity
 import com.mckimquyen.barcodescanner.sdkadbmob.AdMobManager
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -100,6 +101,16 @@ class SettingsFragment : Fragment(), DialogFragmentDeleteConfirmation.Listener, 
                     Log.d("roy93~", "Ad không hiển thị được hoặc có lỗi")
                 }
                 ChooseThemeActivityBase.start(requireActivity())
+            }
+        }
+        buttonChooseLanguage.setOnClickListener {
+            AdMobManager.showInterstitial(requireActivity()) { success ->
+                if (success) {
+                    Log.d("roy93~", "Ad đã hiển thị và đóng thành công")
+                } else {
+                    Log.d("roy93~", "Ad không hiển thị được hoặc có lỗi")
+                }
+                ChooseLanguageActivity.start(requireActivity())
             }
         }
         buttonChooseCamera.setOnClickListener {

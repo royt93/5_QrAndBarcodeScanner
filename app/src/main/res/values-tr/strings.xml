@@ -185,6 +185,8 @@
     </string-array>
     <string name="fragment_barcode_history_menu_title_export">Geçmişi dışarı aktar</string>
     <string name="fragment_barcode_history_menu_title_delete_all">Geçmişi temizle</string>
+    <string name="fragment_barcode_history_empty_title">Geçmiş yok</string>
+    <string name="fragment_barcode_history_empty_message">Taranan ve oluşturulan kodlar burada görünecektir</string>
 
     <!--Export history activity-->
     <string name="activity_export_history_title">Geçmişi dışarı aktar</string>

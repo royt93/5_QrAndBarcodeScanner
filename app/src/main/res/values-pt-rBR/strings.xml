@@ -185,6 +185,8 @@
     </string-array>
     <string name="fragment_barcode_history_menu_title_export">Exportar o histórico</string>
     <string name="fragment_barcode_history_menu_title_delete_all">Limpar o histórico</string>
+    <string name="fragment_barcode_history_empty_title">Sem histórico</string>
+    <string name="fragment_barcode_history_empty_message">Seus códigos escaneados e criados aparecerão aqui</string>
 
     <!--Export history activity-->
     <string name="activity_export_history_title">Exportar o histórico</string>

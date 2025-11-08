@@ -185,6 +185,8 @@
     </string-array>
     <string name="fragment_barcode_history_menu_title_export">Exporta historial</string>
     <string name="fragment_barcode_history_menu_title_delete_all">Buida historial</string>
+    <string name="fragment_barcode_history_empty_title">Sense historial</string>
+    <string name="fragment_barcode_history_empty_message">Els codis escanejats i creats apareixeran aquí</string>
 
     <!--Export history activity-->
     <string name="activity_export_history_title">Exporta historial</string>

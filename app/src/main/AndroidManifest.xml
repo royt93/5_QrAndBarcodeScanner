@@ -183,6 +183,11 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".feature.tabs.setting.language.ChooseLanguageActivity"
+            android:configChanges="orientation|screenSize"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".feature.tabs.setting.camera.ChooseCameraActivityBase"
             android:configChanges="orientation|screenSize"
             android:exported="false"

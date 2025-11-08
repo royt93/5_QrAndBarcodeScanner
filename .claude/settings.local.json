@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(for file in app/src/main/res/values-*/strings.xml)",
+      "Bash(do)",
+      "Bash(echo \"=== $file ===\")",
+      "Bash(done)",
+      "Bash(cp:*)",
+      "Bash(mkdir:*)",
+      "Read(//Users/loitran/AndroidStudioProjects/**)",
+      "Bash(BASE_DIR=\"/Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/0914_QrAndBarcodeScanner/app/src/main/res\")",
+      "Bash(python3:*)",
+      "Bash(./gradlew:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

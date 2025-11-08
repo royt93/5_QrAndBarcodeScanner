@@ -16,6 +16,8 @@ import com.google.android.play.core.review.ReviewManagerFactory
 import com.google.android.play.core.review.model.ReviewErrorCode
 import com.mckimquyen.barcodescanner.BuildConfig
 import com.mckimquyen.barcodescanner.di.rotationHelper
+import com.mckimquyen.barcodescanner.di.settings
+import com.mckimquyen.barcodescanner.usecase.LocaleHelper
 import java.util.Calendar
 
 abstract class ActivityBase : AppCompatActivity() {
@@ -27,11 +29,18 @@ abstract class ActivityBase : AppCompatActivity() {
         rotationHelper.lockCurrentOrientationIfNeeded(this)
     }
 
-    override fun attachBaseContext(context: Context) {
-        val override = Configuration(context.resources.configuration)
+    override fun attachBaseContext(newBase: Context) {
+        // Apply language setting - Read directly from SharedPreferences to avoid initialization issues
+        val sharedPreferences = newBase.getSharedPreferences("SHARED_PREFERENCES_NAME", Context.MODE_PRIVATE)
+        val language = sharedPreferences.getString("LANGUAGE", "system") ?: "system"
+        Log.d("ActivityBase", "attachBaseContext - Language: $language")
+        val localeContext = LocaleHelper.setLocale(newBase, language)
+
+        // Apply font scale override
+        val override = Configuration(localeContext.resources.configuration)
         override.fontScale = 1.0f
         applyOverrideConfiguration(override)
-        super.attachBaseContext(context)
+        super.attachBaseContext(localeContext)
     }
 
     override fun onResume() {

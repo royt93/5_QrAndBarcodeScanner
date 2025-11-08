@@ -169,6 +169,8 @@
     </string-array>
     <string name="fragment_barcode_history_menu_title_export">Экспорт истории</string>
     <string name="fragment_barcode_history_menu_title_delete_all">Очистить историю</string>
+    <string name="fragment_barcode_history_empty_title">Нет истории</string>
+    <string name="fragment_barcode_history_empty_message">Отсканированные и созданные коды появятся здесь</string>
 
     <!--Export history activity-->
     <string name="activity_export_history_title">Экспорт истории</string>

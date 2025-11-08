@@ -204,6 +204,7 @@
     <string name="fragment_settings_title">Settings</string>
     <string name="fragment_settings_appearance_settings">Appearance</string>
     <string name="fragment_settings_theme">Theme</string>
+    <string name="fragment_settings_language">Language</string>
     <string name="fragment_settings_inverse_barcode_colors_in_dark_theme">Inverse code colors in dark theme</string>
     <string name="fragment_settings_inverse_barcode_colors_in_dark_theme_hint">Show codes with white content on dark background</string>
     <string name="fragment_settings_scanner_settings">Scanner</string>
@@ -246,6 +247,13 @@
     <string name="activity_choose_theme_system">Same as system</string>
     <string name="activity_choose_theme_light">Light</string>
     <string name="activity_choose_theme_dark">Dark</string>
+
+    <!--Choose language activity-->
+    <string name="activity_choose_language_title">Language</string>
+    <string name="dialog_change_language_title">Change Language</string>
+    <string name="dialog_change_language_message">The app will restart to apply the new language. Continue?</string>
+    <string name="dialog_change_language_positive">Restart</string>
+    <string name="dialog_change_language_negative">Cancel</string>
 
     <!--Choose camera activity-->
     <string name="activity_choose_camera_title">Camera</string>

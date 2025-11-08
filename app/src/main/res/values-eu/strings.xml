@@ -185,6 +185,8 @@
     </string-array>
     <string name="fragment_barcode_history_menu_title_export">Esportatu historia</string>
     <string name="fragment_barcode_history_menu_title_delete_all">Garbitu historia</string>
+    <string name="fragment_barcode_history_empty_title">Ez dago historiarik</string>
+    <string name="fragment_barcode_history_empty_message">Eskaneatutako eta sortutako kodeak hemen agertuko dira</string>
 
     <!--Export history activity-->
     <string name="activity_export_history_title">Esportatu historia</string>

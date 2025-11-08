@@ -185,6 +185,8 @@
     </string-array>
     <string name="fragment_barcode_history_menu_title_export">履歴をエクスポート</string>
     <string name="fragment_barcode_history_menu_title_delete_all">履歴を削除</string>
+    <string name="fragment_barcode_history_empty_title">履歴なし</string>
+    <string name="fragment_barcode_history_empty_message">スキャンおよび作成したバーコードがここに表示されます</string>
 
     <!--Export history activity-->
     <string name="activity_export_history_title">履歴をエクスポート</string>
