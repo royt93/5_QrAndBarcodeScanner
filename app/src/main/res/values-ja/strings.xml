@@ -246,6 +246,12 @@
     <string name="activity_choose_theme_light">ライト</string>
     <string name="activity_choose_theme_dark">ダーク</string>
 
+        <!--Choose language activity-->
+    <string name="dialog_change_language_title">言語を変更</string>
+    <string name="dialog_change_language_message">新しい言語を適用するためにアプリが再起動します。続行しますか？</string>
+    <string name="dialog_change_language_positive">再起動</string>
+    <string name="dialog_change_language_negative">キャンセル</string>
+
     <!--Choose camera activity-->
     <string name="activity_choose_camera_title">カメラ</string>
     <string name="activity_choose_camera_front">インカメラ</string>

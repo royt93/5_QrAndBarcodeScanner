@@ -246,6 +246,12 @@
     <string name="activity_choose_theme_light">Claro</string>
     <string name="activity_choose_theme_dark">Oscuro</string>
 
+        <!--Choose language activity-->
+    <string name="dialog_change_language_title">Mudar idioma</string>
+    <string name="dialog_change_language_message">O aplicativo será reiniciado para aplicar o novo idioma. Continuar?</string>
+    <string name="dialog_change_language_positive">Reiniciar</string>
+    <string name="dialog_change_language_negative">Cancelar</string>
+
     <!--Choose camera activity-->
     <string name="activity_choose_camera_title">Câmera</string>
     <string name="activity_choose_camera_front">Frontal</string>

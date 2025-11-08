@@ -247,6 +247,12 @@
     <string name="activity_choose_theme_light">Clar</string>
     <string name="activity_choose_theme_dark">Fosc</string>
 
+        <!--Choose language activity-->
+    <string name="dialog_change_language_title">Canviar idioma</string>
+    <string name="dialog_change_language_message">L\'aplicació es reiniciarà per aplicar el nou idioma. Continuar?</string>
+    <string name="dialog_change_language_positive">Reiniciar</string>
+    <string name="dialog_change_language_negative">Cancel·lar</string>
+
     <!--Choose camera activity-->
     <string name="activity_choose_camera_title">Càmera</string>
     <string name="activity_choose_camera_front">Frontal</string>

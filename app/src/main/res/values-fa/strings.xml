@@ -46,6 +46,12 @@
     <string name="activity_choose_theme_light">روشن</string>
     <string name="activity_choose_theme_dark">تیره</string>
 
+    <!--Choose language activity-->
+    <string name="dialog_change_language_title">تغییر زبان</string>
+    <string name="dialog_change_language_message">برنامه برای اعمال زبان جدید راه‌اندازی مجدد می‌شود. ادامه؟</string>
+    <string name="dialog_change_language_positive">راه‌اندازی مجدد</string>
+    <string name="dialog_change_language_negative">لغو</string>
+
     <string name="activity_choose_search_engine_bing">بینگ</string>
     <string name="activity_choose_search_engine_google">گوگل</string>
     <string name="activity_choose_search_engine_yahoo">یاهو</string>

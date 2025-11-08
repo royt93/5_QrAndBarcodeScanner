@@ -246,6 +246,12 @@
     <string name="activity_choose_theme_light">Ανοικτό</string>
     <string name="activity_choose_theme_dark">Σκούρο</string>
 
+        <!--Choose language activity-->
+    <string name="dialog_change_language_title">Αλλαγή γλώσσας</string>
+    <string name="dialog_change_language_message">Η εφαρμογή θα επανεκκινηθεί για να εφαρμοστεί η νέα γλώσσα. Συνέχεια;</string>
+    <string name="dialog_change_language_positive">Επανεκκίνηση</string>
+    <string name="dialog_change_language_negative">Ακύρωση</string>
+
     <!--Choose camera activity-->
     <string name="activity_choose_camera_title">Κάμερα</string>
     <string name="activity_choose_camera_front">Εμπρόσθια</string>

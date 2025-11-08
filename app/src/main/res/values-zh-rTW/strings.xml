@@ -246,6 +246,12 @@
     <string name="activity_choose_theme_light">淺色</string>
     <string name="activity_choose_theme_dark">深色</string>
 
+        <!--Choose language activity-->
+    <string name="dialog_change_language_title">更改語言</string>
+    <string name="dialog_change_language_message">應用程式將重新啟動以套用新語言。繼續？</string>
+    <string name="dialog_change_language_positive">重新啟動</string>
+    <string name="dialog_change_language_negative">取消</string>
+
     <!--Choose camera activity-->
     <string name="activity_choose_camera_title">相機</string>
     <string name="activity_choose_camera_front">前置鏡頭</string>

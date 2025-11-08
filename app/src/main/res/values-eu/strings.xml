@@ -246,6 +246,12 @@
     <string name="activity_choose_theme_light">Argia</string>
     <string name="activity_choose_theme_dark">Iluna</string>
 
+        <!--Choose language activity-->
+    <string name="dialog_change_language_title">Aldatu hizkuntza</string>
+    <string name="dialog_change_language_message">Aplikazioa berrabiaraziko da hizkuntza berria aplikatzeko. Jarraitu?</string>
+    <string name="dialog_change_language_positive">Berrabiarazi</string>
+    <string name="dialog_change_language_negative">Utzi</string>
+
     <!--Choose camera activity-->
     <string name="activity_choose_camera_title">Kamera</string>
     <string name="activity_choose_camera_front">Aurrealdea</string>

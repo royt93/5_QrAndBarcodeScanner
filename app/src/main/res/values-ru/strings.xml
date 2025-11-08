@@ -226,6 +226,12 @@
     <string name="activity_choose_theme_light">Светлая</string>
     <string name="activity_choose_theme_dark">Темная</string>
 
+        <!--Choose language activity-->
+    <string name="dialog_change_language_title">Изменить язык</string>
+    <string name="dialog_change_language_message">Приложение перезапустится для применения нового языка. Продолжить?</string>
+    <string name="dialog_change_language_positive">Перезапустить</string>
+    <string name="dialog_change_language_negative">Отмена</string>
+
     <!--Choose camera activity-->
     <string name="activity_choose_camera_title">Камера</string>
     <string name="activity_choose_camera_front">Передняя</string>

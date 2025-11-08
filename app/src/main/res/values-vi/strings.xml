@@ -250,9 +250,10 @@
     <!--Language settings-->
     <string name="fragment_settings_language">Ngôn ngữ</string>
     <string name="activity_choose_language_title">Chọn ngôn ngữ</string>
-    <string name="language_system">Theo hệ thống</string>
-    <string name="language_english">English</string>
-    <string name="language_vietnamese">Tiếng Việt</string>
+    <string name="dialog_change_language_title">Đổi ngôn ngữ</string>
+    <string name="dialog_change_language_message">Ứng dụng sẽ khởi động lại để áp dụng ngôn ngữ mới. Tiếp tục?</string>
+    <string name="dialog_change_language_positive">Khởi động lại</string>
+    <string name="dialog_change_language_negative">Hủy</string>
 
     <!--Choose camera activity-->
     <string name="activity_choose_camera_title">Camera</string>
