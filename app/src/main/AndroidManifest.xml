@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.mckimquyen.barcodescanner">
+    xmlns:tools="http://schemas.android.com/tools" package="com.mckimquyen.barcodescanner">
 
     <!--Normal permissions-->
-    <uses-feature
-        android:name="android.hardware.camera"
-        android:required="false" />
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
 
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -22,51 +19,67 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-    <application
-        android:name=".RApp"
-        android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        tools:ignore="LockedOrientationActivity,DiscouragedApi">
+    <application android:name=".RApp" android:allowBackup="true" android:icon="@mipmap/ic_launcher" android:label="@string/app_name" android:roundIcon="@mipmap/ic_launcher_round" android:supportsRtl="true" android:theme="@style/AppTheme" tools:ignore="LockedOrientationActivity,DiscouragedApi">
 
         <!-- Khai báo AdMob App ID -->
-        <meta-data
-            android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-3612191981543807~8467338874" /> <!-- Sample AdMob App ID -->
+        <meta-data android:name="com.google.android.gms.ads.APPLICATION_ID" android:value="ca-app-pub-3612191981543807~8467338874" />
+        <!-- Sample AdMob App ID -->
 
         <!--        <meta-data-->
-        <!--            android:name="io.sentry.dsn"-->
-        <!--            android:value="https://09f3022eb19f4fa7ba332b1f44188ff1@o432234.ingest.sentry.io/5384638" />-->
+        <!-- android:name="io.sentry.dsn"-->
+        <!-- android:value="https://09f3022eb19f4fa7ba332b1f44188ff1@o432234.ingest.sentry.io/5384638" />-->
 
-        <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="com.mckimquyen.barcodescanner.fileprovider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths" />
+        <provider android:name="androidx.core.content.FileProvider" android:authorities="com.mckimquyen.barcodescanner.fileprovider" android:exported="false" android:grantUriPermissions="true">
+            <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths" />
         </provider>
 
-        <service
-            android:name=".feature.tile.ServiceQuickSettingsTile"
-            android:exported="true"
-            android:icon="@drawable/ic_scan"
-            android:label="@string/app_name"
-            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
-            tools:ignore="NewApi">
+        <service android:name=".feature.tile.ServiceQuickSettingsTile" android:exported="true" android:icon="@drawable/ic_scan" android:label="@string/app_name" android:permission="android.permission.BIND_QUICK_SETTINGS_TILE" tools:ignore="NewApi">
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
         </service>
 
-        <activity
-            android:name=".feature.SplashActivity"
-            android:exported="true"
-            android:theme="@style/SplashTheme">
+        <receiver android:name=".feature.widget.QuickScanWidgetProvider" android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/quick_scan_widget_info" />
+        </receiver>
+
+        <receiver android:name=".feature.widget.CreateShortcutsWidgetProvider" android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/create_shortcuts_widget_info" />
+        </receiver>
+
+        <receiver android:name=".feature.widget.RecentScansWidgetProvider" android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/recent_scans_widget_info" />
+        </receiver>
+
+        <service android:name=".feature.widget.RecentScansWidgetService" android:permission="android.permission.BIND_REMOTEVIEWS" android:exported="false" />
+
+        <receiver android:name=".feature.widget.MyQrWidgetProvider" android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/my_qr_widget_info" />
+        </receiver>
+
+        <activity android:name=".feature.widget.MyQrWidgetConfigActivity" android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".feature.SplashActivity" android:exported="true" android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -74,33 +87,22 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".feature.tabs.ActivityBottomTabs"
-            android:configChanges="orientation|screenSize"
-            android:exported="true"
-            android:screenOrientation="portrait">
+        <activity android:name=".feature.tabs.ActivityBottomTabs" android:configChanges="orientation|screenSize" android:exported="true" android:screenOrientation="portrait">
 
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
+            <!--            <intent-filter>-->
+            <!--                <action android:name="android.intent.action.MAIN" />-->
+            <!--                <category android:name="android.intent.category.LAUNCHER" />-->
+            <!--            </intent-filter>-->
 
             <intent-filter>
                 <action android:name="com.google.zxing.client.android.SCAN" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
 
-            <meta-data
-                android:name="android.app.shortcuts"
-                android:resource="@xml/shortcuts" />
+            <meta-data android:name="android.app.shortcuts" android:resource="@xml/shortcuts" />
         </activity>
 
-        <activity
-            android:name=".feature.tabs.scan.file.ActivityScanBarcodeFromFile"
-            android:configChanges="orientation|screenSize"
-            android:exported="true"
-            android:screenOrientation="portrait"
-            tools:ignore="AppLinkUrlError">
+        <activity android:name=".feature.tabs.scan.file.ActivityScanBarcodeFromFile" android:configChanges="orientation|screenSize" android:exported="true" android:screenOrientation="portrait" tools:ignore="AppLinkUrlError">
 
             <intent-filter android:label="@string/intent_filter_scan_image">
                 <action android:name="android.intent.action.SEND" />
@@ -116,12 +118,7 @@
 
         </activity>
 
-        <activity
-            android:name=".feature.tabs.create.ActivityCreateBarcode"
-            android:configChanges="orientation|screenSize"
-            android:exported="true"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateVisible">
+        <activity android:name=".feature.tabs.create.ActivityCreateBarcode" android:configChanges="orientation|screenSize" android:exported="true" android:screenOrientation="portrait" android:windowSoftInputMode="stateVisible">
             <intent-filter android:label="@string/intent_filter_create_qr_code_text">
                 <action android:name="android.intent.action.SEND" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -134,79 +131,23 @@
                 <data android:mimeType="text/x-vcard" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".feature.tabs.create.qr.ActivityCreateQrCodeAll"
-            android:configChanges="orientation|screenSize"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".feature.tabs.create.barcode.ActivityCreateBarcodeAll"
-            android:configChanges="orientation|screenSize"
-            android:exported="false"
-            android:screenOrientation="portrait" />
+        <activity android:name=".feature.tabs.create.qr.ActivityCreateQrCodeAll" android:configChanges="orientation|screenSize" android:exported="false" android:screenOrientation="portrait" />
+        <activity android:name=".feature.tabs.create.barcode.ActivityCreateBarcodeAll" android:configChanges="orientation|screenSize" android:exported="false" android:screenOrientation="portrait" />
 
-        <activity
-            android:name=".feature.barcode.ActivityBarcode"
-            android:configChanges="orientation|screenSize"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".feature.barcode.ActivityBarcodeImage"
-            android:configChanges="orientation|screenSize"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".feature.barcode.otp.ActivityOtp"
-            android:configChanges="orientation|screenSize"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".feature.barcode.save.ActivitySaveBarcodeAsText"
-            android:configChanges="orientation|screenSize"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".feature.barcode.save.ActivitySaveBarcodeAsImage"
-            android:configChanges="orientation|screenSize"
-            android:exported="false"
-            android:screenOrientation="portrait" />
+        <activity android:name=".feature.barcode.ActivityBarcode" android:configChanges="orientation|screenSize" android:exported="false" android:screenOrientation="portrait" />
+        <activity android:name=".feature.barcode.ActivityBarcodeImage" android:configChanges="orientation|screenSize" android:exported="false" android:screenOrientation="portrait" />
+        <activity android:name=".feature.barcode.otp.ActivityOtp" android:configChanges="orientation|screenSize" android:exported="false" android:screenOrientation="portrait" />
+        <activity android:name=".feature.barcode.save.ActivitySaveBarcodeAsText" android:configChanges="orientation|screenSize" android:exported="false" android:screenOrientation="portrait" />
+        <activity android:name=".feature.barcode.save.ActivitySaveBarcodeAsImage" android:configChanges="orientation|screenSize" android:exported="false" android:screenOrientation="portrait" />
 
-        <activity
-            android:name=".feature.tabs.history.export.ActivityExportHistory"
-            android:configChanges="orientation|screenSize"
-            android:exported="false"
-            android:screenOrientation="portrait" />
+        <activity android:name=".feature.tabs.history.export.ActivityExportHistory" android:configChanges="orientation|screenSize" android:exported="false" android:screenOrientation="portrait" />
 
-        <activity
-            android:name=".feature.tabs.setting.theme.ChooseThemeActivityBase"
-            android:configChanges="orientation|screenSize"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".feature.tabs.setting.language.ChooseLanguageActivity"
-            android:configChanges="orientation|screenSize"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".feature.tabs.setting.camera.ChooseCameraActivityBase"
-            android:configChanges="orientation|screenSize"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".feature.tabs.setting.formats.SupportedFormatsActivityBase"
-            android:configChanges="orientation|screenSize"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".feature.tabs.setting.search.ChooseSearchEngineActivityBase"
-            android:configChanges="orientation|screenSize"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".feature.tabs.setting.permissions.AllPermissionsActivityBase"
-            android:configChanges="orientation|screenSize"
-            android:exported="false"
-            android:screenOrientation="portrait" />
+        <activity android:name=".feature.tabs.setting.theme.ChooseThemeActivityBase" android:configChanges="orientation|screenSize" android:exported="false" android:screenOrientation="portrait" />
+        <activity android:name=".feature.tabs.setting.language.ChooseLanguageActivity" android:configChanges="orientation|screenSize" android:exported="false" android:screenOrientation="portrait" />
+        <activity android:name=".feature.tabs.setting.camera.ChooseCameraActivityBase" android:configChanges="orientation|screenSize" android:exported="false" android:screenOrientation="portrait" />
+        <activity android:name=".feature.tabs.setting.formats.SupportedFormatsActivityBase" android:configChanges="orientation|screenSize" android:exported="false" android:screenOrientation="portrait" />
+        <activity android:name=".feature.tabs.setting.search.ChooseSearchEngineActivityBase" android:configChanges="orientation|screenSize" android:exported="false" android:screenOrientation="portrait" />
+        <activity android:name=".feature.tabs.setting.permissions.AllPermissionsActivityBase" android:configChanges="orientation|screenSize" android:exported="false" android:screenOrientation="portrait" />
 
     </application>
 

@@ -67,6 +67,9 @@ interface BarcodeDatabase {
     @Query("SELECT * FROM codes ORDER BY date DESC")
     fun getAll(): DataSource.Factory<Int, Barcode>
 
+    @Query("SELECT * FROM codes ORDER BY date DESC LIMIT :limit")
+    fun getRecentScans(limit: Int): List<Barcode>
+
     @Query("SELECT * FROM codes WHERE isFavorite = 1 ORDER BY date DESC")
     fun getFavorites(): DataSource.Factory<Int, Barcode>
 
@@ -75,6 +78,9 @@ interface BarcodeDatabase {
 
     @Query("SELECT * FROM codes WHERE format = :format AND text = :text LIMIT 1")
     fun find(format: String, text: String): Single<List<Barcode>>
+
+    @Query("SELECT * FROM codes WHERE id = :id LIMIT 1")
+    fun getById(id: Long): Single<Barcode>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun save(barcode: Barcode): Single<Long>
