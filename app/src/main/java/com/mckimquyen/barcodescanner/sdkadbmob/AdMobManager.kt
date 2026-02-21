@@ -37,9 +37,9 @@ import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.mckimquyen.barcodescanner.BuildConfig
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.lang.ref.WeakReference
 
@@ -120,9 +120,7 @@ object AdMobManager {
                 }
             }
             onComplete(true, gaidCurrent)
-            CoroutineScope(Dispatchers.Default).launch {
-                EventBus.sendEvent(true)
-            }
+            EventBus.sendEvent(true)
         }
     }
 
@@ -388,16 +386,12 @@ object AdMobManager {
             return
         }
         if (isAppOpenLoading) {
-            if (BuildConfig.DEBUG) {
-                //do nothing
-            } else {
-                if ((System.currentTimeMillis() - lastAppOpenLoadTime) < APP_OPEN_AD_TIME_OUT) {
-                    Log.d(TAG, "App Open Ad is still valid or loading")
-                    mainHandler.postDelayed({
-                        onAdLoaded.invoke(false)
-                    }, 1_000)
-                    return
-                }
+            if ((System.currentTimeMillis() - lastAppOpenLoadTime) < APP_OPEN_AD_TIME_OUT) {
+                Log.d(TAG, "App Open Ad is still valid or loading")
+                mainHandler.postDelayed({
+                    onAdLoaded.invoke(false)
+                }, 1_000)
+                return
             }
         }
         isAppOpenLoading = true
@@ -504,31 +498,33 @@ object AdMobManager {
             onAdLoaded.invoke()
         } else {
             val weakActivity = WeakReference(activity)
-            CoroutineScope(Dispatchers.Default).launch {
+            CoroutineScope(Dispatchers.Main).launch {
                 Log.d(TAG, "~~~initSplashScreen launch")
-                EventBus.eventFlow.collect { value ->
-                    Log.d(TAG, "initSplashScreen collect: $value")
-                    val activityRef = weakActivity.get()
-                    if (activityRef == null || activityRef.isFinishing || activityRef.isDestroyed) {
-                        return@collect
-                    }
-                    CoroutineScope(Dispatchers.Main).launch {
-                        loadAppOpenAd(
-                            context = activityRef,
-                            adUnitId = BuildConfig.ADMOB_APP_OPEN_ID,
-                            onAdLoaded = { result ->
-                                Log.d(TAG, "onAdLoaded result $result")
-                                if (result) {
-                                    showAppOpenAd(activityRef) {
-                                        onAdLoaded.invoke()
-                                    }
-                                } else {
-                                    onAdLoaded.invoke()
-                                }
-                            },
-                        )
-                    }
+                // Đợi cho đến khi init success (value = true)
+                EventBus.eventFlow.first { it == true }
+
+                Log.d(TAG, "initSplashScreen ready to load ad")
+                val activityRef = weakActivity.get()
+                if (activityRef == null || activityRef.isFinishing || activityRef.isDestroyed) {
+                    onAdLoaded.invoke()
+                    return@launch
                 }
+
+                loadAppOpenAd(
+                    context = activityRef,
+                    adUnitId = BuildConfig.ADMOB_APP_OPEN_ID,
+                    onAdLoaded = { result ->
+                        Log.d(TAG, "onAdLoaded result $result")
+                        val activityReshow = weakActivity.get()
+                        if (result && activityReshow != null && !activityReshow.isFinishing && !activityReshow.isDestroyed) {
+                            showAppOpenAd(activityReshow) {
+                                onAdLoaded.invoke()
+                            }
+                        } else {
+                            onAdLoaded.invoke()
+                        }
+                    },
+                )
             }
         }
     }
@@ -589,11 +585,11 @@ class AppPreferences private constructor(context: Context) {
 }
 
 object EventBus {
-    private val _eventFlow = MutableSharedFlow<Boolean>()
-    val eventFlow = _eventFlow.asSharedFlow()
+    private val _eventFlow = MutableStateFlow(false)
+    val eventFlow = _eventFlow.asStateFlow()
 
-    suspend fun sendEvent(value: Boolean) {
-        _eventFlow.emit(value)
+    fun sendEvent(value: Boolean) {
+        _eventFlow.value = value
     }
 }
 

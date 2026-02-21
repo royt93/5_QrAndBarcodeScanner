@@ -1,26 +1,26 @@
-# Danh sách Memory Leak trong Source Code (ĐÃ FIX)
+# Danh sách Memory Leak và Fix Logic Initialization (ĐÃ FIX TẤT CẢ)
 
-Dưới đây là các memory leak đã được phát hiện và xử lý.
+Bản cập nhật này giải quyết rò rỉ bộ nhớ và lỗi logic khiến Quảng cáo App Open không hiển thị trên Splash Screen.
 
-## 1. Rò rỉ bộ nhớ tạm thời do `Handler` trong `AdMobManager.kt` (TRẠNG THÁI: ĐÃ FIX)
+## 1. Rò rỉ vĩnh viễn Activity & Lỗi Race Condition (Mức độ: Rất Cao - ĐÃ FIX)
 
-- **Vị trí:** [AdMobManager.kt](file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/1108_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/sdkadbmob/AdMobManager.kt)
-- **Nguyên nhân:** Sử dụng `Handler` ẩn danh tạo rò rỉ Activity ngắn hạn.
-- **Cách fix:** Đã chuyển sang sử dụng `mainHandler` dùng chung trong Singleton `AdMobManager`. Mặc dù là Singleton nhưng việc quản lý Handler tập trung giúp dễ kiểm soát hơn. Quan trọng nhất là đã sửa logic ở phần Nghiêm trọng nhất để không capture Activity.
+- **Vấn đề:**
+    1. `EventBus` dùng `SharedFlow` không có replay khiến Splash screen dễ bị lỡ mất sự kiện "Init Success" nếu AdMob khởi tạo quá nhanh.
+    2. Logic `collect` coroutine rò rỉ Activity vĩnh viễn (đã fix ở bước trước).
+    3. Việc sử dụng `collectLatest` cũ hoặc `collect` mới không khéo léo có thể gây ra nhiều lần load ad hoặc treo máy.
+- **Cách fix mới nhất:**
+    1. Chuyển `EventBus` sang `MutableStateFlow(false)` để đảm bảo mọi subscriber luôn nhận được trạng thái mới nhất ngay cả khi join muộn.
+    2. Sử dụng `EventBus.eventFlow.first { it == true }` trong `initSplashScreen`. Hàm này sẽ tạm dừng coroutine cho đến khi AdMob init xong thì thực thi logic load ad duy nhất 1 lần, sau đó tự huỷ.
 
-## 2. Rò rỉ `ActivityBottomTabs` do `Handler` (TRẠNG THÁI: ĐÃ FIX)
+## 2. Treo Splash Screen do logic `isAppOpenLoading` (ĐÃ FIX)
 
-- **Vị trí:** [ActivityBottomTabs.kt](file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/1108_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/ActivityBottomTabs.kt)
-- **Nguyên nhân:** Handler delay 2s để reset trạng thái nút Back giữ tham chiếu Activity.
-- **Cách fix:** Đã thêm `handler.removeCallbacksAndMessages(null)` vào hàm `onDestroy()`. Khi Activity bị huỷ, mọi tác vụ chờ trong Handler sẽ bị xoá bỏ ngay lập tức, giải phóng Activity.
+- **Vấn đề:** Trong `loadAppOpenAd`, nếu `isAppOpenLoading` đang là `true` và ở chế độ `DEBUG`, logic cũ không thực hiện `return` mà cũng không gọi callback, khiến Splash screen bị treo vô hạn.
+- **Cách fix:** Đã chuẩn hoá lại logic kiểm tra trạng thái load. Nếu đang load hoặc ad còn hiệu lực thì sẽ callback ngay lập tức (`onAdLoaded(false)`) sau 1s để Splash screen có thể đi tiếp vào Main.
 
-## 3. Rò rỉ vĩnh viễn Activity do `CoroutineScope` (TRẠNG THÁI: ĐÃ FIX)
+## 3. Rò rỉ bộ nhớ từ Handler (ĐÃ FIX)
 
-- **Vị trí:** [AdMobManager.kt](file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/1108_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/sdkadbmob/AdMobManager.kt)
-- **Nguyên nhân:** Launch coroutine trong Singleton scope và capture trực tiếp biến `activity`, lắng nghe `SharedFlow` vô thời hạn.
-- **Cách fix:**
-  1. Sử dụng `WeakReference<Activity>` cho biến activity truyền vào. Nếu Activity bị dọn dẹp bởi hệ thống, coroutine sẽ không còn giữ tham chiếu mạnh (strong reference) và sẽ không thực hiện logic load ad.
-  2. Thêm kiểm tra `activityRef.isFinishing || activityRef.isDestroyed` trước khi thực thi logic UI.
+- **Vị trí:** `AdMobManager.kt` và `ActivityBottomTabs.kt`.
+- **Cách fix:** Đã dọn dẹp Handler trong `onDestroy` và sử dụng central Handler trong singleton để tránh capture context bừa bãi.
 
 ---
-*Kết luận*: Source code hiện tại đã an toàn hơn đối với các vấn đề về vòng đời Android. Các rò rỉ nghiêm trọng nhất liên quan đến SplashActivity đã được triệt tiêu.
+**Tổng kết:** Ứng dụng hiện tại đã giải quyết được cả về rò rỉ bộ nhớ lẫn tính ổn định của luồng khởi tạo quảng cáo. Luồng dữ liệu qua `StateFlow` đảm bảo Splash screen luôn nhận được tín hiệu để chuyển trang.
