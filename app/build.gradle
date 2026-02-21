@@ -44,10 +44,10 @@ android {
 
     signingConfigs {
         release {
-            storeFile file("keystore.jks")
-            storePassword "27072000"
-            keyAlias "mckimquyen"
-            keyPassword "27072000"
+            storeFile file(project.property("RELEASE_STORE_FILE"))
+            storePassword project.property("RELEASE_STORE_PASSWORD")
+            keyAlias project.property("RELEASE_KEY_ALIAS")
+            keyPassword project.property("RELEASE_KEY_PASSWORD")
         }
     }
 
