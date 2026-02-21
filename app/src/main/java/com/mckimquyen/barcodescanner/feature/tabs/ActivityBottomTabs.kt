@@ -33,6 +33,7 @@ class ActivityBottomTabs : ActivityBase(), BottomNavigationView.OnNavigationItem
 
     //    private var adView: MaxAdView? = null
     private var adView: AdView? = null
+    private val handler = Handler(Looper.getMainLooper())
 
     override fun onResume() {
         super.onResume()
@@ -66,6 +67,7 @@ class ActivityBottomTabs : ActivityBase(), BottomNavigationView.OnNavigationItem
     }
 
     override fun onDestroy() {
+        handler.removeCallbacksAndMessages(null)
 //        flAd.destroyAdBanner(adView)
         adView?.destroy()
         super.onDestroy()
@@ -93,7 +95,7 @@ class ActivityBottomTabs : ActivityBase(), BottomNavigationView.OnNavigationItem
             }
             this.doubleBackToExitPressedOnce = true
             Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show()
-            Handler(Looper.getMainLooper()).postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
+            handler.postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
         } else {
             bottomNavigationView.selectedItemId = R.id.itemScan
         }

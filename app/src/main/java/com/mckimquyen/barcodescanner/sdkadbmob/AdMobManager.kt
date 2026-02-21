@@ -62,6 +62,7 @@ object AdMobManager {
     private var isAppOpenLoading = false
     private var isAppOpenShowing = false
     private var lastAppOpenLoadTime: Long = 0
+    private val mainHandler = Handler(Looper.getMainLooper())
 
     private const val APP_OPEN_AD_TIME_OUT = 4 * 60 * 60 * 1000L // 4 hours
 
@@ -366,14 +367,14 @@ object AdMobManager {
         Log.d(TAG, "~~~~~ loadAppOpenAd isVIPMember $isVIPMember")
         if (isVIPMember) {
             Log.d(TAG, "App Open Ad skipped due to whitelist device")
-            Handler(Looper.getMainLooper()).postDelayed({
+            mainHandler.postDelayed({
                 onAdLoaded.invoke(false)
             }, 1_000)
             return
         }
         if (!NetworkUtils.isDeviceConnected(context)) {
             Log.d(TAG, "loadAppOpenAd no internet")
-            Handler(Looper.getMainLooper()).postDelayed({
+            mainHandler.postDelayed({
                 onAdLoaded.invoke(false)
             }, 1_000)
             return
@@ -381,7 +382,7 @@ object AdMobManager {
         // Kiểm tra thời gian cooldown cho App Open
         if (System.currentTimeMillis() - lastAppOpenErrorTime < ERROR_COOLDOWN) {
             Log.d(TAG, "App Open Ad skipped due to recent error")
-            Handler(Looper.getMainLooper()).postDelayed({
+            mainHandler.postDelayed({
                 onAdLoaded(false)
             }, 1_000)
             return
@@ -392,7 +393,7 @@ object AdMobManager {
             } else {
                 if ((System.currentTimeMillis() - lastAppOpenLoadTime) < APP_OPEN_AD_TIME_OUT) {
                     Log.d(TAG, "App Open Ad is still valid or loading")
-                    Handler(Looper.getMainLooper()).postDelayed({
+                    mainHandler.postDelayed({
                         onAdLoaded.invoke(false)
                     }, 1_000)
                     return
@@ -409,7 +410,7 @@ object AdMobManager {
                     appOpenAd = ad
                     lastAppOpenLoadTime = System.currentTimeMillis()
                     isAppOpenLoading = false
-                    Handler(Looper.getMainLooper()).postDelayed({
+                    mainHandler.postDelayed({
                         onAdLoaded.invoke(true)
                     }, 500)
                 }
@@ -418,7 +419,7 @@ object AdMobManager {
                     lastAppOpenErrorTime = System.currentTimeMillis() // Cập nhật thời điểm lỗi
                     Log.d(TAG, "App Open Ad Failed to load: ${error.message}. Cooldown started.")
                     isAppOpenLoading = false
-                    Handler(Looper.getMainLooper()).postDelayed({
+                    mainHandler.postDelayed({
                         onAdLoaded.invoke(false)
                     }, 1_000)
                 }
@@ -502,18 +503,23 @@ object AdMobManager {
         if (countInitSplashScreen > 1) {
             onAdLoaded.invoke()
         } else {
+            val weakActivity = WeakReference(activity)
             CoroutineScope(Dispatchers.Default).launch {
                 Log.d(TAG, "~~~initSplashScreen launch")
-                EventBus.eventFlow.collectLatest { value ->
-                    Log.d(TAG, "initSplashScreen collectLatest: $value")
+                EventBus.eventFlow.collect { value ->
+                    Log.d(TAG, "initSplashScreen collect: $value")
+                    val activityRef = weakActivity.get()
+                    if (activityRef == null || activityRef.isFinishing || activityRef.isDestroyed) {
+                        return@collect
+                    }
                     CoroutineScope(Dispatchers.Main).launch {
                         loadAppOpenAd(
-                            context = activity,
+                            context = activityRef,
                             adUnitId = BuildConfig.ADMOB_APP_OPEN_ID,
                             onAdLoaded = { result ->
                                 Log.d(TAG, "onAdLoaded result $result")
                                 if (result) {
-                                    showAppOpenAd(activity) {
+                                    showAppOpenAd(activityRef) {
                                         onAdLoaded.invoke()
                                     }
                                 } else {
