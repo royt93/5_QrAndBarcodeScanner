@@ -78,7 +78,7 @@ class ActivityBottomTabs : ActivityBase(), BottomNavigationView.OnNavigationItem
             return false
         }
         showFragment(item.itemId)
-//        Log.d("roy93~", "onNavigationItemSelected");
+//        Logger.i("onNavigationItemSelected");
         rateAppInApp(BuildConfig.DEBUG)
         return true
     }

@@ -18,6 +18,7 @@ import com.mckimquyen.barcodescanner.feature.tabs.create.barcode.ActivityCreateB
 import com.mckimquyen.barcodescanner.feature.tabs.create.qr.ActivityCreateQrCodeAll
 import com.mckimquyen.barcodescanner.model.schema.BarcodeSchema
 import com.mckimquyen.barcodescanner.sdkadbmob.AdMobManager
+import com.mckimquyen.barcodescanner.sdkadbmob.Logger
 import kotlinx.android.synthetic.main.f_create_barcode.*
 
 class FragmentCreateBarcode : Fragment(), AdMobManager.InterstitialAdListener {
@@ -94,9 +95,9 @@ class FragmentCreateBarcode : Fragment(), AdMobManager.InterstitialAdListener {
         buttonShowAllQrCode.setOnClickListener {
             AdMobManager.showInterstitial(requireActivity()) { success ->
                 if (success) {
-                    Log.d("roy93~", "Ad đã hiển thị và đóng thành công")
+                    Logger.i("Ad đã hiển thị và đóng thành công")
                 } else {
-                    Log.d("roy93~", "Ad không hiển thị được hoặc có lỗi")
+                    Logger.i("Ad không hiển thị được hoặc có lỗi")
                 }
                 ActivityCreateQrCodeAll.start(requireActivity())
             }
@@ -106,9 +107,9 @@ class FragmentCreateBarcode : Fragment(), AdMobManager.InterstitialAdListener {
         buttonCreateBarcode.setOnClickListener {
             AdMobManager.showInterstitial(requireActivity()) { success ->
                 if (success) {
-                    Log.d("roy93~", "Ad đã hiển thị và đóng thành công")
+                    Logger.i("Ad đã hiển thị và đóng thành công")
                 } else {
-                    Log.d("roy93~", "Ad không hiển thị được hoặc có lỗi")
+                    Logger.i("Ad không hiển thị được hoặc có lỗi")
                 }
                 ActivityCreateBarcodeAll.start(requireActivity())
             }

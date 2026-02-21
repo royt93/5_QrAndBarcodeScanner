@@ -32,6 +32,7 @@ import com.mckimquyen.barcodescanner.feature.tabs.setting.search.ChooseSearchEng
 import com.mckimquyen.barcodescanner.feature.tabs.setting.theme.ChooseThemeActivityBase
 import com.mckimquyen.barcodescanner.feature.tabs.setting.language.ChooseLanguageActivity
 import com.mckimquyen.barcodescanner.sdkadbmob.AdMobManager
+import com.mckimquyen.barcodescanner.sdkadbmob.Logger
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
@@ -96,9 +97,9 @@ class SettingsFragment : Fragment(), DialogFragmentDeleteConfirmation.Listener, 
         buttonChooseTheme.setOnClickListener {
             AdMobManager.showInterstitial(requireActivity()) { success ->
                 if (success) {
-                    Log.d("roy93~", "Ad đã hiển thị và đóng thành công")
+                    Logger.i("Ad đã hiển thị và đóng thành công")
                 } else {
-                    Log.d("roy93~", "Ad không hiển thị được hoặc có lỗi")
+                    Logger.i("Ad không hiển thị được hoặc có lỗi")
                 }
                 ChooseThemeActivityBase.start(requireActivity())
             }
@@ -106,9 +107,9 @@ class SettingsFragment : Fragment(), DialogFragmentDeleteConfirmation.Listener, 
         buttonChooseLanguage.setOnClickListener {
             AdMobManager.showInterstitial(requireActivity()) { success ->
                 if (success) {
-                    Log.d("roy93~", "Ad đã hiển thị và đóng thành công")
+                    Logger.i("Ad đã hiển thị và đóng thành công")
                 } else {
-                    Log.d("roy93~", "Ad không hiển thị được hoặc có lỗi")
+                    Logger.i("Ad không hiển thị được hoặc có lỗi")
                 }
                 ChooseLanguageActivity.start(requireActivity())
             }
@@ -116,9 +117,9 @@ class SettingsFragment : Fragment(), DialogFragmentDeleteConfirmation.Listener, 
         buttonChooseCamera.setOnClickListener {
             AdMobManager.showInterstitial(requireActivity()) { success ->
                 if (success) {
-                    Log.d("roy93~", "Ad đã hiển thị và đóng thành công")
+                    Logger.i("Ad đã hiển thị và đóng thành công")
                 } else {
-                    Log.d("roy93~", "Ad không hiển thị được hoặc có lỗi")
+                    Logger.i("Ad không hiển thị được hoặc có lỗi")
                 }
                 ChooseCameraActivityBase.start(requireActivity())
             }
@@ -126,9 +127,9 @@ class SettingsFragment : Fragment(), DialogFragmentDeleteConfirmation.Listener, 
         buttonSelectSupportedFormats.setOnClickListener {
             AdMobManager.showInterstitial(requireActivity()) { success ->
                 if (success) {
-                    Log.d("roy93~", "Ad đã hiển thị và đóng thành công")
+                    Logger.i("Ad đã hiển thị và đóng thành công")
                 } else {
-                    Log.d("roy93~", "Ad không hiển thị được hoặc có lỗi")
+                    Logger.i("Ad không hiển thị được hoặc có lỗi")
                 }
                 SupportedFormatsActivityBase.start(requireActivity())
             }
@@ -140,9 +141,9 @@ class SettingsFragment : Fragment(), DialogFragmentDeleteConfirmation.Listener, 
         buttonChooseSearchEngine.setOnClickListener {
             AdMobManager.showInterstitial(requireActivity()) { success ->
                 if (success) {
-                    Log.d("roy93~", "Ad đã hiển thị và đóng thành công")
+                    Logger.i("Ad đã hiển thị và đóng thành công")
                 } else {
-                    Log.d("roy93~", "Ad không hiển thị được hoặc có lỗi")
+                    Logger.i("Ad không hiển thị được hoặc có lỗi")
                 }
                 ChooseSearchEngineActivityBase.start(requireContext())
             }

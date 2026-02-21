@@ -10,6 +10,7 @@ import com.mckimquyen.barcodescanner.BuildConfig
 import com.mckimquyen.barcodescanner.databinding.ActivitySplashBinding
 import com.mckimquyen.barcodescanner.feature.tabs.ActivityBottomTabs
 import com.mckimquyen.barcodescanner.sdkadbmob.AdMobManager
+import com.mckimquyen.barcodescanner.sdkadbmob.Logger
 
 @SuppressLint("CustomSplashScreen")
 class SplashActivity : AppCompatActivity() {
@@ -18,7 +19,7 @@ class SplashActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("roy93~", "onCreate")
+        Logger.i("onCreate")
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

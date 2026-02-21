@@ -5,7 +5,8 @@ import androidx.multidex.MultiDexApplication
 import com.google.android.gms.ads.MobileAds
 import com.mckimquyen.barcodescanner.di.settings
 import com.mckimquyen.barcodescanner.sdkadbmob.AdMobManager
-import com.mckimquyen.barcodescanner.usecase.Logger
+import com.mckimquyen.barcodescanner.sdkadbmob.Logger
+import com.mckimquyen.barcodescanner.usecase.Logger as UsecaseLogger
 import io.reactivex.plugins.RxJavaPlugins
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -49,17 +50,16 @@ class RApp : MultiDexApplication() {
         CoroutineScope(Dispatchers.IO).launch {
             MobileAds.initialize(this@RApp) {}
             AdMobManager.init(this@RApp) { success, gaidCurrent ->
-                Log.d("roy93~", "AdMobManager init success $success, gaidCurrent $gaidCurrent")
+                Logger.i("AdMobManager init success $success, gaidCurrent $gaidCurrent")
             }
         }
 //        registerActivityLifecycleCallbacks(
 //            AppLifecycleListener(
 //                { isForeground, activity ->
 //                    if (isForeground) {
-//                        Log.d("roy93~", "App moved to Foreground")
-//                        Log.d("roy93~", "activity.localClassName ${activity.localClassName}")
-//                        Log.d(
-//                            "roy93~",
+//                        Logger.i("App moved to Foreground")
+//                        Logger.i("activity.localClassName ${activity.localClassName}")
+//                        Logger.i(
 //                            "SplashActivity::class.java.simpleName ${SplashActivity::class.java.simpleName}"
 //                        )
 //                        if (activity.localClassName == SplashActivity::class.java.simpleName) {
@@ -68,10 +68,10 @@ class RApp : MultiDexApplication() {
 ////                            AdMobManager.showAppOpenAd(activity)
 //                        }
 //                    } else {
-//                        Log.d("roy93~", "App moved to Background")
+//                        Logger.i("App moved to Background")
 //                    }
 //                }, { activity ->
-//                    Log.d("roy93~", "callbackActivityCreated ${activity.localClassName}")
+//                    Logger.i("callbackActivityCreated ${activity.localClassName}")
 //                    if (activity.localClassName == SplashActivity::class.java.simpleName) {
 //                        //do nothing
 //                    } else {
@@ -92,7 +92,7 @@ class RApp : MultiDexApplication() {
 
     private fun handleUnhandledRxJavaErrors() {
         RxJavaPlugins.setErrorHandler { error ->
-            Logger.log(error)
+            UsecaseLogger.log(error)
         }
     }
 }

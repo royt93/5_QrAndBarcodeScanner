@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import com.mckimquyen.barcodescanner.sdkadbmob.Logger
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.appcompat.widget.Toolbar
@@ -94,7 +95,7 @@ class ChooseLanguageActivity : ActivityBase() {
                     .putString("LANGUAGE", newLanguageCode)
                     .commit() // Use commit() instead of apply() to ensure synchronous save
 
-                Log.d("ChooseLanguageActivity", "Saved language: $newLanguageCode, success: $success")
+                Logger.i("Saved language: $newLanguageCode, success: $success")
 
                 // Also save via Settings for consistency
                 settings.language = newLanguageCode

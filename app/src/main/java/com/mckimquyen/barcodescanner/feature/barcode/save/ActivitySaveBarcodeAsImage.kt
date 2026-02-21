@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import com.mckimquyen.barcodescanner.sdkadbmob.Logger
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.view.isVisible
@@ -63,12 +64,12 @@ class ActivitySaveBarcodeAsImage : ActivityBase() {
         grantResults: IntArray,
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-//        Log.d("roy93~", "onRequestPermissionsResult")
+//        Logger.i("onRequestPermissionsResult")
         if (permissionsHelper.areAllPermissionsGranted(grantResults)) {
-//            Log.d("roy93~", "if")
+//            Logger.i("if")
             saveBarcode()
         } else {
-//            Log.d("roy93~", "else")
+//            Logger.i("else")
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 saveBarcode()
             } else {
@@ -104,13 +105,13 @@ class ActivitySaveBarcodeAsImage : ActivityBase() {
 
     private fun initSaveButton() {
         buttonSave.setOnClickListener {
-//            Log.d("roy93~", "setOnClickListener")
+//            Logger.i("setOnClickListener")
             requestPermissions()
         }
     }
 
     private fun requestPermissions() {
-//        Log.d("roy93~", "requestPermissions")
+//        Logger.i("requestPermissions")
         permissionsHelper.requestPermissions(
             activity = this,
             permissions = PERMISSIONS,

@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.provider.MediaStore
 import android.util.Log
+import com.mckimquyen.barcodescanner.sdkadbmob.Logger
 import android.view.MotionEvent.ACTION_UP
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
@@ -56,7 +57,7 @@ class ActivityScanBarcodeFromFile : ActivityBase() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.a_scan_barcode_from_file)
 
-//        Log.d("roy93~", "onCreate")
+//        Logger.i("onCreate")
 
         supportEdgeToEdge()
         handleToolbarBackPressed()
@@ -65,10 +66,10 @@ class ActivityScanBarcodeFromFile : ActivityBase() {
         handleScanButtonClicked()
 
         if (showImageFromIntent().not()) {
-//            Log.d("roy93~", "if")
+//            Logger.i("if")
             startChooseImageActivity(savedInstanceState)
         } else {
-//            Log.d("roy93~", "else")
+//            Logger.i("else")
         }
     }
 
@@ -95,7 +96,7 @@ class ActivityScanBarcodeFromFile : ActivityBase() {
         grantResults: IntArray,
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-//        Log.d("roy93~", "onRequestPermissionsResult")
+//        Logger.i("onRequestPermissionsResult")
         if (requestCode == PERMISSIONS_REQUEST_CODE && permissionsHelper.areAllPermissionsGranted(grantResults)) {
             imageUri?.apply(::showImage)
         } else {
@@ -145,7 +146,7 @@ class ActivityScanBarcodeFromFile : ActivityBase() {
         savedInstanceState: Bundle?,
     ) {
         if (savedInstanceState != null) {
-//            Log.d("roy93~", "startChooseImageActivity return")
+//            Logger.i("startChooseImageActivity return")
             return
         }
 
@@ -154,10 +155,10 @@ class ActivityScanBarcodeFromFile : ActivityBase() {
         }
 
 //        if (intent.resolveActivity(packageManager) != null) {
-//            Log.d("roy93~", "startChooseImageActivity if")
+//            Logger.i("startChooseImageActivity if")
 //            startActivityForResult(intent, requestCode)
 //        } else {
-//            Log.d("roy93~", "startChooseImageActivity else")
+//            Logger.i("startChooseImageActivity else")
 //        }
         startActivityForResult(intent, requestCode)
     }
@@ -210,7 +211,7 @@ class ActivityScanBarcodeFromFile : ActivityBase() {
     }
 
     private fun showErrorOrRequestPermissions(error: Throwable) {
-//        Log.d("roy93~", "showErrorOrRequestPermissions error $error")
+//        Logger.i("showErrorOrRequestPermissions error $error")
         when (error) {
             is SecurityException -> permissionsHelper.requestPermissions(this, PERMISSIONS, PERMISSIONS_REQUEST_CODE)
             else -> showError(error)
