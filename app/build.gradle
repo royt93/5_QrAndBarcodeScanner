@@ -18,8 +18,8 @@ android {
         applicationId "com.mckimquyen.barcodescanner"
         minSdkVersion 23
         targetSdkVersion 36
-        versionCode 20251108
-        versionName "2025.11.08"
+        versionCode 20260221
+        versionName "2026.02.21"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -48,8 +48,6 @@ android {
             storePassword "27072000"
             keyAlias "mckimquyen"
             keyPassword "27072000"
-            //mckimquyen
-            //84
         }
     }
 
@@ -138,5 +136,5 @@ dependencies {
 //    api 'io.sentry:sentry-android:7.8.0'
     implementation("com.google.android.play:review:2.0.1")
     implementation("com.google.android.play:review-ktx:2.0.1")
-    debugImplementation("com.squareup.leakcanary:leakcanary-android:2.14")
+//    debugImplementation("com.squareup.leakcanary:leakcanary-android:2.14")
 }
