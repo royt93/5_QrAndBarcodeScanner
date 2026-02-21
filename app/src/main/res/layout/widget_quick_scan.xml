@@ -1,25 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@drawable/rounded_blue_bg" android:gravity="center" android:orientation="horizontal" android:padding="8dp">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@drawable/bg_widget" android:gravity="center" android:orientation="horizontal" android:padding="8dp" android:clipToOutline="true">
 
     <LinearLayout android:id="@+id/llScanCamera" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:orientation="vertical">
 
-        <ImageView android:layout_width="32dp" android:layout_height="32dp" android:src="@drawable/ic_scan_white" android:contentDescription="@string/shortcut_scan_from_camera" />
+        <ImageView android:layout_width="32dp" android:layout_height="32dp" android:src="@drawable/ic_scan_white" android:tint="@color/widget_icon_tint" android:contentDescription="@string/shortcut_scan_from_camera" />
 
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/shortcut_scan_from_camera" android:textColor="@android:color/white" android:textSize="12sp" android:maxLines="1" android:ellipsize="end" />
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/shortcut_scan_from_camera" android:textColor="@color/widget_text" android:textSize="12sp" android:maxLines="1" android:ellipsize="end" />
     </LinearLayout>
 
     <LinearLayout android:id="@+id/llScanImage" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:orientation="vertical">
 
-        <ImageView android:layout_width="32dp" android:layout_height="32dp" android:src="@drawable/ic_image_white" android:contentDescription="@string/shortcut_scan_from_file" />
+        <ImageView android:layout_width="32dp" android:layout_height="32dp" android:src="@drawable/ic_image_white" android:tint="@color/widget_icon_tint" android:contentDescription="@string/shortcut_scan_from_file" />
 
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/shortcut_scan_from_file" android:textColor="@android:color/white" android:textSize="12sp" android:maxLines="1" android:ellipsize="end" />
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/shortcut_scan_from_file" android:textColor="@color/widget_text" android:textSize="12sp" android:maxLines="1" android:ellipsize="end" />
     </LinearLayout>
 
     <LinearLayout android:id="@+id/llCreateCode" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:orientation="vertical">
 
-        <ImageView android:layout_width="32dp" android:layout_height="32dp" android:src="@drawable/ic_create" android:contentDescription="@string/shortcut_create_barcode" />
+        <ImageView android:layout_width="32dp" android:layout_height="32dp" android:src="@drawable/ic_create" android:tint="@color/widget_icon_tint" android:contentDescription="@string/shortcut_create_barcode" />
 
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/shortcut_create_barcode" android:textColor="@android:color/white" android:textSize="12sp" android:maxLines="1" android:ellipsize="end" />
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/shortcut_create_barcode" android:textColor="@color/widget_text" android:textSize="12sp" android:maxLines="1" android:ellipsize="end" />
     </LinearLayout>
 
 </LinearLayout>

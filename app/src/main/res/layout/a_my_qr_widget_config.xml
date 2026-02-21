@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical">
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@color/color_background">
 
-    <com.google.android.material.appbar.AppBarLayout android:id="@+id/appBarLayout" android:layout_width="match_parent" android:layout_height="wrap_content">
+    <com.google.android.material.appbar.AppBarLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@color/toolbar_background_color" app:elevation="0dp">
 
-        <androidx.appcompat.widget.Toolbar android:id="@+id/toolbar" android:layout_width="match_parent" android:layout_height="?attr/actionBarSize" app:navigationIcon="@drawable/ic_arrow_back" app:title="Choose a code" />
+        <androidx.appcompat.widget.Toolbar android:id="@+id/toolbar" android:layout_width="match_parent" android:layout_height="?attr/actionBarSize" app:navigationIcon="@drawable/ic_arrow_back" app:navigationIconTint="@color/toolbar_title_color" app:title="Select a barcode" app:titleTextColor="@color/toolbar_title_color" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -12,6 +12,6 @@
 
         <androidx.recyclerview.widget.RecyclerView android:id="@+id/recyclerViewCodes" android:layout_width="match_parent" android:layout_height="match_parent" android:clipToPadding="false" />
 
-        <TextView android:id="@+id/tvEmpty" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center" android:text="No barcodes found" android:visibility="gone" />
+        <TextView android:id="@+id/tvEmpty" android:layout_width="match_parent" android:layout_height="match_parent" android:gravity="center" android:text="@string/fragment_barcode_history_empty_title" android:textColor="@color/secondary_text_color" android:visibility="gone" />
     </FrameLayout>
-</LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

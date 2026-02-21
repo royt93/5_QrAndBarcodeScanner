@@ -60,6 +60,10 @@ class MyQrWidgetProvider : AppWidgetProvider() {
                 .subscribe({ barcode: Barcode ->
                     // Set Name
                     views.setTextViewText(R.id.tvQrName, barcode.name ?: context.getString(R.string.app_name))
+                    // Determine UI Mode
+                    val isDarkTheme = (context.resources.configuration.uiMode and android.content.res.Configuration.UI_MODE_NIGHT_MASK) == android.content.res.Configuration.UI_MODE_NIGHT_YES
+                    val codeColor = if (isDarkTheme) Color.WHITE else Color.BLACK
+                    val bgColor = if (isDarkTheme) Color.parseColor("#1c1c1e") else Color.WHITE
                     
                     // Generate Bitmap for Widget
                     BarcodeImageGenerator.generateBitmapAsync(
@@ -67,8 +71,8 @@ class MyQrWidgetProvider : AppWidgetProvider() {
                         width = 400,
                         height = 400,
                         margin = 1,
-                        codeColor = Color.BLACK,
-                        backgroundColor = Color.WHITE
+                        codeColor = codeColor,
+                        backgroundColor = bgColor
                     )
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())

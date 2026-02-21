@@ -1,32 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@drawable/rounded_blue_bg" android:gravity="center" android:orientation="horizontal" android:padding="8dp">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@drawable/bg_widget" android:gravity="center" android:orientation="horizontal" android:padding="8dp" android:clipToOutline="true">
 
     <LinearLayout android:id="@+id/llCreateText" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:orientation="vertical">
 
-        <ImageView android:layout_width="32dp" android:layout_height="32dp" android:src="@drawable/ic_text" android:contentDescription="@string/fragment_create_barcode_qr_code_text" />
+        <ImageView android:layout_width="32dp" android:layout_height="32dp" android:src="@drawable/ic_text" android:tint="@color/widget_icon_tint" android:contentDescription="@string/fragment_create_barcode_qr_code_text" />
 
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/fragment_create_barcode_qr_code_text" android:textColor="@android:color/white" android:textSize="12sp" android:maxLines="1" android:ellipsize="end" />
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/fragment_create_barcode_qr_code_text" android:textColor="@color/widget_text" android:textSize="12sp" android:maxLines="1" android:ellipsize="end" />
     </LinearLayout>
 
     <LinearLayout android:id="@+id/llCreateUrl" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:orientation="vertical">
 
-        <ImageView android:layout_width="32dp" android:layout_height="32dp" android:src="@drawable/ic_link" android:contentDescription="URL" />
+        <ImageView android:layout_width="32dp" android:layout_height="32dp" android:src="@drawable/ic_link" android:tint="@color/widget_icon_tint" android:contentDescription="URL" />
 
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="URL" android:textColor="@android:color/white" android:textSize="12sp" android:maxLines="1" android:ellipsize="end" />
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="URL" android:textColor="@color/widget_text" android:textSize="12sp" android:maxLines="1" android:ellipsize="end" />
     </LinearLayout>
 
     <LinearLayout android:id="@+id/llCreateWifi" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:orientation="vertical">
 
-        <ImageView android:layout_width="32dp" android:layout_height="32dp" android:src="@drawable/ic_wifi" android:contentDescription="Wi-Fi" />
+        <ImageView android:layout_width="32dp" android:layout_height="32dp" android:src="@drawable/ic_wifi" android:tint="@color/widget_icon_tint" android:contentDescription="Wi-Fi" />
 
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="Wi-Fi" android:textColor="@android:color/white" android:textSize="12sp" android:maxLines="1" android:ellipsize="end" />
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="Wi-Fi" android:textColor="@color/widget_text" android:textSize="12sp" android:maxLines="1" android:ellipsize="end" />
     </LinearLayout>
 
     <LinearLayout android:id="@+id/llCreateContact" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:orientation="vertical">
 
-        <ImageView android:layout_width="32dp" android:layout_height="32dp" android:src="@drawable/ic_contact" android:contentDescription="@string/barcode_schema_v_card" />
+        <ImageView android:layout_width="32dp" android:layout_height="32dp" android:src="@drawable/ic_contact" android:tint="@color/widget_icon_tint" android:contentDescription="@string/barcode_schema_v_card" />
 
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="Contact" android:textColor="@android:color/white" android:textSize="12sp" android:maxLines="1" android:ellipsize="end" />
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="Contact" android:textColor="@color/widget_text" android:textSize="12sp" android:maxLines="1" android:ellipsize="end" />
     </LinearLayout>
 
 </LinearLayout>

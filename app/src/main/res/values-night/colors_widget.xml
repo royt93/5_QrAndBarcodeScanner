@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="widget_background">#1c1c1e</color>    <!-- Apple Dark Gray -->
+    <color name="widget_text">@color/white</color>
+    <color name="widget_text_secondary">#CCFFFFFF</color>
+    <color name="widget_text_tertiary">#AAFFFFFF</color>
+    <color name="widget_icon_tint">@color/white</color>
+</resources>
