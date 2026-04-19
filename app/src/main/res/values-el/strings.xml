@@ -382,4 +382,9 @@
     <string name="security_alert_message">This QR code contains an unverified URL that may lead to a harmful website. We recommend avoiding this link.</string>
     <string name="action_go_back_safe">Go Back (Safe)</string>
     <string name="action_proceed_anyway">Proceed anyway</string>
+    <string name="activity_batch_export_title">Αποτέλεσμα εξαγωγής</string>
+    <string name="activity_batch_export_success_title">Εξαγωγή επιτυχής!</string>
+    <string name="activity_batch_export_success_detail">Εξαγωγή %1$d barcodes με επιτυχία</string>
+    <string name="activity_batch_export_button_continue">Συνέχεια σάρωσης</string>
+    <string name="activity_batch_export_button_history">Προβολή ιστορικού</string>
 </resources>

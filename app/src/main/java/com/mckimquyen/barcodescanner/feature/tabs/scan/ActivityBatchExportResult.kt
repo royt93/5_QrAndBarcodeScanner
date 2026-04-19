@@ -38,13 +38,13 @@ class ActivityBatchExportResult : ActivityBase() {
         val fileName = intent.getStringExtra(EXTRA_FILE_NAME) ?: ""
         Log.d(TAG, "ActivityBatchExportResult.onCreate: itemCount=$itemCount, fileName=$fileName")
 
-        // Toolbar with back button
+        // Toolbar with back button + localized title
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
             setDisplayShowHomeEnabled(true)
-            title = ""
+            title = getString(R.string.activity_batch_export_title)
         }
         toolbar.setNavigationOnClickListener {
             Log.d(TAG, "ActivityBatchExportResult: back button pressed")
@@ -59,7 +59,7 @@ class ActivityBatchExportResult : ActivityBase() {
         val buttonContinueScanning = findViewById<Button>(R.id.buttonContinueScanning)
         val buttonBackHome = findViewById<Button>(R.id.buttonBackHome)
 
-        textViewDetail.text = "Successfully exported $itemCount barcodes"
+        textViewDetail.text = getString(R.string.activity_batch_export_success_detail, itemCount)
         textViewPath.text = "Downloads/${fileName}.csv"
         Log.d(TAG, "ActivityBatchExportResult: UI populated — $itemCount items, path=Downloads/$fileName.csv")
 

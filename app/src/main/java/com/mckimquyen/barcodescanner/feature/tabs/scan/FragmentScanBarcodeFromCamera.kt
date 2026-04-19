@@ -202,11 +202,10 @@ class FragmentScanBarcodeFromCamera : Fragment(), DialogFragmentConfirmBarcode.L
                     recyclerViewBatch.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(requireContext())
                     recyclerViewBatch.adapter = batchAdapter
                 }
-                // Show helper dialog first; panel appears after dismiss
+                // Show helper dialog; panel will appear only after first successful scan
                 val dialog = DialogFragmentScanHelper()
                 dialog.onDismissCallback = {
-                    Log.d(TAG, "BatchHelper dialog dismissed → showing batch panel")
-                    layoutBatchListPanel.isVisible = true
+                    Log.d(TAG, "BatchHelper dialog dismissed — waiting for first scan to reveal panel")
                 }
                 dialog.show(childFragmentManager, "BatchHelper")
             } else {
@@ -345,6 +344,14 @@ class FragmentScanBarcodeFromCamera : Fragment(), DialogFragmentConfirmBarcode.L
                     batchList.add(0, barcode)
                     batchAdapter.notifyItemInserted(0)
                     recyclerViewBatch.scrollToPosition(0)
+                    Log.d(TAG, "saveScannedBarcode [BATCH]: added '${barcode.text}', total=${batchList.size}")
+                    // Show panel on very first successful scan
+                    if (!layoutBatchListPanel.isVisible) {
+                        layoutBatchListPanel.isVisible = true
+                        Log.d(TAG, "saveScannedBarcode [BATCH]: revealing panel on first scan")
+                    }
+                } else {
+                    Log.d(TAG, "saveScannedBarcode [BATCH]: duplicate skipped '${barcode.text}'")
                 }
             }
             restartPreviewWithDelay(false)

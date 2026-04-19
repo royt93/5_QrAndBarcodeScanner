@@ -122,14 +122,14 @@
 
     </LinearLayout>
 
-    <!-- BATCH LIST PANEL: anchored BELOW top controls, ABOVE QR scan frame center -->
-    <!-- QR frame is centered in the full screen → panel at top never overlaps it -->
+    <!-- BATCH LIST PANEL: anchored BELOW top controls with 16dp gap -->
+    <!-- Shown only after first successful scan in batch mode (not on toggle) -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layoutBatchListPanel"
         android:layout_width="0dp"
         android:layout_height="160dp"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="16dp"
         android:visibility="gone"
         android:background="@drawable/bg_dialog_glass"
         android:elevation="8dp"

@@ -382,4 +382,9 @@
     <string name="security_alert_message">This QR code contains an unverified URL that may lead to a harmful website. We recommend avoiding this link.</string>
     <string name="action_go_back_safe">Go Back (Safe)</string>
     <string name="action_proceed_anyway">Proceed anyway</string>
+    <string name="activity_batch_export_title">Resultado de exportación</string>
+    <string name="activity_batch_export_success_title">¡Exportación exitosa!</string>
+    <string name="activity_batch_export_success_detail">Se exportaron %1$d códigos de barras correctamente</string>
+    <string name="activity_batch_export_button_continue">Continuar escaneando</string>
+    <string name="activity_batch_export_button_history">Ver historial</string>
 </resources>

@@ -404,4 +404,9 @@
     <string name="security_alert_message">This QR code contains an unverified URL that may lead to a harmful website. We recommend avoiding this link.</string>
     <string name="action_go_back_safe">Go Back (Safe)</string>
     <string name="action_proceed_anyway">Proceed anyway</string>
+    <string name="activity_batch_export_title">Kết quả xuất</string>
+    <string name="activity_batch_export_success_title">Xuất thành công!</string>
+    <string name="activity_batch_export_success_detail">Đã xuất thành công %1$d mã vạch</string>
+    <string name="activity_batch_export_button_continue">Tiếp tục quét</string>
+    <string name="activity_batch_export_button_history">Xem lịch sử</string>
 </resources>
