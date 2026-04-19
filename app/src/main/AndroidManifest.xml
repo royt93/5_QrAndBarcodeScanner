@@ -135,6 +135,7 @@
         <activity android:name=".feature.tabs.create.barcode.ActivityCreateBarcodeAll" android:configChanges="orientation|screenSize" android:exported="false" android:screenOrientation="portrait" />
 
         <activity android:name=".feature.barcode.ActivityBarcode" android:configChanges="orientation|screenSize" android:exported="false" android:screenOrientation="portrait" />
+        <activity android:name=".feature.tabs.scan.ActivityBatchExportResult" android:configChanges="orientation|screenSize" android:exported="false" android:screenOrientation="portrait" />
         <activity android:name=".feature.barcode.ActivityBarcodeImage" android:configChanges="orientation|screenSize" android:exported="false" android:screenOrientation="portrait" />
         <activity android:name=".feature.barcode.otp.ActivityOtp" android:configChanges="orientation|screenSize" android:exported="false" android:screenOrientation="portrait" />
         <activity android:name=".feature.barcode.save.ActivitySaveBarcodeAsText" android:configChanges="orientation|screenSize" android:exported="false" android:screenOrientation="portrait" />

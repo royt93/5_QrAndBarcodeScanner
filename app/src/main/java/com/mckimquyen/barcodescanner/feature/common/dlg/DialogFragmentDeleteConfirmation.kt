@@ -3,6 +3,7 @@ package com.mckimquyen.barcodescanner.feature.common.dlg
 import android.app.Dialog
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import com.mckimquyen.barcodescanner.R
@@ -31,7 +32,7 @@ class DialogFragmentDeleteConfirmation : DialogFragment() {
         val listener = requireActivity() as? Listener ?: parentFragment as? Listener
         val messageId = arguments?.getInt(MESSAGE_ID_KEY).orZero()
 
-        val dialog = AlertDialog.Builder(requireActivity(), R.style.DialogTheme)
+        val dialog = MaterialAlertDialogBuilder(requireActivity(), R.style.DialogTheme)
             .setMessage(messageId)
             .setPositiveButton(R.string.dialog_delete_positive_button) { _, _ -> listener?.onDeleteConfirmed() }
             .setNegativeButton(R.string.dialog_delete_negative_button, null)

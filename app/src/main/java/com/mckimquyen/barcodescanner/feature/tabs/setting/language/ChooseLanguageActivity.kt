@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import com.mckimquyen.barcodescanner.sdkadbmob.Logger
 import androidx.appcompat.app.AlertDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -85,7 +86,7 @@ class ChooseLanguageActivity : ActivityBase() {
     }
 
     private fun showLanguageChangeDialog(newLanguageCode: String, selectedButton: RadioButtonSettings) {
-        AlertDialog.Builder(this, R.style.DialogTheme)
+        MaterialAlertDialogBuilder(this, R.style.DialogTheme)
             .setTitle(getString(R.string.dialog_change_language_title))
             .setMessage(getString(R.string.dialog_change_language_message))
             .setPositiveButton(getString(R.string.dialog_change_language_positive)) { _, _ ->

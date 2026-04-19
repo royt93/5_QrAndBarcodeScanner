@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import com.mckimquyen.barcodescanner.R
@@ -38,7 +39,7 @@ class DialogFragmentEditBarcodeName : DialogFragment() {
             .from(requireContext())
             .inflate(R.layout.dlg_edit_barcode_name, null, false)
 
-        val dialog = AlertDialog.Builder(requireActivity(), R.style.DialogTheme)
+        val dialog = MaterialAlertDialogBuilder(requireActivity(), R.style.DialogTheme)
             .setTitle(R.string.dialog_edit_barcode_name_title)
             .setView(view)
             .setPositiveButton(R.string.dialog_edit_barcode_name_positive_button) { _, _ ->

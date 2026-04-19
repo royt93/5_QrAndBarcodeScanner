@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.SeekBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.budiyev.android.codescanner.*
 import com.mckimquyen.barcodescanner.di.*
@@ -31,6 +32,7 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.f_scan_barcode_from_camera.*
 import java.util.concurrent.TimeUnit
 import com.mckimquyen.barcodescanner.R
+import android.util.Log
 
 class FragmentScanBarcodeFromCamera : Fragment(), DialogFragmentConfirmBarcode.Listener {
 
@@ -42,6 +44,7 @@ class FragmentScanBarcodeFromCamera : Fragment(), DialogFragmentConfirmBarcode.L
         private const val PERMISSION_REQUEST_CODE = 101
         private const val ZXING_SCAN_INTENT_ACTION = "com.google.zxing.client.android.SCAN"
         private const val CONTINUOUS_SCANNING_PREVIEW_DELAY = 500L
+        private const val TAG = "roy93~"
     }
 
     private val vibrationPattern = arrayOf<Long>(0, 350).toLongArray()
@@ -51,6 +54,10 @@ class FragmentScanBarcodeFromCamera : Fragment(), DialogFragmentConfirmBarcode.L
     private lateinit var codeScanner: CodeScanner
     private var toast: Toast? = null
     private var lastResult: Barcode? = null
+    
+    private var isBatchScanMode = false
+    private val batchList = mutableListOf<Barcode>()
+    private val batchAdapter = BatchAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -62,6 +69,7 @@ class FragmentScanBarcodeFromCamera : Fragment(), DialogFragmentConfirmBarcode.L
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.d(TAG, "onViewCreated: initializing scan fragment")
         supportEdgeToEdge()
         setDarkStatusBar()
         initScanner()
@@ -70,6 +78,7 @@ class FragmentScanBarcodeFromCamera : Fragment(), DialogFragmentConfirmBarcode.L
         handleZoomChanged()
         handleDecreaseZoomClicked()
         handleIncreaseZoomClicked()
+        initBatchScanButton()
         requestPermissions()
     }
 
@@ -113,8 +122,8 @@ class FragmentScanBarcodeFromCamera : Fragment(), DialogFragmentConfirmBarcode.L
     }
 
     private fun supportEdgeToEdge() {
-        imageViewFlash.applySystemWindowInsets(applyTop = true)
-        imageViewScanFromFile.applySystemWindowInsets(applyTop = true)
+        // Apply status bar inset to the entire top controls row
+        layoutTopControls.applySystemWindowInsets(applyTop = true)
     }
 
     private fun setDarkStatusBar() {
@@ -180,6 +189,51 @@ class FragmentScanBarcodeFromCamera : Fragment(), DialogFragmentConfirmBarcode.L
             toggleFlash()
         }
         imageViewFlash.isActivated = settings.flash
+    }
+
+    private fun initBatchScanButton() {
+        layoutBatchScanContainer.setOnClickListener {
+            isBatchScanMode = !isBatchScanMode
+            imageViewBatchScan.isActivated = isBatchScanMode
+            Log.d(TAG, "Batch Scan toggle: isBatchScanMode=$isBatchScanMode")
+
+            if (isBatchScanMode) {
+                if (recyclerViewBatch.adapter == null) {
+                    recyclerViewBatch.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(requireContext())
+                    recyclerViewBatch.adapter = batchAdapter
+                }
+                // Show helper dialog first; panel appears after dismiss
+                val dialog = DialogFragmentScanHelper()
+                dialog.onDismissCallback = {
+                    Log.d(TAG, "BatchHelper dialog dismissed → showing batch panel")
+                    layoutBatchListPanel.isVisible = true
+                }
+                dialog.show(childFragmentManager, "BatchHelper")
+            } else {
+                Log.d(TAG, "Batch Scan OFF → hiding panel, clearing list")
+                layoutBatchListPanel.isVisible = false
+            }
+        }
+        
+        buttonExportCsv.setOnClickListener {
+            if (batchList.isEmpty()) {
+                return@setOnClickListener
+            }
+            val fileName = "Batch_Scan_${System.currentTimeMillis()}"
+            val exportList = batchList.map { com.mckimquyen.barcodescanner.model.ExportBarcode(it.date, it.format, it.text) }
+            (requireActivity() as AppCompatActivity).barcodeSaver.saveBarcodeHistoryAsCsv(requireContext(), fileName, exportList)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    val count = batchList.size
+                    batchList.clear()
+                    batchAdapter.notifyDataSetChanged()
+                    com.mckimquyen.barcodescanner.feature.tabs.scan.ActivityBatchExportResult.start(requireContext(), count, fileName)
+                }, { error: Throwable ->
+                    showError(error)
+                })
+                .addTo(disposable)
+        }
     }
 
     private fun handleScanFromFileClicked() {
@@ -270,7 +324,7 @@ class FragmentScanBarcodeFromCamera : Fragment(), DialogFragmentConfirmBarcode.L
 
     private fun vibrateIfNeeded() {
         if (settings.vibrate) {
-            requireActivity().apply {
+            activity?.apply {
                 runOnUiThread {
                     applicationContext.vibrator?.vibrateOnce(vibrationPattern)
                 }
@@ -284,6 +338,19 @@ class FragmentScanBarcodeFromCamera : Fragment(), DialogFragmentConfirmBarcode.L
     }
 
     private fun saveScannedBarcode(barcode: Barcode) {
+        if (isBatchScanMode) {
+            activity?.runOnUiThread {
+                val isDuplicate = settings.doNotSaveDuplicates && batchList.any { it.text == barcode.text && it.format == barcode.format }
+                if (!isDuplicate) {
+                    batchList.add(0, barcode)
+                    batchAdapter.notifyItemInserted(0)
+                    recyclerViewBatch.scrollToPosition(0)
+                }
+            }
+            restartPreviewWithDelay(false)
+            return
+        }
+
         barcodeDatabase.save(barcode, settings.doNotSaveDuplicates)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -314,7 +381,7 @@ class FragmentScanBarcodeFromCamera : Fragment(), DialogFragmentConfirmBarcode.L
     }
 
     private fun restartPreview() {
-        requireActivity().runOnUiThread {
+        activity?.runOnUiThread {
             codeScanner.startPreview()
         }
     }
@@ -391,5 +458,20 @@ class FragmentScanBarcodeFromCamera : Fragment(), DialogFragmentConfirmBarcode.L
             setResult(Activity.RESULT_OK, intent)
             finish()
         }
+    }
+
+    inner class BatchAdapter : androidx.recyclerview.widget.RecyclerView.Adapter<BatchAdapter.BatchViewHolder>() {
+        inner class BatchViewHolder(view: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
+            val text: android.widget.TextView = view.findViewById(android.R.id.text1)
+        }
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BatchViewHolder {
+            val view = LayoutInflater.from(parent.context).inflate(android.R.layout.simple_list_item_1, parent, false)
+            return BatchViewHolder(view)
+        }
+        override fun onBindViewHolder(holder: BatchViewHolder, position: Int) {
+            holder.text.text = batchList[position].text
+            holder.text.setTextColor(androidx.core.content.ContextCompat.getColor(holder.itemView.context, R.color.default_text_color))
+        }
+        override fun getItemCount() = batchList.size
     }
 }

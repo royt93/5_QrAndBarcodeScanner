@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import com.mckimquyen.barcodescanner.R
@@ -41,7 +42,7 @@ class DialogFragmentError : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val message = arguments?.getString(ERROR_MESSAGE_KEY).orEmpty()
 
-        val dialog = AlertDialog.Builder(requireActivity(), R.style.DialogTheme)
+        val dialog = MaterialAlertDialogBuilder(requireActivity(), R.style.DialogTheme)
             .setTitle(R.string.error_dialog_title)
             .setMessage(message)
             .setCancelable(false)

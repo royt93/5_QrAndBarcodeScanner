@@ -3,6 +3,7 @@ package com.mckimquyen.barcodescanner.feature.common.dlg
 import android.app.Dialog
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import com.mckimquyen.barcodescanner.R
@@ -39,7 +40,7 @@ class DialogFragmentChooseSearchEngine : DialogFragment() {
             getString(R.string.activity_choose_search_engine_yandex)
         )
 
-        val dialog = AlertDialog.Builder(requireActivity(), R.style.DialogTheme)
+        val dialog = MaterialAlertDialogBuilder(requireActivity(), R.style.DialogTheme)
             .setItems(items) { _, itemClicked ->
                 val searchEngine = ITEMS[itemClicked]
                 listener?.onSearchEngineSelected(searchEngine)

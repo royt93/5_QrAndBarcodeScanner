@@ -42,7 +42,8 @@ import java.util.*
 
 
 class ActivityBarcode : ActivityBase(), DialogFragmentDeleteConfirmation.Listener,
-    DialogFragmentChooseSearchEngine.Listener, DialogFragmentEditBarcodeName.Listener {
+    DialogFragmentChooseSearchEngine.Listener, DialogFragmentEditBarcodeName.Listener,
+    com.mckimquyen.barcodescanner.feature.common.dlg.DialogFragmentSecurityAlert.Listener {
 
     companion object {
         private const val BARCODE_KEY = "BARCODE_KEY"
@@ -107,6 +108,14 @@ class ActivityBarcode : ActivityBase(), DialogFragmentDeleteConfirmation.Listene
 
     override fun onSearchEngineSelected(searchEngine: SearchEngine) {
         performWebSearchUsingSearchEngine(searchEngine)
+    }
+
+    override fun onSecurityProceed(url: String) {
+        startActivityIfExists(Intent.ACTION_VIEW, url)
+    }
+
+    override fun onSecurityCancel() {
+        // Do nothing
     }
 
     override fun onDestroy() {
@@ -514,7 +523,24 @@ class ActivityBarcode : ActivityBase(), DialogFragmentDeleteConfirmation.Listene
     }
 
     private fun openLink() {
-        startActivityIfExists(Intent.ACTION_VIEW, barcode.url.orEmpty())
+        val url = barcode.url.orEmpty()
+        if (url.isBlank()) return
+        
+        val safeDomains = listOf("google.com", "facebook.com", "youtube.com", "vnexpress.net", "github.com", "amazon.com", "apple.com")
+        var isSafe = false
+        for (domain in safeDomains) {
+            if (url.contains(domain, ignoreCase = true)) {
+                isSafe = true
+                break
+            }
+        }
+        
+        if (!isSafe) {
+            val dialog = com.mckimquyen.barcodescanner.feature.common.dlg.DialogFragmentSecurityAlert.newInstance(url)
+            dialog.show(supportFragmentManager, "SecurityAlert")
+        } else {
+            startActivityIfExists(Intent.ACTION_VIEW, url)
+        }
     }
 
     private fun saveBookmark() {

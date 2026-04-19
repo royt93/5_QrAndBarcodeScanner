@@ -7,23 +7,21 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import com.mckimquyen.barcodescanner.R
-import com.mckimquyen.barcodescanner.extension.toStringId
-import com.mckimquyen.barcodescanner.model.Barcode
 
-class DialogFragmentConfirmBarcode : DialogFragment() {
+class DialogFragmentSecurityAlert : DialogFragment() {
 
     interface Listener {
-        fun onBarcodeConfirmed(barcode: Barcode)
-        fun onBarcodeDeclined()
+        fun onSecurityProceed(url: String)
+        fun onSecurityCancel()
     }
 
     companion object {
-        private const val BARCODE_KEY = "BARCODE_FORMAT_MESSAGE_ID_KEY"
+        private const val URL_KEY = "URL_KEY"
 
-        fun newInstance(barcode: Barcode): DialogFragmentConfirmBarcode {
-            return DialogFragmentConfirmBarcode().apply {
+        fun newInstance(url: String): DialogFragmentSecurityAlert {
+            return DialogFragmentSecurityAlert().apply {
                 arguments = Bundle().apply {
-                    putSerializable(BARCODE_KEY, barcode)
+                    putString(URL_KEY, url)
                 }
                 isCancelable = false
             }
@@ -31,20 +29,18 @@ class DialogFragmentConfirmBarcode : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val listener = parentFragment as? Listener
-        val barcode =
-            arguments?.getSerializable(BARCODE_KEY) as? Barcode ?: throw IllegalArgumentException("No barcode passed")
-        val messageId = barcode.format.toStringId()
+        val listener = activity as? Listener
+        val url = arguments?.getString(URL_KEY) ?: ""
 
         val dialog = MaterialAlertDialogBuilder(requireActivity(), R.style.DialogTheme)
-            .setTitle(R.string.dialog_confirm_barcode_title)
-            .setMessage(messageId)
+            .setTitle(R.string.security_alert_title)
+            .setMessage(getString(R.string.security_alert_message) + "\n\n" + url)
             .setCancelable(false)
-            .setPositiveButton(R.string.dialog_confirm_barcode_positive_button) { _, _ ->
-                listener?.onBarcodeConfirmed(barcode)
+            .setPositiveButton(R.string.action_go_back_safe) { _, _ ->
+                listener?.onSecurityCancel()
             }
-            .setNegativeButton(R.string.dialog_confirm_barcode_negative_button) { _, _ ->
-                listener?.onBarcodeDeclined()
+            .setNegativeButton(R.string.action_proceed_anyway) { _, _ ->
+                listener?.onSecurityProceed(url)
             }
             .create()
 

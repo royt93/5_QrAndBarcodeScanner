@@ -16,6 +16,8 @@
         <item name="android:navigationBarColor">@color/navigation_bar_color</item>
         <item name="android:actionOverflowButtonStyle">@style/ToolbarMenuButtonStyle</item>
         <item name="alertDialogTheme">@style/AppAlertDialogTheme</item>
+        <item name="colorSurface">@color/dialog_background_color</item>
+        <item name="colorOnSurface">@color/default_text_color</item>
     </style>
 
     <style name="AppTheme" parent="BaseAppTheme" />
@@ -151,14 +153,16 @@
         <item name="android:backgroundTint">@color/blue</item>
     </style>
 
-    <style name="DialogTheme" parent="Theme.AppCompat.DayNight.Dialog.Alert">
+    <style name="DialogTheme" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
         <item name="android:colorBackground">@color/dialog_background_color</item>
         <item name="colorAccent">@color/color_accent</item>
+        <item name="colorSurface">@color/dialog_background_color</item>
     </style>
 
-    <style name="AppAlertDialogTheme" parent="Theme.AppCompat.DayNight.Dialog.Alert">
+    <style name="AppAlertDialogTheme" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
         <item name="android:colorBackground">@color/dialog_background_color</item>
         <item name="colorAccent">@color/color_accent</item>
+        <item name="colorSurface">@color/dialog_background_color</item>
         <item name="android:textColor">@color/default_text_color</item>
         <item name="android:textColorSecondary">@color/text_color_secondary</item>
     </style>

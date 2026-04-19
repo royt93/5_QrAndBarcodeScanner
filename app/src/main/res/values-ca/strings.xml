@@ -388,4 +388,12 @@
     <string name="barcode_format_upc_a" translatable="false">UPC-A</string>
     <string name="barcode_format_upc_e" translatable="false">UPC-E</string>
 
+    <string name="mode_batch_scan">Batch Scan</string>
+    <string name="action_export_csv">Export CSV</string>
+    <string name="helper_batch_scan_title">Batch Scan Mode</string>
+    <string name="helper_batch_scan_message">Scan multiple items back-to-back without leaving the camera. Press "Export CSV" when you are done.</string>
+    <string name="security_alert_title">Security Warning</string>
+    <string name="security_alert_message">This QR code contains an unverified URL that may lead to a harmful website. We recommend avoiding this link.</string>
+    <string name="action_go_back_safe">Go Back (Safe)</string>
+    <string name="action_proceed_anyway">Proceed anyway</string>
 </resources>
