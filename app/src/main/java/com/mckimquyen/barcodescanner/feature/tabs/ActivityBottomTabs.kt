@@ -1,5 +1,6 @@
 package com.mckimquyen.barcodescanner.feature.tabs
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -78,9 +79,26 @@ class ActivityBottomTabs : ActivityBase(), BottomNavigationView.OnNavigationItem
             return false
         }
         showFragment(item.itemId)
-//        Logger.i("onNavigationItemSelected");
         rateAppInApp(BuildConfig.DEBUG)
         return true
+    }
+
+    /** Called when ActivityBottomTabs is brought to foreground via FLAG_ACTIVITY_CLEAR_TOP.
+     *  e.g. when View History is tapped in ActivityBatchExportResult */
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        Log.d("roy93~", "ActivityBottomTabs.onNewIntent: action=${intent?.action}")
+        when (intent?.action) {
+            ACTION_HISTORY -> {
+                Log.d("roy93~", "ActivityBottomTabs.onNewIntent: switching to History tab")
+                bottomNavigationView.selectedItemId = R.id.itemHistory
+            }
+            ACTION_CREATE_BARCODE -> {
+                Log.d("roy93~", "ActivityBottomTabs.onNewIntent: switching to Create tab")
+                bottomNavigationView.selectedItemId = R.id.itemCreate
+            }
+            else -> Log.d("roy93~", "ActivityBottomTabs.onNewIntent: no matching action, ignoring")
+        }
     }
 
     private var doubleBackToExitPressedOnce = false

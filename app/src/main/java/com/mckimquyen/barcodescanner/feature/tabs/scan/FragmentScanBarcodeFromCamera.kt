@@ -191,16 +191,37 @@ class FragmentScanBarcodeFromCamera : Fragment(), DialogFragmentConfirmBarcode.L
         imageViewFlash.isActivated = settings.flash
     }
 
+    private fun updateBatchScanVisual() {
+        if (isBatchScanMode) {
+            // ON: blue pill background + white tint on icon
+            layoutBatchScanContainer.setBackgroundResource(R.drawable.bg_batch_scan_active)
+            imageViewBatchScan.setColorFilter(
+                android.graphics.Color.parseColor("#00B1FF"),
+                android.graphics.PorterDuff.Mode.SRC_IN
+            )
+            textViewBatchScan.setTextColor(android.graphics.Color.parseColor("#00B1FF"))
+        } else {
+            // OFF: transparent + white (default)
+            layoutBatchScanContainer.setBackgroundResource(android.R.color.transparent)
+            imageViewBatchScan.clearColorFilter()
+            textViewBatchScan.setTextColor(android.graphics.Color.WHITE)
+        }
+    }
+
     private fun initBatchScanButton() {
         layoutBatchScanContainer.setOnClickListener {
             isBatchScanMode = !isBatchScanMode
-            imageViewBatchScan.isActivated = isBatchScanMode
+            updateBatchScanVisual()
             Log.d(TAG, "Batch Scan toggle: isBatchScanMode=$isBatchScanMode")
 
             if (isBatchScanMode) {
                 if (recyclerViewBatch.adapter == null) {
                     recyclerViewBatch.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(requireContext())
                     recyclerViewBatch.adapter = batchAdapter
+                    // Fix 2: disable RecyclerView touch interception so card-level click works
+                    recyclerViewBatch.isClickable = false
+                    recyclerViewBatch.isFocusable = false
+                    recyclerViewBatch.isNestedScrollingEnabled = false
                 }
                 // Show helper dialog; panel will appear only after first successful scan
                 val dialog = DialogFragmentScanHelper()
@@ -213,29 +234,45 @@ class FragmentScanBarcodeFromCamera : Fragment(), DialogFragmentConfirmBarcode.L
                 layoutBatchListPanel.isVisible = false
             }
         }
-        
+
         // Export on button click
         buttonExportCsv.setOnClickListener { triggerExport() }
-        // Also trigger export when tapping anywhere on the card
+        // Card click exports (works because RecyclerView is non-clickable)
         layoutBatchListPanel.setOnClickListener { triggerExport() }
     }
 
     private fun triggerExport() {
         if (batchList.isEmpty()) return
+        val snapshot = batchList.toList() // take a snapshot before clearing
         val fileName = "Batch_Scan_${System.currentTimeMillis()}"
-        val exportList = batchList.map { com.mckimquyen.barcodescanner.model.ExportBarcode(it.date, it.format, it.text) }
-        (requireActivity() as AppCompatActivity).barcodeSaver.saveBarcodeHistoryAsCsv(requireContext(), fileName, exportList)
+        val exportList = snapshot.map { com.mckimquyen.barcodescanner.model.ExportBarcode(it.date, it.format, it.text) }
+        Log.d(TAG, "triggerExport: saving ${snapshot.size} items to database + CSV")
+
+        // Step 1: save all batch items to the barcode database so they appear in History
+        io.reactivex.Observable.fromIterable(snapshot)
+            .flatMapSingle { barcode ->
+                barcodeDatabase.save(barcode, settings.doNotSaveDuplicates)
+                    .doOnSuccess { id -> Log.d(TAG, "triggerExport: saved '${barcode.text}' to DB id=$id") }
+                    .onErrorReturnItem(-1L)
+            }
+            .toList()
+            .flatMap {
+                // Step 2: export to CSV after all DB saves are done
+                Log.d(TAG, "triggerExport: DB saves complete, exporting CSV")
+                (requireActivity() as AppCompatActivity).barcodeSaver
+                    .saveBarcodeHistoryAsCsv(requireContext(), fileName, exportList)
+                    .andThen(io.reactivex.Single.just(snapshot.size))
+            }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                val count = batchList.size
+            .subscribe({ count ->
                 batchList.clear()
                 batchAdapter.notifyDataSetChanged()
-                // Hide panel after export — re-appears only on next scan
                 layoutBatchListPanel.isVisible = false
-                Log.d(TAG, "triggerExport success: panel hidden, list cleared. count=$count")
+                Log.d(TAG, "triggerExport success: DB + CSV done, panel hidden. count=$count")
                 com.mckimquyen.barcodescanner.feature.tabs.scan.ActivityBatchExportResult.start(requireContext(), count, fileName)
             }, { error: Throwable ->
+                Log.e(TAG, "triggerExport error: ${error.message}", error)
                 showError(error)
             })
             .addTo(disposable)

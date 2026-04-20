@@ -9,14 +9,15 @@ import android.os.Environment
 import android.util.Log
 import android.view.animation.AnimationUtils
 import android.widget.Button
-import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.FileProvider
+import com.mckimquyen.barcodescanner.BuildConfig
 import com.mckimquyen.barcodescanner.R
 import com.mckimquyen.barcodescanner.feature.ActivityBase
+import com.mckimquyen.barcodescanner.feature.tabs.ActivityBottomTabs
 import java.io.File
 
 class ActivityBatchExportResult : ActivityBase() {
@@ -71,30 +72,33 @@ class ActivityBatchExportResult : ActivityBase() {
         textViewPath.text = csvPath
         Log.d(TAG, "ActivityBatchExportResult: UI populated — $itemCount items, path=$csvPath")
 
-        // Animations
+        // Entrance animations
         val scalePop = AnimationUtils.loadAnimation(this, R.anim.anim_scale_pop)
         val slideUp = AnimationUtils.loadAnimation(this, R.anim.anim_slide_up_fade)
         imageViewSuccess.startAnimation(scalePop)
         layoutContent.startAnimation(slideUp)
         Log.d(TAG, "ActivityBatchExportResult: animations started")
 
-        // Open file button — opens the CSV from Downloads
+        // Open the exported CSV file
         buttonOpenFile.setOnClickListener {
             Log.d(TAG, "ActivityBatchExportResult: Open File tapped for $fileName.csv")
             openCsvFile(fileName)
         }
 
+        // Continue scanning → go back to camera tab
         buttonContinueScanning.setOnClickListener {
-            Log.d(TAG, "ActivityBatchExportResult: Continue Scanning clicked")
+            Log.d(TAG, "ActivityBatchExportResult: Continue Scanning → finish")
             finish()
         }
 
+        // View History → navigate to history tab in bottom navigation
         buttonBackHome.setOnClickListener {
-            Log.d(TAG, "ActivityBatchExportResult: View History clicked → finish")
-            finish()
+            Log.d(TAG, "ActivityBatchExportResult: View History → navigating to history tab")
+            navigateToHistoryTab()
         }
     }
 
+    /** Opens the exported CSV from Downloads using FileProvider */
     private fun openCsvFile(fileName: String) {
         try {
             val downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
@@ -116,5 +120,19 @@ class ActivityBatchExportResult : ActivityBase() {
         } catch (e: Exception) {
             Log.e(TAG, "openCsvFile: failed to open file — ${e.message}", e)
         }
+    }
+
+    /** Navigates to ActivityBottomTabs and switches to the History tab */
+    private fun navigateToHistoryTab() {
+        val action = "${BuildConfig.APPLICATION_ID}.HISTORY"
+        Log.d(TAG, "navigateToHistoryTab: starting ActivityBottomTabs with action=$action")
+        val intent = Intent(this, ActivityBottomTabs::class.java).apply {
+            this.action = action
+            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        }
+        Log.d(TAG, "navigateToHistoryTab: intent created, flags=CLEAR_TOP|SINGLE_TOP")
+        startActivity(intent)
+        finish()
+        Log.d(TAG, "navigateToHistoryTab: finish() called")
     }
 }

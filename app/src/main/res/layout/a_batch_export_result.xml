@@ -69,52 +69,44 @@
                     android:textColor="@color/secondary_text_color"
                     android:layout_marginBottom="24dp" />
 
-                <!-- File info card with prominent "Open File" button -->
+                <!-- File info card (path only) -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
+                    android:orientation="horizontal"
                     android:background="@drawable/bg_dialog_glass"
                     android:padding="16dp"
-                    android:layout_marginBottom="32dp">
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="16dp">
 
-                    <!-- Path row -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        app:srcCompat="@drawable/ic_download"
+                        app:tint="@color/blue"
+                        android:layout_marginEnd="10dp" />
+
+                    <TextView
+                        android:id="@+id/textViewPath"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
-                        android:layout_marginBottom="12dp">
-
-                        <ImageView
-                            android:layout_width="18dp"
-                            android:layout_height="18dp"
-                            app:srcCompat="@drawable/ic_download"
-                            app:tint="@color/blue"
-                            android:layout_marginEnd="10dp" />
-
-                        <TextView
-                            android:id="@+id/textViewPath"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:textSize="13sp"
-                            android:textColor="@color/secondary_text_color" />
-                    </LinearLayout>
-
-                    <!-- Open File: full-width prominent button -->
-                    <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/buttonOpenFile"
-                        android:layout_width="match_parent"
-                        android:layout_height="44dp"
-                        android:text="@string/activity_batch_export_button_open_file"
-                        android:textColor="@color/white"
-                        android:textSize="15sp"
-                        android:textStyle="bold"
-                        android:textAllCaps="false"
-                        android:background="@drawable/bg_gradient_button" />
-
+                        android:layout_weight="1"
+                        android:textSize="13sp"
+                        android:textColor="@color/secondary_text_color" />
                 </LinearLayout>
+
+                <!-- Open File: same hierarchy as other buttons → same width -->
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/buttonOpenFile"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:text="@string/activity_batch_export_button_open_file"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textAllCaps="false"
+                    android:background="@drawable/bg_gradient_button"
+                    android:layout_marginBottom="12dp" />
 
                 <!-- Continue Scanning -->
                 <androidx.appcompat.widget.AppCompatButton
@@ -129,7 +121,7 @@
                     android:background="@drawable/bg_gradient_button"
                     android:layout_marginBottom="12dp" />
 
-                <!-- View History (ghost style) -->
+                <!-- View History: ghost style with same height -->
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/buttonBackHome"
                     android:layout_width="match_parent"
