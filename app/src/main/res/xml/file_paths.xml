@@ -4,5 +4,9 @@
         <cache-path
             name="shared_images"
             path="images/" />
+        <!-- Allow FileProvider to serve files from external Downloads directory -->
+        <external-path
+            name="external_downloads"
+            path="Download/" />
     </paths>
 </resources>

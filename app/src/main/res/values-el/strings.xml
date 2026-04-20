@@ -387,4 +387,5 @@
     <string name="activity_batch_export_success_detail">Εξαγωγή %1$d barcodes με επιτυχία</string>
     <string name="activity_batch_export_button_continue">Συνέχεια σάρωσης</string>
     <string name="activity_batch_export_button_history">Προβολή ιστορικού</string>
+    <string name="activity_batch_export_button_open_file">Άνοιγμα αρχείου</string>
 </resources>

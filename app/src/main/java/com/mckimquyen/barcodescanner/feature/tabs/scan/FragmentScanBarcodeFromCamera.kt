@@ -214,25 +214,31 @@ class FragmentScanBarcodeFromCamera : Fragment(), DialogFragmentConfirmBarcode.L
             }
         }
         
-        buttonExportCsv.setOnClickListener {
-            if (batchList.isEmpty()) {
-                return@setOnClickListener
-            }
-            val fileName = "Batch_Scan_${System.currentTimeMillis()}"
-            val exportList = batchList.map { com.mckimquyen.barcodescanner.model.ExportBarcode(it.date, it.format, it.text) }
-            (requireActivity() as AppCompatActivity).barcodeSaver.saveBarcodeHistoryAsCsv(requireContext(), fileName, exportList)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    val count = batchList.size
-                    batchList.clear()
-                    batchAdapter.notifyDataSetChanged()
-                    com.mckimquyen.barcodescanner.feature.tabs.scan.ActivityBatchExportResult.start(requireContext(), count, fileName)
-                }, { error: Throwable ->
-                    showError(error)
-                })
-                .addTo(disposable)
-        }
+        // Export on button click
+        buttonExportCsv.setOnClickListener { triggerExport() }
+        // Also trigger export when tapping anywhere on the card
+        layoutBatchListPanel.setOnClickListener { triggerExport() }
+    }
+
+    private fun triggerExport() {
+        if (batchList.isEmpty()) return
+        val fileName = "Batch_Scan_${System.currentTimeMillis()}"
+        val exportList = batchList.map { com.mckimquyen.barcodescanner.model.ExportBarcode(it.date, it.format, it.text) }
+        (requireActivity() as AppCompatActivity).barcodeSaver.saveBarcodeHistoryAsCsv(requireContext(), fileName, exportList)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                val count = batchList.size
+                batchList.clear()
+                batchAdapter.notifyDataSetChanged()
+                // Hide panel after export — re-appears only on next scan
+                layoutBatchListPanel.isVisible = false
+                Log.d(TAG, "triggerExport success: panel hidden, list cleared. count=$count")
+                com.mckimquyen.barcodescanner.feature.tabs.scan.ActivityBatchExportResult.start(requireContext(), count, fileName)
+            }, { error: Throwable ->
+                showError(error)
+            })
+            .addTo(disposable)
     }
 
     private fun handleScanFromFileClicked() {

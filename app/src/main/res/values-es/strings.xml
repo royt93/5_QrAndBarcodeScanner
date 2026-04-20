@@ -387,4 +387,5 @@
     <string name="activity_batch_export_success_detail">Se exportaron %1$d códigos de barras correctamente</string>
     <string name="activity_batch_export_button_continue">Continuar escaneando</string>
     <string name="activity_batch_export_button_history">Ver historial</string>
+    <string name="activity_batch_export_button_open_file">Abrir archivo</string>
 </resources>

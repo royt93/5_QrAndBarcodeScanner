@@ -387,4 +387,5 @@
     <string name="activity_batch_export_success_detail">Pomyślnie wyeksportowano %1$d kodów kreskowych</string>
     <string name="activity_batch_export_button_continue">Kontynuuj skanowanie</string>
     <string name="activity_batch_export_button_history">Zobacz historię</string>
+    <string name="activity_batch_export_button_open_file">Otwórz plik</string>
 </resources>

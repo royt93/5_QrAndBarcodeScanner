@@ -409,4 +409,5 @@
     <string name="activity_batch_export_success_detail">Successfully exported %1$d barcodes</string>
     <string name="activity_batch_export_button_continue">Continue Scanning</string>
     <string name="activity_batch_export_button_history">View History</string>
+    <string name="activity_batch_export_button_open_file">Open file</string>
 </resources>

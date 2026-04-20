@@ -409,4 +409,5 @@
     <string name="activity_batch_export_success_detail">Đã xuất thành công %1$d mã vạch</string>
     <string name="activity_batch_export_button_continue">Tiếp tục quét</string>
     <string name="activity_batch_export_button_history">Xem lịch sử</string>
+    <string name="activity_batch_export_button_open_file">Mở file</string>
 </resources>

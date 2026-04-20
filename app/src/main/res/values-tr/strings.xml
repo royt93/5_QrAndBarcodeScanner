@@ -387,4 +387,5 @@
     <string name="activity_batch_export_success_detail">%1$d barkod başarıyla dışa aktarıldı</string>
     <string name="activity_batch_export_button_continue">Taramaya devam et</string>
     <string name="activity_batch_export_button_history">Geçmişi görüntüle</string>
+    <string name="activity_batch_export_button_open_file">Dosyayı aç</string>
 </resources>

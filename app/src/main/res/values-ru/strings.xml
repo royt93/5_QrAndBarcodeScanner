@@ -360,4 +360,5 @@
     <string name="activity_batch_export_success_detail">Успешно экспортировано %1$d штрих-кодов</string>
     <string name="activity_batch_export_button_continue">Продолжить сканирование</string>
     <string name="activity_batch_export_button_history">Просмотр истории</string>
+    <string name="activity_batch_export_button_open_file">Открыть файл</string>
 </resources>

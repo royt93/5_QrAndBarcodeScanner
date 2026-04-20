@@ -387,4 +387,5 @@
     <string name="activity_batch_export_success_detail">%1$d Barcodes erfolgreich exportiert</string>
     <string name="activity_batch_export_button_continue">Weiter scannen</string>
     <string name="activity_batch_export_button_history">Verlauf anzeigen</string>
+    <string name="activity_batch_export_button_open_file">Datei öffnen</string>
 </resources>

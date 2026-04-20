@@ -80,4 +80,5 @@
     <string name="activity_batch_export_success_detail">%1$d بارکد با موفقیت صادر شد</string>
     <string name="activity_batch_export_button_continue">ادامه اسکن</string>
     <string name="activity_batch_export_button_history">مشاهده تاریخچه</string>
+    <string name="activity_batch_export_button_open_file">باز کردن فایل</string>
 </resources>

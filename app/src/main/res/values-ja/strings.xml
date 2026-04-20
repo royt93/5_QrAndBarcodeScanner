@@ -387,4 +387,5 @@
     <string name="activity_batch_export_success_detail">%1$d 個のバーコードのエクスポートに成功しました</string>
     <string name="activity_batch_export_button_continue">スキャンを続ける</string>
     <string name="activity_batch_export_button_history">履歴を見る</string>
+    <string name="activity_batch_export_button_open_file">ファイルを開く</string>
 </resources>
