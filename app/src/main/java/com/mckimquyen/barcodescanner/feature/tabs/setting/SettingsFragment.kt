@@ -72,6 +72,9 @@ class SettingsFragment : Fragment(), DialogFragmentDeleteConfirmation.Listener, 
     override fun onDestroyView() {
         super.onDestroyView()
         disposable.clear()
+        if (AdMobManager.interstitialListener == this) {
+            AdMobManager.interstitialListener = null
+        }
     }
 
     fun supportEdgeToEdge() {

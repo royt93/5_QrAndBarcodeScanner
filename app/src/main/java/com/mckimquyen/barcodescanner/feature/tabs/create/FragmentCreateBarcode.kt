@@ -145,6 +145,13 @@ class FragmentCreateBarcode : Fragment(), AdMobManager.InterstitialAdListener {
     override fun onAdNotAvailable() {
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        if (AdMobManager.interstitialListener == this) {
+            AdMobManager.interstitialListener = null
+        }
+    }
+
 //    private var interstitialAd: MaxInterstitialAd? = null
 //
 //    private fun createAdInter() {

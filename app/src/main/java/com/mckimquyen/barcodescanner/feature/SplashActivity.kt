@@ -14,8 +14,8 @@ import com.mckimquyen.barcodescanner.sdkadbmob.Logger
 
 @SuppressLint("CustomSplashScreen")
 class SplashActivity : AppCompatActivity() {
-
     private lateinit var binding: ActivitySplashBinding
+    private var finishRunnable: Runnable? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,8 +33,13 @@ class SplashActivity : AppCompatActivity() {
         startActivity(intent)
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         // Trì hoãn finish để đợi animation hoàn tất
-        window.decorView.postDelayed({
-            finish() // Finish sau animation
-        }, 300) // delay khoảng 300ms (hoặc đúng thời gian của animation)
+        finishRunnable = Runnable { finish() }
+        window.decorView.postDelayed(finishRunnable, 300) // delay khoảng 300ms (hoặc đúng thời gian của animation)
+    }
+
+    override fun onDestroy() {
+        finishRunnable?.let { window.decorView.removeCallbacks(it) }
+        finishRunnable = null
+        super.onDestroy()
     }
 }
