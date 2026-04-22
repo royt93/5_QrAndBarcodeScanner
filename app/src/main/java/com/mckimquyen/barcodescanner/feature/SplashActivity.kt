@@ -3,43 +3,73 @@ package com.mckimquyen.barcodescanner.feature
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat.startActivity
-import com.mckimquyen.barcodescanner.BuildConfig
 import com.mckimquyen.barcodescanner.databinding.ActivitySplashBinding
 import com.mckimquyen.barcodescanner.feature.tabs.ActivityBottomTabs
-import com.mckimquyen.barcodescanner.sdkadbmob.AdMobManager
-import com.mckimquyen.barcodescanner.sdkadbmob.Logger
+import com.roy.sdkadbmob.AdManager
 
 @SuppressLint("CustomSplashScreen")
 class SplashActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySplashBinding
-    private var finishRunnable: Runnable? = null
+    private var splashStartTime: Long = 0
+    private var isNavigating = false
+    private var navigationHandler: android.os.Handler? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Logger.i("onCreate")
+        splashStartTime = System.currentTimeMillis()
+        android.util.Log.i("roy93~", "onCreate Splash")
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        AdMobManager.initSplashScreen(this, {
+        AdManager.initSplashScreen(this) {
+            handleAdLoadCompleted()
+        }
+    }
+
+    private fun handleAdLoadCompleted() {
+        if (isNavigating || isFinishing) return
+
+        val currentTime = System.currentTimeMillis()
+        val elapsedTime = currentTime - splashStartTime
+        val remainingTime = 1000L - elapsedTime // MIN_SPLASH_DURATION = 1000L
+
+        if (remainingTime > 0) {
+            navigationHandler = android.os.Handler(android.os.Looper.getMainLooper())
+            navigationHandler?.postDelayed({
+                goToMain()
+            }, remainingTime)
+        } else {
             goToMain()
-        })
+        }
     }
 
     private fun goToMain() {
+        if (isNavigating || isFinishing || isDestroyed) return
+        isNavigating = true
+
         val intent = Intent(this@SplashActivity, ActivityBottomTabs::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-        // Trì hoãn finish để đợi animation hoàn tất
-        finishRunnable = Runnable { finish() }
-        window.decorView.postDelayed(finishRunnable, 300) // delay khoảng 300ms (hoặc đúng thời gian của animation)
+
+        navigationHandler = android.os.Handler(android.os.Looper.getMainLooper())
+        navigationHandler?.postDelayed({
+            try {
+                if (!isFinishing && !isDestroyed) finish()
+            } catch (e: Exception) {
+            }
+        }, 300L) // NAVIGATION_ANIMATION_DURATION
+    }
+
+    override fun onBackPressed() {
+        // Prevent back button during splash
     }
 
     override fun onDestroy() {
-        finishRunnable?.let { window.decorView.removeCallbacks(it) }
-        finishRunnable = null
+        navigationHandler?.removeCallbacksAndMessages(null)
+        navigationHandler = null
+        isNavigating = false
         super.onDestroy()
     }
 }

@@ -9,30 +9,62 @@ import android.os.Bundle
 import android.provider.ContactsContract
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import com.google.zxing.BarcodeFormat
 import com.mckimquyen.barcodescanner.R
-import com.mckimquyen.barcodescanner.di.*
+import com.mckimquyen.barcodescanner.databinding.ACreateBarcodeBinding
+import com.mckimquyen.barcodescanner.di.barcodeDatabase
+import com.mckimquyen.barcodescanner.di.barcodeParser
+import com.mckimquyen.barcodescanner.di.contactHelper
+import com.mckimquyen.barcodescanner.di.permissionsHelper
+import com.mckimquyen.barcodescanner.di.settings
 import com.mckimquyen.barcodescanner.extension.applySystemWindowInsets
 import com.mckimquyen.barcodescanner.extension.showError
 import com.mckimquyen.barcodescanner.extension.toStringId
 import com.mckimquyen.barcodescanner.extension.unsafeLazy
 import com.mckimquyen.barcodescanner.feature.ActivityBase
 import com.mckimquyen.barcodescanner.feature.barcode.ActivityBarcode
-import com.mckimquyen.barcodescanner.feature.tabs.create.barcode.*
-import com.mckimquyen.barcodescanner.feature.tabs.create.qr.*
+import com.mckimquyen.barcodescanner.feature.tabs.create.barcode.FragmentCreateAztec
+import com.mckimquyen.barcodescanner.feature.tabs.create.barcode.FragmentCreateCodabar
+import com.mckimquyen.barcodescanner.feature.tabs.create.barcode.FragmentCreateCode128
+import com.mckimquyen.barcodescanner.feature.tabs.create.barcode.FragmentCreateCode39
+import com.mckimquyen.barcodescanner.feature.tabs.create.barcode.FragmentCreateCode93
+import com.mckimquyen.barcodescanner.feature.tabs.create.barcode.FragmentCreateDataMatrix
+import com.mckimquyen.barcodescanner.feature.tabs.create.barcode.FragmentCreateEan13
+import com.mckimquyen.barcodescanner.feature.tabs.create.barcode.FragmentCreateEan8
+import com.mckimquyen.barcodescanner.feature.tabs.create.barcode.FragmentCreateItf14
+import com.mckimquyen.barcodescanner.feature.tabs.create.barcode.FragmentCreatePdf417
+import com.mckimquyen.barcodescanner.feature.tabs.create.barcode.FragmentCreateUpcA
+import com.mckimquyen.barcodescanner.feature.tabs.create.barcode.FragmentCreateUpcE
+import com.mckimquyen.barcodescanner.feature.tabs.create.qr.AdapterApp
+import com.mckimquyen.barcodescanner.feature.tabs.create.qr.FragmentCreateQrCodeApp
+import com.mckimquyen.barcodescanner.feature.tabs.create.qr.FragmentCreateQrCodeBookmark
+import com.mckimquyen.barcodescanner.feature.tabs.create.qr.FragmentCreateQrCodeCryptocurrency
+import com.mckimquyen.barcodescanner.feature.tabs.create.qr.FragmentCreateQrCodeEmail
+import com.mckimquyen.barcodescanner.feature.tabs.create.qr.FragmentCreateQrCodeEvent
+import com.mckimquyen.barcodescanner.feature.tabs.create.qr.FragmentCreateQrCodeLocation
+import com.mckimquyen.barcodescanner.feature.tabs.create.qr.FragmentCreateQrCodeMeCard
+import com.mckimquyen.barcodescanner.feature.tabs.create.qr.FragmentCreateQrCodeMms
+import com.mckimquyen.barcodescanner.feature.tabs.create.qr.FragmentCreateQrCodeOtp
+import com.mckimquyen.barcodescanner.feature.tabs.create.qr.FragmentCreateQrCodePhone
+import com.mckimquyen.barcodescanner.feature.tabs.create.qr.FragmentCreateQrCodeSms
+import com.mckimquyen.barcodescanner.feature.tabs.create.qr.FragmentCreateQrCodeText
+import com.mckimquyen.barcodescanner.feature.tabs.create.qr.FragmentCreateQrCodeUrl
+import com.mckimquyen.barcodescanner.feature.tabs.create.qr.FragmentCreateQrCodeVCard
+import com.mckimquyen.barcodescanner.feature.tabs.create.qr.FragmentCreateQrCodeWifi
 import com.mckimquyen.barcodescanner.model.Barcode
 import com.mckimquyen.barcodescanner.model.schema.App
 import com.mckimquyen.barcodescanner.model.schema.BarcodeSchema
 import com.mckimquyen.barcodescanner.model.schema.Schema
 import com.mckimquyen.barcodescanner.usecase.Logger
 import com.mckimquyen.barcodescanner.usecase.save
-import com.google.zxing.BarcodeFormat
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.a_create_barcode.*
 
 class ActivityCreateBarcode : ActivityBase(), AdapterApp.Listener {
+    private lateinit var binding: ACreateBarcodeBinding
+
 
     companion object {
         private const val BARCODE_FORMAT_KEY = "BARCODE_FORMAT_KEY"
@@ -84,7 +116,7 @@ class ActivityCreateBarcode : ActivityBase(), AdapterApp.Listener {
                 R.drawable.ic_confirm_disabled
             }
 
-            toolbar.menu?.findItem(R.id.itemCreateBarcode)?.apply {
+            binding.toolbar.menu?.findItem(R.id.itemCreateBarcode)?.apply {
                 icon = ContextCompat.getDrawable(this@ActivityCreateBarcode, iconId)
                 isEnabled = enabled
             }
@@ -97,7 +129,8 @@ class ActivityCreateBarcode : ActivityBase(), AdapterApp.Listener {
             return
         }
 
-        setContentView(R.layout.a_create_barcode)
+        binding = ACreateBarcodeBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         supportEdgeToEdge()
         handleToolbarBackClicked()
         handleToolbarMenuItemClicked()
@@ -144,7 +177,7 @@ class ActivityCreateBarcode : ActivityBase(), AdapterApp.Listener {
     }
 
     private fun supportEdgeToEdge() {
-        rootView.applySystemWindowInsets(applyTop = true, applyBottom = true)
+        binding.rootView.applySystemWindowInsets(applyTop = true, applyBottom = true)
     }
 
     private fun createBarcodeImmediatelyIfNeeded(): Boolean {
@@ -204,13 +237,13 @@ class ActivityCreateBarcode : ActivityBase(), AdapterApp.Listener {
     }
 
     private fun handleToolbarBackClicked() {
-        toolbar.setNavigationOnClickListener {
+        binding.toolbar.setNavigationOnClickListener {
             finish()
         }
     }
 
     private fun handleToolbarMenuItemClicked() {
-        toolbar.setOnMenuItemClickListener { item ->
+        binding.toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.itemPhone -> choosePhone()
                 R.id.itemContacts -> requestContactsPermissions()
@@ -222,7 +255,7 @@ class ActivityCreateBarcode : ActivityBase(), AdapterApp.Listener {
 
     private fun showToolbarTitle() {
         val titleId = barcodeSchema?.toStringId() ?: barcodeFormat.toStringId()
-        toolbar.setTitle(titleId)
+        binding.toolbar.setTitle(titleId)
     }
 
     private fun showToolbarMenu() {
@@ -232,7 +265,7 @@ class ActivityCreateBarcode : ActivityBase(), AdapterApp.Listener {
             BarcodeSchema.VCARD, BarcodeSchema.MECARD -> R.menu.menu_create_qr_code_contacts
             else -> R.menu.menu_create_barcode
         }
-        toolbar.inflateMenu(menuId)
+        binding.toolbar.inflateMenu(menuId)
     }
 
     private fun showFragment() {

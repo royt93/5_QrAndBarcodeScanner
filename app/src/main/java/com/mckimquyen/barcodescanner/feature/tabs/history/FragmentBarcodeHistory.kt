@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.mckimquyen.barcodescanner.R
+import com.mckimquyen.barcodescanner.databinding.FBarcodeHistoryBinding
 import com.mckimquyen.barcodescanner.di.barcodeDatabase
 import com.mckimquyen.barcodescanner.extension.applySystemWindowInsets
 import com.mckimquyen.barcodescanner.extension.showError
@@ -15,10 +16,12 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.f_barcode_history.*
 
 
 class FragmentBarcodeHistory : Fragment(), DialogFragmentDeleteConfirmation.Listener {
+    private var _binding: FBarcodeHistoryBinding? = null
+    private val binding get() = _binding!!
+
     private val disposable = CompositeDisposable()
 
     override fun onCreateView(
@@ -26,7 +29,8 @@ class FragmentBarcodeHistory : Fragment(), DialogFragmentDeleteConfirmation.List
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-        return inflater.inflate(R.layout.f_barcode_history, container, false)
+        _binding = FBarcodeHistoryBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -43,19 +47,20 @@ class FragmentBarcodeHistory : Fragment(), DialogFragmentDeleteConfirmation.List
     override fun onDestroyView() {
         super.onDestroyView()
         disposable.clear()
+        _binding = null
     }
 
     private fun supportEdgeToEdge() {
-        appBarLayout.applySystemWindowInsets(applyTop = true)
+        binding.appBarLayout.applySystemWindowInsets(applyTop = true)
     }
 
     private fun initTabs() {
-        viewPager.adapter = AdapterBarcodeHistoryViewPager(requireContext(), childFragmentManager)
-        tabLayout.setupWithViewPager(viewPager)
+        binding.viewPager.adapter = AdapterBarcodeHistoryViewPager(requireContext(), childFragmentManager)
+        binding.tabLayout.setupWithViewPager(binding.viewPager)
     }
 
     private fun handleMenuClicked() {
-        toolbar.setOnMenuItemClickListener { item ->
+        binding.toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.itemExportHistory -> navigateToExportHistoryScreen()
                 R.id.itemClearHistory -> showDeleteHistoryConfirmationDialog()

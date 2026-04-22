@@ -3,16 +3,13 @@ package com.mckimquyen.barcodescanner.feature.tabs.setting
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.google.android.gms.ads.AdError
-import com.google.android.gms.ads.LoadAdError
 import com.mckimquyen.barcodescanner.BuildConfig
 import com.mckimquyen.barcodescanner.R
+import com.mckimquyen.barcodescanner.databinding.FSettingsBinding
 import com.mckimquyen.barcodescanner.di.barcodeDatabase
 import com.mckimquyen.barcodescanner.di.settings
 import com.mckimquyen.barcodescanner.extension.applySystemWindowInsets
@@ -21,39 +18,35 @@ import com.mckimquyen.barcodescanner.extension.ext.openBrowserPolicy
 import com.mckimquyen.barcodescanner.extension.ext.openUrlInBrowser
 import com.mckimquyen.barcodescanner.extension.ext.rateApp
 import com.mckimquyen.barcodescanner.extension.ext.shareApp
-import com.mckimquyen.barcodescanner.extension.packageManager
 import com.mckimquyen.barcodescanner.extension.showError
 import com.mckimquyen.barcodescanner.feature.common.dlg.DialogFragmentDeleteConfirmation
-import com.mckimquyen.barcodescanner.feature.tabs.create.barcode.ActivityCreateBarcodeAll
 import com.mckimquyen.barcodescanner.feature.tabs.setting.camera.ChooseCameraActivityBase
 import com.mckimquyen.barcodescanner.feature.tabs.setting.formats.SupportedFormatsActivityBase
+import com.mckimquyen.barcodescanner.feature.tabs.setting.language.ChooseLanguageActivity
 import com.mckimquyen.barcodescanner.feature.tabs.setting.permissions.AllPermissionsActivityBase
 import com.mckimquyen.barcodescanner.feature.tabs.setting.search.ChooseSearchEngineActivityBase
 import com.mckimquyen.barcodescanner.feature.tabs.setting.theme.ChooseThemeActivityBase
-import com.mckimquyen.barcodescanner.feature.tabs.setting.language.ChooseLanguageActivity
-import com.mckimquyen.barcodescanner.sdkadbmob.AdMobManager
-import com.mckimquyen.barcodescanner.sdkadbmob.Logger
+import com.roy.sdkadbmob.AdManager
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.f_settings.*
 
-class SettingsFragment : Fragment(), DialogFragmentDeleteConfirmation.Listener, AdMobManager.InterstitialAdListener {
+class SettingsFragment : Fragment(), DialogFragmentDeleteConfirmation.Listener {
+    private var _binding: FSettingsBinding? = null
+    private val binding get() = _binding!!
+
     private val disposable = CompositeDisposable()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.f_settings, container, false)
+        _binding = FSettingsBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        AdMobManager.setCurrentActivity(requireActivity())
-        AdMobManager.interstitialListener = this
-
-//        createAdInter()
-        AdMobManager.loadInterstitial(requireContext(), BuildConfig.ADMOB_INTERSTITIAL_ID)
+        AdManager.loadInterstitial(requireActivity())
         supportEdgeToEdge()
     }
 
@@ -72,122 +65,122 @@ class SettingsFragment : Fragment(), DialogFragmentDeleteConfirmation.Listener, 
     override fun onDestroyView() {
         super.onDestroyView()
         disposable.clear()
-        if (AdMobManager.interstitialListener == this) {
-            AdMobManager.interstitialListener = null
-        }
+        _binding = null
     }
 
     fun supportEdgeToEdge() {
-        appBarLayout.applySystemWindowInsets(applyTop = true)
+        binding.appBarLayout.applySystemWindowInsets(applyTop = true)
     }
 
     private fun handleButtonCheckedChanged() {
-        buttonInverseBarcodeColorsInDarkTheme.setCheckedChangedListener { settings.areBarcodeColorsInversed = it }
-        buttonOpenLinksAutomatically.setCheckedChangedListener { settings.openLinksAutomatically = it }
-        buttonCopyToClipboard.setCheckedChangedListener { settings.copyToClipboard = it }
-        buttonSimpleAutoFocus.setCheckedChangedListener { settings.simpleAutoFocus = it }
-        buttonFlashlight.setCheckedChangedListener { settings.flash = it }
-        buttonVibrate.setCheckedChangedListener { settings.vibrate = it }
-        buttonContinuousScanning.setCheckedChangedListener { settings.continuousScanning = it }
-        buttonConfirmScansManually.setCheckedChangedListener { settings.confirmScansManually = it }
-        buttonSaveScannedBarcodes.setCheckedChangedListener { settings.saveScannedBarcodesToHistory = it }
-        buttonSaveCreatedBarcodes.setCheckedChangedListener { settings.saveCreatedBarcodesToHistory = it }
-        buttonDoNotSaveDuplicates.setCheckedChangedListener { settings.doNotSaveDuplicates = it }
-        buttonEnableErrorReports.setCheckedChangedListener { settings.areErrorReportsEnabled = it }
+        binding.buttonInverseBarcodeColorsInDarkTheme.setCheckedChangedListener {
+            settings.areBarcodeColorsInversed = it
+        }
+        binding.buttonOpenLinksAutomatically.setCheckedChangedListener { settings.openLinksAutomatically = it }
+        binding.buttonCopyToClipboard.setCheckedChangedListener { settings.copyToClipboard = it }
+        binding.buttonSimpleAutoFocus.setCheckedChangedListener { settings.simpleAutoFocus = it }
+        binding.buttonFlashlight.setCheckedChangedListener { settings.flash = it }
+        binding.buttonVibrate.setCheckedChangedListener { settings.vibrate = it }
+        binding.buttonContinuousScanning.setCheckedChangedListener { settings.continuousScanning = it }
+        binding.buttonConfirmScansManually.setCheckedChangedListener { settings.confirmScansManually = it }
+        binding.buttonSaveScannedBarcodes.setCheckedChangedListener { settings.saveScannedBarcodesToHistory = it }
+        binding.buttonSaveCreatedBarcodes.setCheckedChangedListener { settings.saveCreatedBarcodesToHistory = it }
+        binding.buttonDoNotSaveDuplicates.setCheckedChangedListener { settings.doNotSaveDuplicates = it }
+        binding.buttonEnableErrorReports.setCheckedChangedListener { settings.areErrorReportsEnabled = it }
     }
 
     private fun handleButtonClicks() {
-        buttonChooseTheme.setOnClickListener {
-            AdMobManager.showInterstitial(requireActivity()) { success ->
+        binding.buttonChooseTheme.setOnClickListener {
+            AdManager.showInterstitial(requireActivity()) { success ->
                 if (success) {
-                    Logger.i("Ad đã hiển thị và đóng thành công")
+                    android.util.Log.i("roy93~", "Ad đã hiển thị và đóng thành công")
                 } else {
-                    Logger.i("Ad không hiển thị được hoặc có lỗi")
+                    android.util.Log.i("roy93~", "Ad không hiển thị được hoặc có lỗi")
                 }
                 ChooseThemeActivityBase.start(requireActivity())
             }
         }
-        buttonChooseLanguage.setOnClickListener {
-            AdMobManager.showInterstitial(requireActivity()) { success ->
+        binding.buttonChooseLanguage.setOnClickListener {
+            AdManager.showInterstitial(requireActivity()) { success ->
                 if (success) {
-                    Logger.i("Ad đã hiển thị và đóng thành công")
+                    android.util.Log.i("roy93~", "Ad đã hiển thị và đóng thành công")
                 } else {
-                    Logger.i("Ad không hiển thị được hoặc có lỗi")
+                    android.util.Log.i("roy93~", "Ad không hiển thị được hoặc có lỗi")
                 }
                 ChooseLanguageActivity.start(requireActivity())
             }
         }
-        buttonChooseCamera.setOnClickListener {
-            AdMobManager.showInterstitial(requireActivity()) { success ->
+        binding.buttonChooseCamera.setOnClickListener {
+            AdManager.showInterstitial(requireActivity()) { success ->
                 if (success) {
-                    Logger.i("Ad đã hiển thị và đóng thành công")
+                    android.util.Log.i("roy93~", "Ad đã hiển thị và đóng thành công")
                 } else {
-                    Logger.i("Ad không hiển thị được hoặc có lỗi")
+                    android.util.Log.i("roy93~", "Ad không hiển thị được hoặc có lỗi")
                 }
                 ChooseCameraActivityBase.start(requireActivity())
             }
         }
-        buttonSelectSupportedFormats.setOnClickListener {
-            AdMobManager.showInterstitial(requireActivity()) { success ->
+        binding.buttonSelectSupportedFormats.setOnClickListener {
+            AdManager.showInterstitial(requireActivity()) { success ->
                 if (success) {
-                    Logger.i("Ad đã hiển thị và đóng thành công")
+                    android.util.Log.i("roy93~", "Ad đã hiển thị và đóng thành công")
                 } else {
-                    Logger.i("Ad không hiển thị được hoặc có lỗi")
+                    android.util.Log.i("roy93~", "Ad không hiển thị được hoặc có lỗi")
                 }
                 SupportedFormatsActivityBase.start(requireActivity())
             }
         }
-        buttonClearHistory.setOnClickListener {
+        binding.buttonClearHistory.setOnClickListener {
             showDeleteHistoryConfirmationDialog()
         }
-        buttonChooseSearchEngine.setOnClickListener {
-            AdMobManager.showInterstitial(requireActivity()) { success ->
+        binding.buttonChooseSearchEngine.setOnClickListener {
+            AdManager.showInterstitial(requireActivity()) { success ->
                 if (success) {
-                    Logger.i("Ad đã hiển thị và đóng thành công")
+                    android.util.Log.i("roy93~", "Ad đã hiển thị và đóng thành công")
                 } else {
-                    Logger.i("Ad không hiển thị được hoặc có lỗi")
+                    android.util.Log.i("roy93~", "Ad không hiển thị được hoặc có lỗi")
                 }
                 ChooseSearchEngineActivityBase.start(requireContext())
             }
         }
-        buttonPermissions.setOnClickListener {
+        binding.buttonPermissions.setOnClickListener {
             AllPermissionsActivityBase.start(requireActivity())
         }
-        buttonCheckUpdates.setOnClickListener {
+        binding.buttonCheckUpdates.setOnClickListener {
             showAppInMarket()
         }
-        buttonSourceCode.setOnClickListener {
+        binding.buttonSourceCode.setOnClickListener {
             context.openUrlInBrowser("https://github.com/wewewe718/QrAndBarcodeScanner")
         }
-        buttonSourceCodeFork.setOnClickListener {
+        binding.buttonSourceCodeFork.setOnClickListener {
             context.openUrlInBrowser("https://github.com/gj-loitp/5_QrAndBarcodeScanner")
         }
-        btRateApp.setOnClickListener {
+        binding.btRateApp.setOnClickListener {
             requireContext().rateApp(requireContext().packageName)
         }
-        btMoreApp.setOnClickListener {
+        binding.btMoreApp.setOnClickListener {
             requireContext().moreApp()
         }
-        btShareApp.setOnClickListener {
+        binding.btShareApp.setOnClickListener {
             requireContext().shareApp()
         }
-        btPolicy.setOnClickListener {
+        binding.btPolicy.setOnClickListener {
             requireContext().openBrowserPolicy()
         }
     }
 
     private fun clearHistory() {
-        buttonClearHistory.isEnabled = false
+        binding.buttonClearHistory.isEnabled = false
 
         barcodeDatabase.deleteAll()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 {
-                    buttonClearHistory.isEnabled = true
+                    binding.buttonClearHistory.isEnabled = true
                 },
                 { error ->
-                    buttonClearHistory.isEnabled = true
+                    binding.buttonClearHistory.isEnabled = true
                     showError(error)
                 }
             )
@@ -196,18 +189,18 @@ class SettingsFragment : Fragment(), DialogFragmentDeleteConfirmation.Listener, 
 
     private fun showSettings() {
         settings.apply {
-            buttonInverseBarcodeColorsInDarkTheme.isChecked = areBarcodeColorsInversed
-            buttonOpenLinksAutomatically.isChecked = openLinksAutomatically
-            buttonCopyToClipboard.isChecked = copyToClipboard
-            buttonSimpleAutoFocus.isChecked = simpleAutoFocus
-            buttonFlashlight.isChecked = flash
-            buttonVibrate.isChecked = vibrate
-            buttonContinuousScanning.isChecked = continuousScanning
-            buttonConfirmScansManually.isChecked = confirmScansManually
-            buttonSaveScannedBarcodes.isChecked = saveScannedBarcodesToHistory
-            buttonSaveCreatedBarcodes.isChecked = saveCreatedBarcodesToHistory
-            buttonDoNotSaveDuplicates.isChecked = doNotSaveDuplicates
-            buttonEnableErrorReports.isChecked = areErrorReportsEnabled
+            binding.buttonInverseBarcodeColorsInDarkTheme.isChecked = areBarcodeColorsInversed
+            binding.buttonOpenLinksAutomatically.isChecked = openLinksAutomatically
+            binding.buttonCopyToClipboard.isChecked = copyToClipboard
+            binding.buttonSimpleAutoFocus.isChecked = simpleAutoFocus
+            binding.buttonFlashlight.isChecked = flash
+            binding.buttonVibrate.isChecked = vibrate
+            binding.buttonContinuousScanning.isChecked = continuousScanning
+            binding.buttonConfirmScansManually.isChecked = confirmScansManually
+            binding.buttonSaveScannedBarcodes.isChecked = saveScannedBarcodesToHistory
+            binding.buttonSaveCreatedBarcodes.isChecked = saveCreatedBarcodesToHistory
+            binding.buttonDoNotSaveDuplicates.isChecked = doNotSaveDuplicates
+            binding.buttonEnableErrorReports.isChecked = areErrorReportsEnabled
         }
     }
 
@@ -228,29 +221,10 @@ class SettingsFragment : Fragment(), DialogFragmentDeleteConfirmation.Listener, 
     }
 
     private fun showAppVersion() {
-        buttonAppVersion.hint = BuildConfig.VERSION_NAME
+        binding.buttonAppVersion.hint = BuildConfig.VERSION_NAME
     }
 
-    override fun onAdLoaded() {
-    }
 
-    override fun onAdFailedToLoad(error: LoadAdError) {
-    }
-
-    override fun onAdShowed() {
-    }
-
-    override fun onAdDismissed() {
-    }
-
-    override fun onAdClicked() {
-    }
-
-    override fun onAdFailedToShow(error: AdError) {
-    }
-
-    override fun onAdNotAvailable() {
-    }
 
 //    private var interstitialAd: MaxInterstitialAd? = null
 //

@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.paging.PagedList
 import androidx.paging.RxPagedListBuilder
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.mckimquyen.barcodescanner.R
+import com.mckimquyen.barcodescanner.databinding.AMyQrWidgetConfigBinding
 import com.mckimquyen.barcodescanner.di.barcodeDatabase
 import com.mckimquyen.barcodescanner.extension.showError
 import com.mckimquyen.barcodescanner.feature.tabs.history.AdapterBarcodeHistory
@@ -19,9 +19,10 @@ import io.reactivex.BackpressureStrategy
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
-import kotlinx.android.synthetic.main.a_my_qr_widget_config.*
 
 class MyQrWidgetConfigActivity : AppCompatActivity(), AdapterBarcodeHistory.Listener {
+    private lateinit var binding: AMyQrWidgetConfigBinding
+
 
     private var appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
     private val disposable = CompositeDisposable()
@@ -45,9 +46,10 @@ class MyQrWidgetConfigActivity : AppCompatActivity(), AdapterBarcodeHistory.List
             return
         }
 
-        setContentView(R.layout.a_my_qr_widget_config)
+        binding = AMyQrWidgetConfigBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        toolbar.setNavigationOnClickListener {
+        binding.toolbar.setNavigationOnClickListener {
             setResult(Activity.RESULT_CANCELED)
             finish()
         }
@@ -57,7 +59,7 @@ class MyQrWidgetConfigActivity : AppCompatActivity(), AdapterBarcodeHistory.List
     }
 
     private fun initRecyclerView() {
-        recyclerViewCodes.apply {
+        binding.recyclerViewCodes.apply {
             layoutManager = LinearLayoutManager(this@MyQrWidgetConfigActivity)
             adapter = scanHistoryAdapter
         }
@@ -83,8 +85,8 @@ class MyQrWidgetConfigActivity : AppCompatActivity(), AdapterBarcodeHistory.List
     }
 
     private fun updateEmptyState(isEmpty: Boolean) {
-        tvEmpty.visibility = if (isEmpty) View.VISIBLE else View.GONE
-        recyclerViewCodes.visibility = if (isEmpty) View.GONE else View.VISIBLE
+        binding.tvEmpty.visibility = if (isEmpty) View.VISIBLE else View.GONE
+        binding.recyclerViewCodes.visibility = if (isEmpty) View.GONE else View.VISIBLE
     }
 
     override fun onBarcodeClicked(barcode: Barcode) {

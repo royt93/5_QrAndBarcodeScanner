@@ -5,22 +5,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
-import com.mckimquyen.barcodescanner.R
+import com.mckimquyen.barcodescanner.databinding.FCreateQrCodePhoneBinding
 import com.mckimquyen.barcodescanner.extension.isNotBlank
 import com.mckimquyen.barcodescanner.extension.textString
 import com.mckimquyen.barcodescanner.feature.tabs.create.FragmentBaseCreateBarcode
 import com.mckimquyen.barcodescanner.model.schema.Phone
 import com.mckimquyen.barcodescanner.model.schema.Schema
-import kotlinx.android.synthetic.main.f_create_qr_code_phone.*
 
 class FragmentCreateQrCodePhone : FragmentBaseCreateBarcode() {
+    private var _binding: FCreateQrCodePhoneBinding? = null
+    private val binding get() = _binding!!
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-        return inflater.inflate(R.layout.f_create_qr_code_phone, container, false)
+        _binding = FCreateQrCodePhoneBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -30,23 +33,28 @@ class FragmentCreateQrCodePhone : FragmentBaseCreateBarcode() {
     }
 
     override fun showPhone(phone: String) {
-        editText.apply {
+        binding.editText.apply {
             setText(phone)
             setSelection(phone.length)
         }
     }
 
     override fun getBarcodeSchema(): Schema {
-        return Phone(editText.textString)
+        return Phone(binding.editText.textString)
     }
 
     private fun initEditText() {
-        editText.requestFocus()
+        binding.editText.requestFocus()
     }
 
     private fun handleTextChanged() {
-        editText.addTextChangedListener {
-            parentActivity.isCreateBarcodeButtonEnabled = editText.isNotBlank()
+        binding.editText.addTextChangedListener {
+            parentActivity.isCreateBarcodeButtonEnabled = binding.editText.isNotBlank()
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

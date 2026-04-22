@@ -1,0 +1,158 @@
+Configuration on demand is an incubating feature.
+> Task :app:checkKotlinGradlePluginConfigurationErrors
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preDevDebugBuild UP-TO-DATE
+> Task :app:dataBindingMergeDependencyArtifactsDevDebug UP-TO-DATE
+> Task :app:generateDevDebugResValues UP-TO-DATE
+> Task :app:generateDevDebugResources UP-TO-DATE
+> Task :app:mergeDevDebugResources UP-TO-DATE
+> Task :app:packageDevDebugResources UP-TO-DATE
+> Task :app:processDevDebugNavigationResources UP-TO-DATE
+> Task :app:parseDevDebugLocalResources UP-TO-DATE
+> Task :app:dataBindingGenBaseClassesDevDebug UP-TO-DATE
+> Task :app:generateDevDebugBuildConfig UP-TO-DATE
+> Task :app:checkDevDebugAarMetadata UP-TO-DATE
+> Task :app:compileDevDebugNavigationResources UP-TO-DATE
+> Task :app:mapDevDebugSourceSetPaths UP-TO-DATE
+> Task :app:createDevDebugCompatibleScreenManifests UP-TO-DATE
+> Task :app:extractDeepLinksDevDebug UP-TO-DATE
+> Task :app:processDevDebugMainManifest UP-TO-DATE
+> Task :app:processDevDebugManifest UP-TO-DATE
+> Task :app:processDevDebugManifestForPackage UP-TO-DATE
+> Task :app:processDevDebugResources UP-TO-DATE
+> Task :app:kaptGenerateStubsDevDebugKotlin
+
+> Task :app:kaptDevDebugKotlin
+/Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/build/tmp/kapt3/stubs/devDebug/com/mckimquyen/barcodescanner/usecase/BarcodeDatabaseFactory.java:5: warning: Schema export directory was not provided to the annotation processor so Room cannot export the schema. You can either provide `room.schemaLocation` annotation processor argument by applying the Room Gradle plugin (id 'androidx.room') OR set exportSchema to false.
+public abstract class BarcodeDatabaseFactory extends androidx.room.RoomDatabase {
+                ^
+
+> Task :app:compileDevDebugKotlin FAILED
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/barcode/ActivityBarcode.kt:266:17 Unresolved reference: button_send_sms_or_mms_2
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/barcode/ActivityBarcode.kt:663:21 Unresolved reference: findItem
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/barcode/ActivityBarcode.kt:663:59 Variable expected
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/barcode/ActivityBarcode.kt:664:21 Unresolved reference: findItem
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/barcode/ActivityBarcode.kt:664:56 Variable expected
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/barcode/ActivityBarcode.kt:665:21 Unresolved reference: findItem
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/barcode/ActivityBarcode.kt:665:58 Variable expected
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/barcode/ActivityBarcode.kt:666:21 Unresolved reference: findItem
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/barcode/ActivityBarcode.kt:666:46 Variable expected
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/barcode/ActivityBarcode.kt:667:21 Unresolved reference: findItem
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/barcode/ActivityBarcode.kt:667:48 Variable expected
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/barcode/ActivityBarcode.kt:775:21 Unresolved reference: text
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/barcode/ActivityBarcode.kt:801:17 Unresolved reference: button_send_sms_or_mms_2
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/barcode/ActivityBarcode.kt:801:42 Variable expected
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/barcode/ActivityBarcode.kt:830:17 Unresolved reference: button_send_sms_or_mms_2
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/barcode/ActivityBarcode.kt:830:42 Variable expected
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/barcode/ActivityBarcodeImage.kt:73:33 Unresolved reference: findItem
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/barcode/ActivityBarcodeImage.kt:73:71 Variable expected
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/barcode/ActivityBarcodeImage.kt:74:33 Unresolved reference: findItem
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/barcode/ActivityBarcodeImage.kt:74:71 Variable expected
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/barcode/ActivityBarcodeImage.kt:81:33 Unresolved reference: findItem
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/barcode/ActivityBarcodeImage.kt:81:71 Variable expected
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/barcode/ActivityBarcodeImage.kt:82:33 Unresolved reference: findItem
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/barcode/ActivityBarcodeImage.kt:82:71 Variable expected
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/ActivityBottomTabs.kt:127:21 Unresolved reference: setOnNavigationItemSelectedListener
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/create/ActivityCreateBarcode.kt:91:25 Unresolved reference: icon
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/create/ActivityCreateBarcode.kt:92:25 Unresolved reference: isEnabled
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/create/barcode/FragmentCreatePdf417.kt:14:24 Unresolved reference: binding
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/create/barcode/FragmentCreatePdf417.kt:28:9 Unresolved reference: binding
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/create/barcode/FragmentCreatePdf417.kt:29:9 Unresolved reference: binding
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/create/barcode/FragmentCreatePdf417.kt:30:59 Unresolved reference: binding
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/create/barcode/FragmentCreatePdf417.kt:35:22 Unresolved reference: binding
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/create/qr/AdapterApp.kt:12:24 Unresolved reference: binding
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/create/qr/AdapterApp.kt:58:22 Unresolved reference: binding
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/create/qr/AdapterApp.kt:58:39 Variable expected
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/create/qr/AdapterApp.kt:62:22 Unresolved reference: binding
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/create/qr/AdapterApp.kt:66:22 Unresolved reference: binding
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/create/qr/AdapterApp.kt:66:40 Variable expected
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/create/qr/FragmentCreateQrCodeApp.kt:22:24 Unresolved reference: binding
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/create/qr/FragmentCreateQrCodeApp.kt:23:24 Unresolved reference: binding
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/create/qr/FragmentCreateQrCodeApp.kt:53:9 Unresolved reference: binding
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/create/qr/FragmentCreateQrCodeApp.kt:54:13 Unresolved reference: binding
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/create/qr/FragmentCreateQrCodeApp.kt:54:21 Variable expected
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/create/qr/FragmentCreateQrCodeApp.kt:55:13 Unresolved reference: binding
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/create/qr/FragmentCreateQrCodeApp.kt:55:21 Variable expected
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/create/qr/FragmentCreateQrCodeApp.kt:89:9 Unresolved reference: binding
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/create/qr/FragmentCreateQrCodeApp.kt:89:36 Variable expected
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/create/qr/FragmentCreateQrCodeApp.kt:90:9 Unresolved reference: binding
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/create/qr/FragmentCreateQrCodeApp.kt:90:34 Variable expected
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/create/qr/FragmentCreateQrCodeEvent.kt:41:31 Unresolved reference: button_date_time_end
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/create/qr/FragmentCreateQrCodeMms.kt:39:21 Unresolved reference: setText
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/create/qr/FragmentCreateQrCodeMms.kt:40:21 Unresolved reference: setSelection
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/create/qr/FragmentCreateQrCodePhone.kt:39:21 Unresolved reference: setText
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/create/qr/FragmentCreateQrCodePhone.kt:40:21 Unresolved reference: setSelection
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/create/qr/FragmentCreateQrCodeSms.kt:35:21 Unresolved reference: setText
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/create/qr/FragmentCreateQrCodeSms.kt:36:21 Unresolved reference: setSelection
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/create/qr/FragmentCreateQrCodeText.kt:57:21 Unresolved reference: setText
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/create/qr/FragmentCreateQrCodeText.kt:58:21 Unresolved reference: setSelection
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/create/qr/FragmentCreateQrCodeText.kt:59:21 Unresolved reference: requestFocus
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/create/qr/FragmentCreateQrCodeUrl.kt:44:21 Unresolved reference: setText
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/create/qr/FragmentCreateQrCodeUrl.kt:45:21 Unresolved reference: setSelection
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/create/qr/FragmentCreateQrCodeUrl.kt:46:21 Unresolved reference: requestFocus
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/history/AdapterBarcodeHistory.kt:19:24 Unresolved reference: binding
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/history/AdapterBarcodeHistory.kt:64:22 Unresolved reference: binding
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/history/AdapterBarcodeHistory.kt:64:43 Variable expected
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/history/AdapterBarcodeHistory.kt:68:22 Unresolved reference: binding
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/history/AdapterBarcodeHistory.kt:72:22 Unresolved reference: binding
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/history/AdapterBarcodeHistory.kt:72:43 Variable expected
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/history/AdapterBarcodeHistory.kt:78:22 Unresolved reference: binding
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/history/AdapterBarcodeHistory.kt:85:23 Unresolved reference: binding
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/history/AdapterBarcodeHistory.kt:89:22 Unresolved reference: binding
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/history/AdapterBarcodeHistory.kt:89:48 Variable expected
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/history/AdapterBarcodeHistory.kt:93:22 Unresolved reference: binding
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/history/AdapterBarcodeHistory.kt:93:40 Variable expected
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/history/FragmentBarcodeHistoryList.kt:82:21 Unresolved reference: layoutManager
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/history/FragmentBarcodeHistoryList.kt:83:21 Unresolved reference: adapter
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/scan/file/ActivityScanBarcodeFromFile.kt:189:31 Unresolved reference: it
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/setting/SettingsFragment.kt:84:127 Unresolved reference: it
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/setting/SettingsFragment.kt:85:116 Unresolved reference: it
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/setting/SettingsFragment.kt:86:102 Unresolved reference: it
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/setting/SettingsFragment.kt:87:102 Unresolved reference: it
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/setting/SettingsFragment.kt:88:87 Unresolved reference: it
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/setting/SettingsFragment.kt:89:86 Unresolved reference: it
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/setting/SettingsFragment.kt:90:108 Unresolved reference: it
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/setting/SettingsFragment.kt:91:112 Unresolved reference: it
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/setting/SettingsFragment.kt:92:119 Unresolved reference: it
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/setting/SettingsFragment.kt:93:119 Unresolved reference: it
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/setting/SettingsFragment.kt:94:110 Unresolved reference: it
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/setting/SettingsFragment.kt:95:112 Unresolved reference: it
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/setting/formats/FormatsAdapter.kt:11:24 Unresolved reference: binding
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/setting/formats/FormatsAdapter.kt:41:22 Unresolved reference: binding
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/setting/formats/FormatsAdapter.kt:41:43 Variable expected
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/setting/formats/FormatsAdapter.kt:42:22 Unresolved reference: binding
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/setting/formats/FormatsAdapter.kt:42:40 Variable expected
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/setting/formats/FormatsAdapter.kt:43:22 Unresolved reference: binding
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/setting/formats/FormatsAdapter.kt:43:39 Variable expected
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/setting/formats/FormatsAdapter.kt:45:22 Unresolved reference: binding
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/setting/formats/FormatsAdapter.kt:45:68 Cannot infer a type for this parameter. Please specify it explicitly.
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/setting/formats/FormatsAdapter.kt:45:71 Cannot infer a type for this parameter. Please specify it explicitly.
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/setting/formats/FormatsAdapter.kt:50:26 Unresolved reference: binding
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/setting/formats/SupportedFormatsActivityBase.kt:51:21 Unresolved reference: layoutManager
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/tabs/setting/formats/SupportedFormatsActivityBase.kt:52:21 Unresolved reference: adapter
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/widget/MyQrWidgetConfigActivity.kt:65:21 Unresolved reference: layoutManager
+e: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/app/src/main/java/com/mckimquyen/barcodescanner/feature/widget/MyQrWidgetConfigActivity.kt:66:21 Unresolved reference: adapter
+
+[Incubating] Problems report is available at: file:///Users/loitran/AndroidStudioProjects/@mckimquyen/@playstore/@prodution/@ad/260221_QrAndBarcodeScanner/build/reports/problems/problems-report.html
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:compileDevDebugKotlin'.
+> A failure occurred while executing org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction
+   > Compilation error. See log for more details
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/8.13/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD FAILED in 6s
+22 actionable tasks: 4 executed, 18 up-to-date

@@ -5,22 +5,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
-import com.mckimquyen.barcodescanner.R
+import com.mckimquyen.barcodescanner.databinding.FCreateQrCodeUrlBinding
 import com.mckimquyen.barcodescanner.extension.isNotBlank
 import com.mckimquyen.barcodescanner.extension.textString
 import com.mckimquyen.barcodescanner.feature.tabs.create.FragmentBaseCreateBarcode
 import com.mckimquyen.barcodescanner.model.schema.Schema
 import com.mckimquyen.barcodescanner.model.schema.Url
-import kotlinx.android.synthetic.main.f_create_qr_code_url.*
 
 class FragmentCreateQrCodeUrl : FragmentBaseCreateBarcode() {
+    private var _binding: FCreateQrCodeUrlBinding? = null
+    private val binding get() = _binding!!
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-        return inflater.inflate(R.layout.f_create_qr_code_url, container, false)
+        _binding = FCreateQrCodeUrlBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -30,12 +33,12 @@ class FragmentCreateQrCodeUrl : FragmentBaseCreateBarcode() {
     }
 
     override fun getBarcodeSchema(): Schema {
-        return Url(editText.textString)
+        return Url(binding.editText.textString)
     }
 
     private fun showUrlPrefix() {
         val prefix = "https://"
-        editText.apply {
+        binding.editText.apply {
             setText(prefix)
             setSelection(prefix.length)
             requestFocus()
@@ -43,8 +46,13 @@ class FragmentCreateQrCodeUrl : FragmentBaseCreateBarcode() {
     }
 
     private fun handleTextChanged() {
-        editText.addTextChangedListener {
-            parentActivity.isCreateBarcodeButtonEnabled = editText.isNotBlank()
+        binding.editText.addTextChangedListener {
+            parentActivity.isCreateBarcodeButtonEnabled = binding.editText.isNotBlank()
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

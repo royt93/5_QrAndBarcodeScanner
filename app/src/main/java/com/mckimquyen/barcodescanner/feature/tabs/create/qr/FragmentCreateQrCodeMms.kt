@@ -5,22 +5,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
-import com.mckimquyen.barcodescanner.R
+import com.mckimquyen.barcodescanner.databinding.FCreateQrCodeMmsBinding
 import com.mckimquyen.barcodescanner.extension.isNotBlank
 import com.mckimquyen.barcodescanner.extension.textString
 import com.mckimquyen.barcodescanner.feature.tabs.create.FragmentBaseCreateBarcode
 import com.mckimquyen.barcodescanner.model.schema.Mms
 import com.mckimquyen.barcodescanner.model.schema.Schema
-import kotlinx.android.synthetic.main.f_create_qr_code_mms.*
 
 class FragmentCreateQrCodeMms : FragmentBaseCreateBarcode() {
+    private var _binding: FCreateQrCodeMmsBinding? = null
+    private val binding get() = _binding!!
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-        return inflater.inflate(R.layout.f_create_qr_code_mms, container, false)
+        _binding = FCreateQrCodeMmsBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -30,7 +33,7 @@ class FragmentCreateQrCodeMms : FragmentBaseCreateBarcode() {
     }
 
     override fun showPhone(phone: String) {
-        editTextPhone.apply {
+        binding.editTextPhone.apply {
             setText(phone)
             setSelection(phone.length)
         }
@@ -38,30 +41,35 @@ class FragmentCreateQrCodeMms : FragmentBaseCreateBarcode() {
 
     override fun getBarcodeSchema(): Schema {
         return Mms(
-            phone = editTextPhone.textString,
-            subject = editTextSubject.textString,
-            message = editTextMessage.textString
+            phone = binding.editTextPhone.textString,
+            subject = binding.editTextSubject.textString,
+            message = binding.editTextMessage.textString
         )
     }
 
     private fun initTitleEditText() {
-        editTextPhone.requestFocus()
+        binding.editTextPhone.requestFocus()
     }
 
     private fun handleTextChanged() {
-        editTextPhone.addTextChangedListener {
+        binding.editTextPhone.addTextChangedListener {
             toggleCreateBarcodeButton()
         }
-        editTextSubject.addTextChangedListener {
+        binding.editTextSubject.addTextChangedListener {
             toggleCreateBarcodeButton()
         }
-        editTextMessage.addTextChangedListener {
+        binding.editTextMessage.addTextChangedListener {
             toggleCreateBarcodeButton()
         }
     }
 
     private fun toggleCreateBarcodeButton() {
         parentActivity.isCreateBarcodeButtonEnabled =
-            editTextPhone.isNotBlank() || editTextSubject.isNotBlank() || editTextMessage.isNotBlank()
+            binding.editTextPhone.isNotBlank() || binding.editTextSubject.isNotBlank() || binding.editTextMessage.isNotBlank()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

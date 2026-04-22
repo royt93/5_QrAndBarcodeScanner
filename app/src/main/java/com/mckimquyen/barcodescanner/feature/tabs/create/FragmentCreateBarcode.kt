@@ -1,55 +1,51 @@
 package com.mckimquyen.barcodescanner.feature.tabs.create
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.google.android.gms.ads.AdError
-import com.google.android.gms.ads.LoadAdError
 import com.google.zxing.BarcodeFormat
-import com.mckimquyen.barcodescanner.BuildConfig
-import com.mckimquyen.barcodescanner.R
+import com.mckimquyen.barcodescanner.databinding.FCreateBarcodeBinding
 import com.mckimquyen.barcodescanner.extension.applySystemWindowInsets
 import com.mckimquyen.barcodescanner.extension.clipboardManager
 import com.mckimquyen.barcodescanner.extension.orZero
 import com.mckimquyen.barcodescanner.feature.tabs.create.barcode.ActivityCreateBarcodeAll
 import com.mckimquyen.barcodescanner.feature.tabs.create.qr.ActivityCreateQrCodeAll
 import com.mckimquyen.barcodescanner.model.schema.BarcodeSchema
-import com.mckimquyen.barcodescanner.sdkadbmob.AdMobManager
-import com.mckimquyen.barcodescanner.sdkadbmob.Logger
-import kotlinx.android.synthetic.main.f_create_barcode.*
+import com.roy.sdkadbmob.AdManager
 
-class FragmentCreateBarcode : Fragment(), AdMobManager.InterstitialAdListener {
+
+class FragmentCreateBarcode : Fragment() {
+    private var _binding: FCreateBarcodeBinding? = null
+    private val binding get() = _binding!!
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-        return inflater.inflate(R.layout.f_create_barcode, container, false)
+        _binding = FCreateBarcodeBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        AdMobManager.setCurrentActivity(requireActivity())
-        AdMobManager.interstitialListener = this
-
-        AdMobManager.loadInterstitial(requireContext(), BuildConfig.ADMOB_INTERSTITIAL_ID)
+        AdManager.loadInterstitial(requireActivity())
 //        createAdInter()
         supportEdgeToEdge()
         handleButtonsClicked()
     }
 
     private fun supportEdgeToEdge() {
-        appBarLayout.applySystemWindowInsets(applyTop = true)
+        binding.appBarLayout.applySystemWindowInsets(applyTop = true)
     }
 
     private fun handleButtonsClicked() {
         // QR code
-        buttonClipboard.setOnClickListener {
+        binding.buttonClipboard.setOnClickListener {
             ActivityCreateBarcode.start(
                 requireActivity(),
                 BarcodeFormat.QR_CODE,
@@ -57,59 +53,59 @@ class FragmentCreateBarcode : Fragment(), AdMobManager.InterstitialAdListener {
                 getClipboardContent()
             )
         }
-        buttonText.setOnClickListener {
+        binding.buttonText.setOnClickListener {
             ActivityCreateBarcode.start(
                 requireActivity(),
                 BarcodeFormat.QR_CODE,
                 BarcodeSchema.OTHER
             )
         }
-        buttonUrl.setOnClickListener {
+        binding.buttonUrl.setOnClickListener {
             ActivityCreateBarcode.start(
                 requireActivity(),
                 BarcodeFormat.QR_CODE,
                 BarcodeSchema.URL
             )
         }
-        buttonWifi.setOnClickListener {
+        binding.buttonWifi.setOnClickListener {
             ActivityCreateBarcode.start(
                 requireActivity(),
                 BarcodeFormat.QR_CODE,
                 BarcodeSchema.WIFI
             )
         }
-        buttonLocation.setOnClickListener {
+        binding.buttonLocation.setOnClickListener {
             ActivityCreateBarcode.start(
                 requireActivity(),
                 BarcodeFormat.QR_CODE,
                 BarcodeSchema.GEO
             )
         }
-        buttonContactVcard.setOnClickListener {
+        binding.buttonContactVcard.setOnClickListener {
             ActivityCreateBarcode.start(
                 requireActivity(),
                 BarcodeFormat.QR_CODE,
                 BarcodeSchema.VCARD
             )
         }
-        buttonShowAllQrCode.setOnClickListener {
-            AdMobManager.showInterstitial(requireActivity()) { success ->
+        binding.buttonShowAllQrCode.setOnClickListener {
+            AdManager.showInterstitial(requireActivity()) { success ->
                 if (success) {
-                    Logger.i("Ad đã hiển thị và đóng thành công")
+                    android.util.Log.i("roy93~", "Ad đã hiển thị và đóng thành công")
                 } else {
-                    Logger.i("Ad không hiển thị được hoặc có lỗi")
+                    android.util.Log.i("roy93~", "Ad không hiển thị được hoặc có lỗi")
                 }
                 ActivityCreateQrCodeAll.start(requireActivity())
             }
         }
 
         // Barcode
-        buttonCreateBarcode.setOnClickListener {
-            AdMobManager.showInterstitial(requireActivity()) { success ->
+        binding.buttonCreateBarcode.setOnClickListener {
+            AdManager.showInterstitial(requireActivity()) { success ->
                 if (success) {
-                    Logger.i("Ad đã hiển thị và đóng thành công")
+                    android.util.Log.i("roy93~", "Ad đã hiển thị và đóng thành công")
                 } else {
-                    Logger.i("Ad không hiển thị được hoặc có lỗi")
+                    android.util.Log.i("roy93~", "Ad không hiển thị được hoặc có lỗi")
                 }
                 ActivityCreateBarcodeAll.start(requireActivity())
             }
@@ -124,34 +120,7 @@ class FragmentCreateBarcode : Fragment(), AdMobManager.InterstitialAdListener {
         }
     }
 
-    override fun onAdLoaded() {
-    }
-
-    override fun onAdFailedToLoad(error: LoadAdError) {
-    }
-
-    override fun onAdShowed() {
-    }
-
-    override fun onAdDismissed() {
-    }
-
-    override fun onAdClicked() {
-    }
-
-    override fun onAdFailedToShow(error: AdError) {
-    }
-
-    override fun onAdNotAvailable() {
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        if (AdMobManager.interstitialListener == this) {
-            AdMobManager.interstitialListener = null
-        }
-    }
-
+    // Callbacks completely removed since AdmobWrapper handles this natively now.
 //    private var interstitialAd: MaxInterstitialAd? = null
 //
 //    private fun createAdInter() {
@@ -235,4 +204,9 @@ class FragmentCreateBarcode : Fragment(), AdMobManager.InterstitialAdListener {
 //            runnable?.run()
 //        }
 //    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }

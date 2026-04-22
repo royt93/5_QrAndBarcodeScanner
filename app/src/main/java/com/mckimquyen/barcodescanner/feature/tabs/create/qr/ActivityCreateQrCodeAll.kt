@@ -3,15 +3,15 @@ package com.mckimquyen.barcodescanner.feature.tabs.create.qr
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import com.mckimquyen.barcodescanner.R
+import com.google.zxing.BarcodeFormat
+import com.mckimquyen.barcodescanner.databinding.ACreateQrCodeAllBinding
 import com.mckimquyen.barcodescanner.extension.applySystemWindowInsets
 import com.mckimquyen.barcodescanner.feature.ActivityBase
 import com.mckimquyen.barcodescanner.feature.tabs.create.ActivityCreateBarcode
 import com.mckimquyen.barcodescanner.model.schema.BarcodeSchema
-import com.google.zxing.BarcodeFormat
-import kotlinx.android.synthetic.main.a_create_qr_code_all.*
 
 class ActivityCreateQrCodeAll : ActivityBase() {
+    private lateinit var binding: ACreateQrCodeAllBinding
 
     companion object {
 
@@ -23,122 +23,123 @@ class ActivityCreateQrCodeAll : ActivityBase() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.a_create_qr_code_all)
+        binding = ACreateQrCodeAllBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         supportEdgeToEdge()
         handleToolbarBackClicked()
         handleButtonsClicked()
     }
 
     private fun supportEdgeToEdge() {
-        rootView.applySystemWindowInsets(applyTop = true, applyBottom = true)
+        binding.rootView.applySystemWindowInsets(applyTop = true, applyBottom = true)
     }
 
     private fun handleToolbarBackClicked() {
-        toolbar.setNavigationOnClickListener {
+        binding.toolbar.setNavigationOnClickListener {
             finish()
         }
     }
 
     private fun handleButtonsClicked() {
-        buttonText.setOnClickListener {
+        binding.buttonText.setOnClickListener {
             ActivityCreateBarcode.start(
                 context = this,
                 barcodeFormat = BarcodeFormat.QR_CODE,
                 barcodeSchema = BarcodeSchema.OTHER
             )
         }
-        buttonUrl.setOnClickListener {
+        binding.buttonUrl.setOnClickListener {
             ActivityCreateBarcode.start(
                 context = this,
                 barcodeFormat = BarcodeFormat.QR_CODE,
                 barcodeSchema = BarcodeSchema.URL
             )
         }
-        buttonWifi.setOnClickListener {
+        binding.buttonWifi.setOnClickListener {
             ActivityCreateBarcode.start(
                 context = this,
                 barcodeFormat = BarcodeFormat.QR_CODE,
                 barcodeSchema = BarcodeSchema.WIFI
             )
         }
-        buttonLocation.setOnClickListener {
+        binding.buttonLocation.setOnClickListener {
             ActivityCreateBarcode.start(
                 context = this,
                 barcodeFormat = BarcodeFormat.QR_CODE,
                 barcodeSchema = BarcodeSchema.GEO
             )
         }
-        buttonOtp.setOnClickListener {
+        binding.buttonOtp.setOnClickListener {
             ActivityCreateBarcode.start(
                 context = this,
                 barcodeFormat = BarcodeFormat.QR_CODE,
                 barcodeSchema = BarcodeSchema.OTP_AUTH
             )
         }
-        buttonContactVcard.setOnClickListener {
+        binding.buttonContactVcard.setOnClickListener {
             ActivityCreateBarcode.start(
                 context = this,
                 barcodeFormat = BarcodeFormat.QR_CODE,
                 barcodeSchema = BarcodeSchema.VCARD
             )
         }
-        buttonContactMecard.setOnClickListener {
+        binding.buttonContactMecard.setOnClickListener {
             ActivityCreateBarcode.start(
                 context = this,
                 barcodeFormat = BarcodeFormat.QR_CODE,
                 barcodeSchema = BarcodeSchema.MECARD
             )
         }
-        buttonEvent.setOnClickListener {
+        binding.buttonEvent.setOnClickListener {
             ActivityCreateBarcode.start(
                 context = this,
                 barcodeFormat = BarcodeFormat.QR_CODE,
                 barcodeSchema = BarcodeSchema.VEVENT
             )
         }
-        buttonPhone.setOnClickListener {
+        binding.buttonPhone.setOnClickListener {
             ActivityCreateBarcode.start(
                 context = this,
                 barcodeFormat = BarcodeFormat.QR_CODE,
                 barcodeSchema = BarcodeSchema.PHONE
             )
         }
-        buttonEmail.setOnClickListener {
+        binding.buttonEmail.setOnClickListener {
             ActivityCreateBarcode.start(
                 context = this,
                 barcodeFormat = BarcodeFormat.QR_CODE,
                 barcodeSchema = BarcodeSchema.EMAIL
             )
         }
-        buttonSms.setOnClickListener {
+        binding.buttonSms.setOnClickListener {
             ActivityCreateBarcode.start(
                 context = this,
                 barcodeFormat = BarcodeFormat.QR_CODE,
                 barcodeSchema = BarcodeSchema.SMS
             )
         }
-        buttonMms.setOnClickListener {
+        binding.buttonMms.setOnClickListener {
             ActivityCreateBarcode.start(
                 context = this,
                 barcodeFormat = BarcodeFormat.QR_CODE,
                 barcodeSchema = BarcodeSchema.MMS
             )
         }
-        buttonCryptoCurrency.setOnClickListener {
+        binding.buttonCryptoCurrency.setOnClickListener {
             ActivityCreateBarcode.start(
                 context = this,
                 barcodeFormat = BarcodeFormat.QR_CODE,
                 barcodeSchema = BarcodeSchema.CRYPTOCURRENCY
             )
         }
-        buttonBookmark.setOnClickListener {
+        binding.buttonBookmark.setOnClickListener {
             ActivityCreateBarcode.start(
                 context = this,
                 barcodeFormat = BarcodeFormat.QR_CODE,
                 barcodeSchema = BarcodeSchema.BOOKMARK
             )
         }
-        buttonApp.setOnClickListener {
+        binding.buttonApp.setOnClickListener {
             ActivityCreateBarcode.start(
                 context = this,
                 barcodeFormat = BarcodeFormat.QR_CODE,

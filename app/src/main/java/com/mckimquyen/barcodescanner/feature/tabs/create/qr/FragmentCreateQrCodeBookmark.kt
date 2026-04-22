@@ -5,22 +5,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
-import com.mckimquyen.barcodescanner.R
+import com.mckimquyen.barcodescanner.databinding.FCreateQrCodeBookmarkBinding
 import com.mckimquyen.barcodescanner.extension.isNotBlank
 import com.mckimquyen.barcodescanner.extension.textString
 import com.mckimquyen.barcodescanner.feature.tabs.create.FragmentBaseCreateBarcode
 import com.mckimquyen.barcodescanner.model.schema.Bookmark
 import com.mckimquyen.barcodescanner.model.schema.Schema
-import kotlinx.android.synthetic.main.f_create_qr_code_bookmark.*
 
 class FragmentCreateQrCodeBookmark : FragmentBaseCreateBarcode() {
+    private var _binding: FCreateQrCodeBookmarkBinding? = null
+    private val binding get() = _binding!!
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-        return inflater.inflate(R.layout.f_create_qr_code_bookmark, container, false)
+        _binding = FCreateQrCodeBookmarkBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -31,25 +34,31 @@ class FragmentCreateQrCodeBookmark : FragmentBaseCreateBarcode() {
 
     override fun getBarcodeSchema(): Schema {
         return Bookmark(
-            title = editTextTitle.textString,
-            url = editTextUrl.textString
+            title = binding.editTextTitle.textString,
+            url = binding.editTextUrl.textString
         )
     }
 
     private fun initTitleEditText() {
-        editTextTitle.requestFocus()
+        binding.editTextTitle.requestFocus()
     }
 
     private fun handleTextChanged() {
-        editTextTitle.addTextChangedListener {
+        binding.editTextTitle.addTextChangedListener {
             toggleCreateBarcodeButton()
         }
-        editTextUrl.addTextChangedListener {
+        binding.editTextUrl.addTextChangedListener {
             toggleCreateBarcodeButton()
         }
     }
 
     private fun toggleCreateBarcodeButton() {
-        parentActivity.isCreateBarcodeButtonEnabled = editTextTitle.isNotBlank() || editTextUrl.isNotBlank()
+        parentActivity.isCreateBarcodeButtonEnabled =
+            binding.editTextTitle.isNotBlank() || binding.editTextUrl.isNotBlank()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

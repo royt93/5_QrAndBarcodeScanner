@@ -4,47 +4,55 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.mckimquyen.barcodescanner.R
+import com.mckimquyen.barcodescanner.databinding.FCreateQrCodeVcardBinding
 import com.mckimquyen.barcodescanner.extension.textString
 import com.mckimquyen.barcodescanner.feature.tabs.create.FragmentBaseCreateBarcode
 import com.mckimquyen.barcodescanner.model.Contact
 import com.mckimquyen.barcodescanner.model.schema.Schema
 import com.mckimquyen.barcodescanner.model.schema.VCard
-import kotlinx.android.synthetic.main.f_create_qr_code_vcard.*
 
 class FragmentCreateQrCodeVCard : FragmentBaseCreateBarcode() {
+    private var _binding: FCreateQrCodeVcardBinding? = null
+    private val binding get() = _binding!!
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-        return inflater.inflate(R.layout.f_create_qr_code_vcard, container, false)
+        _binding = FCreateQrCodeVcardBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        editTextFirstName.requestFocus()
+        binding.editTextFirstName.requestFocus()
         parentActivity.isCreateBarcodeButtonEnabled = true
     }
 
     override fun getBarcodeSchema(): Schema {
         return VCard(
-            firstName = editTextFirstName.textString,
-            lastName = editTextLastName.textString,
-            organization = editTextOrganization.textString,
-            title = editTextJob.textString,
-            email = editTextEmail.textString,
-            phone = editTextPhone.textString,
-            secondaryPhone = editTextFax.textString,
-            url = editTextWebsite.textString
+            firstName = binding.editTextFirstName.textString,
+            lastName = binding.editTextLastName.textString,
+            organization = binding.editTextOrganization.textString,
+            title = binding.editTextJob.textString,
+            email = binding.editTextEmail.textString,
+            phone = binding.editTextPhone.textString,
+            secondaryPhone = binding.editTextFax.textString,
+            url = binding.editTextWebsite.textString
         )
     }
 
     override fun showContact(contact: Contact) {
-        editTextFirstName.setText(contact.firstName)
-        editTextLastName.setText(contact.lastName)
-        editTextEmail.setText(contact.email)
-        editTextPhone.setText(contact.phone)
+        binding.editTextFirstName.setText(contact.firstName)
+        binding.editTextLastName.setText(contact.lastName)
+        binding.editTextEmail.setText(contact.email)
+        binding.editTextPhone.setText(contact.phone)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

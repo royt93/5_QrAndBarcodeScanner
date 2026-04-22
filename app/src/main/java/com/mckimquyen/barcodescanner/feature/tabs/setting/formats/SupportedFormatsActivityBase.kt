@@ -4,16 +4,17 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.mckimquyen.barcodescanner.R
+import com.google.zxing.BarcodeFormat
+import com.mckimquyen.barcodescanner.databinding.ASupportedFormatsBinding
 import com.mckimquyen.barcodescanner.di.settings
 import com.mckimquyen.barcodescanner.extension.applySystemWindowInsets
 import com.mckimquyen.barcodescanner.extension.unsafeLazy
 import com.mckimquyen.barcodescanner.feature.ActivityBase
 import com.mckimquyen.barcodescanner.usecase.SupportedBarcodeFormats
-import com.google.zxing.BarcodeFormat
-import kotlinx.android.synthetic.main.a_supported_formats.*
 
 class SupportedFormatsActivityBase : ActivityBase(), FormatsAdapter.Listener {
+    private lateinit var binding: ASupportedFormatsBinding
+
 
     companion object {
         fun start(context: Context) {
@@ -28,7 +29,8 @@ class SupportedFormatsActivityBase : ActivityBase(), FormatsAdapter.Listener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.a_supported_formats)
+        binding = ASupportedFormatsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         supportEdgeToEdge()
         initRecyclerView()
         handleToolbarBackClicked()
@@ -39,18 +41,18 @@ class SupportedFormatsActivityBase : ActivityBase(), FormatsAdapter.Listener {
     }
 
     private fun supportEdgeToEdge() {
-        rootView.applySystemWindowInsets(applyTop = true, applyBottom = true)
+        binding.rootView.applySystemWindowInsets(applyTop = true, applyBottom = true)
     }
 
     private fun initRecyclerView() {
-        recyclerViewFormats.apply {
+        binding.recyclerViewFormats.apply {
             layoutManager = LinearLayoutManager(this@SupportedFormatsActivityBase)
             adapter = formatsAdapter
         }
     }
 
     private fun handleToolbarBackClicked() {
-        toolbar.setNavigationOnClickListener {
+        binding.toolbar.setNavigationOnClickListener {
             finish()
         }
     }

@@ -329,7 +329,7 @@
     <string name="activity_barcode_otp_title">OTP</string>
     <string name="activity_barcode_otp_unable_to_generate_otp">Não foi possível gerar uma senha</string>
     <string name="activity_barcode_otp_counter">Contador: %s</string>
-    <string name="activity_barcode_otp_timer">%s:%s esquerda</string>
+    <string name="activity_barcode_otp_timer" formatted="false">%s:%s esquerda</string>
     <string name="activity_barcode_otp_refresh_otp">Atualizar</string>
 
     <!--Save barcode as text activity-->

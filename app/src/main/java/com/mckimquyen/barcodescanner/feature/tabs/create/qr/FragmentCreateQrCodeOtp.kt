@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import com.mckimquyen.barcodescanner.R
+import com.mckimquyen.barcodescanner.databinding.FCreateQrCodeOtpBinding
 import com.mckimquyen.barcodescanner.extension.encodeBase32
 import com.mckimquyen.barcodescanner.extension.isNotBlank
 import com.mckimquyen.barcodescanner.extension.textString
@@ -17,10 +18,12 @@ import com.mckimquyen.barcodescanner.feature.tabs.create.FragmentBaseCreateBarco
 import com.mckimquyen.barcodescanner.model.schema.OtpAuth
 import com.mckimquyen.barcodescanner.model.schema.Schema
 import dev.turingcomplete.kotlinonetimepassword.RandomSecretGenerator
-import kotlinx.android.synthetic.main.f_create_qr_code_otp.*
-import java.util.*
+import java.util.Locale
 
 class FragmentCreateQrCodeOtp : FragmentBaseCreateBarcode() {
+    private var _binding: FCreateQrCodeOtpBinding? = null
+    private val binding get() = _binding!!
+
     private val randomGenerator = RandomSecretGenerator()
 
     override fun onCreateView(
@@ -28,7 +31,8 @@ class FragmentCreateQrCodeOtp : FragmentBaseCreateBarcode() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-        return inflater.inflate(R.layout.f_create_qr_code_otp, container, false)
+        _binding = FCreateQrCodeOtpBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -42,36 +46,36 @@ class FragmentCreateQrCodeOtp : FragmentBaseCreateBarcode() {
 
     override fun getBarcodeSchema(): Schema {
         return OtpAuth(
-            type = spinnerOptTypes.selectedItem?.toString()?.lowercase(Locale.ENGLISH),
-            algorithm = spinnerAlgorithms.selectedItem?.toString(),
-            label = if (editTextIssuer.isNotBlank()) {
-                "${editTextIssuer.textString}:${editTextAccount.textString}"
+            type = binding.spinnerOptTypes.selectedItem?.toString()?.lowercase(Locale.ENGLISH),
+            algorithm = binding.spinnerAlgorithms.selectedItem?.toString(),
+            label = if (binding.editTextIssuer.isNotBlank()) {
+                "${binding.editTextIssuer.textString}:${binding.editTextAccount.textString}"
             } else {
-                editTextAccount.textString
+                binding.editTextAccount.textString
             },
-            issuer = editTextIssuer.textString,
-            digits = editTextDigits.textString.toIntOrNull(),
-            period = editTextPeriod.textString.toLongOrNull(),
-            counter = editTextCounter.textString.toLongOrNull(),
-            secret = editTextSecret.textString
+            issuer = binding.editTextIssuer.textString,
+            digits = binding.editTextDigits.textString.toIntOrNull(),
+            period = binding.editTextPeriod.textString.toLongOrNull(),
+            counter = binding.editTextCounter.textString.toLongOrNull(),
+            secret = binding.editTextSecret.textString
         )
     }
 
     private fun initOtpTypesSpinner() {
-        spinnerOptTypes.adapter = ArrayAdapter.createFromResource(
+        binding.spinnerOptTypes.adapter = ArrayAdapter.createFromResource(
             requireContext(), R.array.fragment_create_qr_code_otp_types, R.layout.i_spinner
         ).apply {
             setDropDownViewResource(R.layout.i_spinner_dropdown)
         }
 
-        spinnerOptTypes.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        binding.spinnerOptTypes.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>?,
                 view: View?,
                 position: Int,
                 id: Long,
             ) {
-                textInputLayoutCounter.isVisible = position == 0
+                binding.textInputLayoutCounter.isVisible = position == 0
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -81,7 +85,7 @@ class FragmentCreateQrCodeOtp : FragmentBaseCreateBarcode() {
     }
 
     private fun initAlgorithmsSpinner() {
-        spinnerAlgorithms.adapter = ArrayAdapter.createFromResource(
+        binding.spinnerAlgorithms.adapter = ArrayAdapter.createFromResource(
             requireContext(), R.array.fragment_create_qr_code_otp_algorithms, R.layout.i_spinner
         ).apply {
             setDropDownViewResource(R.layout.i_spinner_dropdown)
@@ -89,41 +93,46 @@ class FragmentCreateQrCodeOtp : FragmentBaseCreateBarcode() {
     }
 
     private fun initEditTexts() {
-        editTextAccount.addTextChangedListener {
+        binding.editTextAccount.addTextChangedListener {
             toggleCreateBarcodeButton()
         }
-        editTextSecret.addTextChangedListener {
+        binding.editTextSecret.addTextChangedListener {
             toggleCreateBarcodeButton()
         }
-        editTextPeriod.addTextChangedListener {
+        binding.editTextPeriod.addTextChangedListener {
             toggleCreateBarcodeButton()
         }
-        editTextCounter.addTextChangedListener {
+        binding.editTextCounter.addTextChangedListener {
             toggleCreateBarcodeButton()
         }
     }
 
     private fun initGenerateRandomSecretButton() {
-        buttonGenerateRandomSecret.setOnClickListener {
+        binding.buttonGenerateRandomSecret.setOnClickListener {
             showRandomSecret()
         }
     }
 
     private fun toggleCreateBarcodeButton() {
-        val isHotp = spinnerOptTypes.selectedItemPosition == 0
-        val areGeneralFieldsNotBlank = editTextAccount.isNotBlank() && editTextSecret.isNotBlank()
-        val areHotpFieldsNotBlank = editTextCounter.isNotBlank() && editTextPeriod.isNotBlank()
+        val isHotp = binding.spinnerOptTypes.selectedItemPosition == 0
+        val areGeneralFieldsNotBlank = binding.editTextAccount.isNotBlank() && binding.editTextSecret.isNotBlank()
+        val areHotpFieldsNotBlank = binding.editTextCounter.isNotBlank() && binding.editTextPeriod.isNotBlank()
         parentActivity.isCreateBarcodeButtonEnabled =
             areGeneralFieldsNotBlank && (isHotp.not() || isHotp && areHotpFieldsNotBlank)
     }
 
     private fun showRandomSecret() {
-        editTextSecret.setText(generateRandomSecret())
+        binding.editTextSecret.setText(generateRandomSecret())
     }
 
     private fun generateRandomSecret(): String {
-        val algorithm = spinnerAlgorithms.selectedItem?.toString().toHmacAlgorithm()
+        val algorithm = binding.spinnerAlgorithms.selectedItem?.toString().toHmacAlgorithm()
         val secret = randomGenerator.createRandomSecret(algorithm)
         return secret.encodeBase32()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

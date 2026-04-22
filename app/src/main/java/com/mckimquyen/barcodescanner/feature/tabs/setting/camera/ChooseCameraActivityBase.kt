@@ -3,13 +3,14 @@ package com.mckimquyen.barcodescanner.feature.tabs.setting.camera
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import com.mckimquyen.barcodescanner.R
+import com.mckimquyen.barcodescanner.databinding.AChooseCameraBinding
 import com.mckimquyen.barcodescanner.di.settings
 import com.mckimquyen.barcodescanner.extension.applySystemWindowInsets
 import com.mckimquyen.barcodescanner.feature.ActivityBase
-import kotlinx.android.synthetic.main.a_choose_camera.*
 
 class ChooseCameraActivityBase : ActivityBase() {
+    private lateinit var binding: AChooseCameraBinding
+
 
     companion object {
         fun start(context: Context) {
@@ -20,7 +21,8 @@ class ChooseCameraActivityBase : ActivityBase() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.a_choose_camera)
+        binding = AChooseCameraBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         supportEdgeToEdge()
         handleToolbarBackClicked()
     }
@@ -34,33 +36,33 @@ class ChooseCameraActivityBase : ActivityBase() {
 
     private fun showSelectedCamera() {
         val isBackCamera = settings.isBackCamera
-        buttonBackCamera.isChecked = isBackCamera
-        buttonFrontCamera.isChecked = isBackCamera.not()
+        binding.buttonBackCamera.isChecked = isBackCamera
+        binding.buttonFrontCamera.isChecked = isBackCamera.not()
     }
 
     private fun supportEdgeToEdge() {
-        rootView.applySystemWindowInsets(applyTop = true, applyBottom = true)
+        binding.rootView.applySystemWindowInsets(applyTop = true, applyBottom = true)
     }
 
     private fun handleToolbarBackClicked() {
-        toolbar.setNavigationOnClickListener {
+        binding.toolbar.setNavigationOnClickListener {
             finish()
         }
     }
 
     private fun handleBackCameraButtonChecked() {
-        buttonBackCamera.setCheckedChangedListener { isChecked ->
+        binding.buttonBackCamera.setCheckedChangedListener { isChecked ->
             if (isChecked) {
-                buttonFrontCamera.isChecked = false
+                binding.buttonFrontCamera.isChecked = false
             }
             settings.isBackCamera = isChecked
         }
     }
 
     private fun handleFrontCameraButtonChecked() {
-        buttonFrontCamera.setCheckedChangedListener { isChecked ->
+        binding.buttonFrontCamera.setCheckedChangedListener { isChecked ->
             if (isChecked) {
-                buttonBackCamera.isChecked = false
+                binding.buttonBackCamera.isChecked = false
             }
             settings.isBackCamera = isChecked.not()
         }

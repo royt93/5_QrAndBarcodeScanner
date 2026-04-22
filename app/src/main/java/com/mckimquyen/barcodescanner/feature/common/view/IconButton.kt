@@ -5,20 +5,19 @@ import android.content.res.TypedArray
 import android.graphics.drawable.GradientDrawable
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.FrameLayout
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import com.mckimquyen.barcodescanner.R
-import kotlinx.android.synthetic.main.lo_icon_button.view.*
+import com.mckimquyen.barcodescanner.databinding.LoIconButtonBinding
 
 class IconButton : FrameLayout {
-    private val view: View
+    private val binding: LoIconButtonBinding
 
     var text: String
-        get() = view.textView.text.toString()
+        get() = binding.textView.text.toString()
         set(value) {
-            view.textView.text = value
+            binding.textView.text = value
         }
 
     constructor(context: Context) : this(context, null)
@@ -31,9 +30,8 @@ class IconButton : FrameLayout {
         attrs: AttributeSet?,
         defStyleAttr: Int,
     ) : super(context, attrs, defStyleAttr) {
-        view = LayoutInflater
-            .from(context)
-            .inflate(R.layout.lo_icon_button, this, true)
+        val inflater = LayoutInflater.from(context)
+        binding = LoIconButtonBinding.inflate(inflater, this, true)
 
         context.obtainStyledAttributes(attrs, R.styleable.IconButton).apply {
             showIcon(this)
@@ -46,24 +44,24 @@ class IconButton : FrameLayout {
     private fun showIcon(attributes: TypedArray) {
         val iconResId = attributes.getResourceId(R.styleable.IconButton_icon, -1)
         val icon = AppCompatResources.getDrawable(context, iconResId)
-        view.imageViewSchema.setImageDrawable(icon)
+        binding.imageViewSchema.setImageDrawable(icon)
     }
 
     private fun showIconBackgroundColor(attributes: TypedArray) {
         val color = attributes.getColor(
             R.styleable.IconButton_iconBackground,
-            ContextCompat.getColor(view.context, R.color.green)
+            ContextCompat.getColor(context, R.color.green)
         )
-        (view.layoutImage.background.mutate() as GradientDrawable).setColor(color)
+        (binding.layoutImage.background.mutate() as GradientDrawable).setColor(color)
     }
 
     private fun showText(attributes: TypedArray) {
-        view.textView.text = attributes.getString(R.styleable.IconButton_text).orEmpty()
+        binding.textView.text = attributes.getString(R.styleable.IconButton_text).orEmpty()
     }
 
     override fun setEnabled(enabled: Boolean) {
         super.setEnabled(enabled)
-        view.imageViewSchema.isEnabled = enabled
-        view.textView.isEnabled = enabled
+        binding.imageViewSchema.isEnabled = enabled
+        binding.textView.isEnabled = enabled
     }
 }

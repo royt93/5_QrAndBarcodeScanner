@@ -330,7 +330,7 @@
     <string name="activity_barcode_otp_title">ワンタイムパスワード</string>
     <string name="activity_barcode_otp_unable_to_generate_otp">秘密鍵生成を無効化</string>
     <string name="activity_barcode_otp_counter">カウンター：%s</string>
-    <string name="activity_barcode_otp_timer">残り%s:%s</string>
+    <string name="activity_barcode_otp_timer" formatted="false">残り%s:%s</string>
     <string name="activity_barcode_otp_refresh_otp">更新</string>
 
     <!--Save barcode as text activity-->

@@ -330,7 +330,7 @@
     <string name="activity_barcode_otp_title">Tek Kullanımlık Şifre</string>
     <string name="activity_barcode_otp_unable_to_generate_otp">Şifre oluşturulamadı</string>
     <string name="activity_barcode_otp_counter">Sayaç: %s</string>
-    <string name="activity_barcode_otp_timer">%s:%s kaldı</string>
+    <string name="activity_barcode_otp_timer" formatted="false">%s:%s kaldı</string>
     <string name="activity_barcode_otp_refresh_otp">Yenile</string>
 
     <!--Save barcode as text activity-->

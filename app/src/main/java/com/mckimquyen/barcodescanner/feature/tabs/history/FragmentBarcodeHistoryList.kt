@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.paging.PagedList
 import androidx.paging.RxPagedListBuilder
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.mckimquyen.barcodescanner.R
+import com.mckimquyen.barcodescanner.databinding.FBarcodeHistoryListBinding
 import com.mckimquyen.barcodescanner.di.barcodeDatabase
 import com.mckimquyen.barcodescanner.extension.orZero
 import com.mckimquyen.barcodescanner.extension.showError
@@ -18,9 +18,11 @@ import io.reactivex.BackpressureStrategy
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
-import kotlinx.android.synthetic.main.f_barcode_history_list.*
 
 class FragmentBarcodeHistoryList : Fragment(), AdapterBarcodeHistory.Listener {
+    private var _binding: FBarcodeHistoryListBinding? = null
+    private val binding get() = _binding!!
+
 
     companion object {
         private const val PAGE_SIZE = 20
@@ -53,7 +55,8 @@ class FragmentBarcodeHistoryList : Fragment(), AdapterBarcodeHistory.Listener {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-        return inflater.inflate(R.layout.f_barcode_history_list, container, false)
+        _binding = FBarcodeHistoryListBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -69,10 +72,11 @@ class FragmentBarcodeHistoryList : Fragment(), AdapterBarcodeHistory.Listener {
     override fun onDestroyView() {
         super.onDestroyView()
         disposable.clear()
+        _binding = null
     }
 
     private fun initRecyclerView() {
-        recyclerViewHistory.apply {
+        binding.recyclerViewHistory.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = scanHistoryAdapter
         }
@@ -104,7 +108,7 @@ class FragmentBarcodeHistoryList : Fragment(), AdapterBarcodeHistory.Listener {
     }
 
     private fun updateEmptyState(isEmpty: Boolean) {
-        layoutEmptyState?.visibility = if (isEmpty) View.VISIBLE else View.GONE
-        recyclerViewHistory?.visibility = if (isEmpty) View.GONE else View.VISIBLE
+        binding.layoutEmptyState?.visibility = if (isEmpty) View.VISIBLE else View.GONE
+        binding.recyclerViewHistory?.visibility = if (isEmpty) View.GONE else View.VISIBLE
     }
 }

@@ -330,7 +330,7 @@
     <string name="activity_barcode_otp_title">OTP</string>
     <string name="activity_barcode_otp_unable_to_generate_otp">Αδυναμία δημιουργίας κωδικού</string>
     <string name="activity_barcode_otp_counter">Μετρητής: %s</string>
-    <string name="activity_barcode_otp_timer">%s:%s μένουν</string>
+    <string name="activity_barcode_otp_timer" formatted="false">%s:%s μένουν</string>
     <string name="activity_barcode_otp_refresh_otp">Ανανέωση</string>
 
     <!--Save barcode as text activity-->

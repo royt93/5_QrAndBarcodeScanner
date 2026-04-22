@@ -5,22 +5,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
-import com.mckimquyen.barcodescanner.R
+import com.mckimquyen.barcodescanner.databinding.FCreateQrCodeEmailBinding
 import com.mckimquyen.barcodescanner.extension.isNotBlank
 import com.mckimquyen.barcodescanner.extension.textString
 import com.mckimquyen.barcodescanner.feature.tabs.create.FragmentBaseCreateBarcode
 import com.mckimquyen.barcodescanner.model.schema.Email
 import com.mckimquyen.barcodescanner.model.schema.Schema
-import kotlinx.android.synthetic.main.f_create_qr_code_email.*
 
 class FragmentCreateQrCodeEmail : FragmentBaseCreateBarcode() {
+    private var _binding: FCreateQrCodeEmailBinding? = null
+    private val binding get() = _binding!!
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-        return inflater.inflate(R.layout.f_create_qr_code_email, container, false)
+        _binding = FCreateQrCodeEmailBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -31,30 +34,35 @@ class FragmentCreateQrCodeEmail : FragmentBaseCreateBarcode() {
 
     override fun getBarcodeSchema(): Schema {
         return Email(
-            email = editTextEmail.textString,
-            subject = editTextSubject.textString,
-            body = editTextMessage.textString
+            email = binding.editTextEmail.textString,
+            subject = binding.editTextSubject.textString,
+            body = binding.editTextMessage.textString
         )
     }
 
     private fun initTitleEditText() {
-        editTextEmail.requestFocus()
+        binding.editTextEmail.requestFocus()
     }
 
     private fun handleTextChanged() {
-        editTextEmail.addTextChangedListener {
+        binding.editTextEmail.addTextChangedListener {
             toggleCreateBarcodeButton()
         }
-        editTextSubject.addTextChangedListener {
+        binding.editTextSubject.addTextChangedListener {
             toggleCreateBarcodeButton()
         }
-        editTextMessage.addTextChangedListener {
+        binding.editTextMessage.addTextChangedListener {
             toggleCreateBarcodeButton()
         }
     }
 
     private fun toggleCreateBarcodeButton() {
         parentActivity.isCreateBarcodeButtonEnabled =
-            editTextEmail.isNotBlank() || editTextSubject.isNotBlank() || editTextMessage.isNotBlank()
+            binding.editTextEmail.isNotBlank() || binding.editTextSubject.isNotBlank() || binding.editTextMessage.isNotBlank()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

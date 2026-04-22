@@ -331,7 +331,7 @@
     <string name="activity_barcode_otp_title">OTP</string>
     <string name="activity_barcode_otp_unable_to_generate_otp">לא ניתן ליצור סיסמה</string>
     <string name="activity_barcode_otp_counter">מונה: %s</string>
-    <string name="activity_barcode_otp_timer">%s:%s נותרו</string>
+    <string name="activity_barcode_otp_timer" formatted="false">%s:%s נותרו</string>
     <string name="activity_barcode_otp_refresh_otp">רענון</string>
 
     <!--Save barcode as text activity-->

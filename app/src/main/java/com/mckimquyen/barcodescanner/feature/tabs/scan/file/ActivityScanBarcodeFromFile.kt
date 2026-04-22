@@ -8,29 +8,33 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
 import android.provider.MediaStore
-import android.util.Log
-import com.mckimquyen.barcodescanner.sdkadbmob.Logger
 import android.view.MotionEvent.ACTION_UP
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
+import com.google.zxing.Result
+import com.isseiaoki.simplecropview.CropImageView
 import com.mckimquyen.barcodescanner.R
-import com.mckimquyen.barcodescanner.di.*
+import com.mckimquyen.barcodescanner.databinding.AScanBarcodeFromFileBinding
+import com.mckimquyen.barcodescanner.di.barcodeDatabase
+import com.mckimquyen.barcodescanner.di.barcodeImageScanner
+import com.mckimquyen.barcodescanner.di.barcodeParser
+import com.mckimquyen.barcodescanner.di.permissionsHelper
+import com.mckimquyen.barcodescanner.di.settings
 import com.mckimquyen.barcodescanner.extension.applySystemWindowInsets
 import com.mckimquyen.barcodescanner.extension.showError
 import com.mckimquyen.barcodescanner.feature.ActivityBase
 import com.mckimquyen.barcodescanner.feature.barcode.ActivityBarcode
 import com.mckimquyen.barcodescanner.model.Barcode
 import com.mckimquyen.barcodescanner.usecase.save
-import com.google.zxing.Result
-import com.isseiaoki.simplecropview.CropImageView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.a_scan_barcode_from_file.*
 import java.util.concurrent.TimeUnit
 
 class ActivityScanBarcodeFromFile : ActivityBase() {
+    private lateinit var binding: AScanBarcodeFromFileBinding
+
 
     companion object {
         private const val CHOOSE_FILE_REQUEST_CODE = 12
@@ -55,9 +59,10 @@ class ActivityScanBarcodeFromFile : ActivityBase() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.a_scan_barcode_from_file)
+        binding = AScanBarcodeFromFileBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-//        Logger.i("onCreate")
+//        android.util.Log.i("roy93~", "onCreate")
 
         supportEdgeToEdge()
         handleToolbarBackPressed()
@@ -66,10 +71,10 @@ class ActivityScanBarcodeFromFile : ActivityBase() {
         handleScanButtonClicked()
 
         if (showImageFromIntent().not()) {
-//            Logger.i("if")
+//            android.util.Log.i("roy93~", "if")
             startChooseImageActivity(savedInstanceState)
         } else {
-//            Logger.i("else")
+//            android.util.Log.i("roy93~", "else")
         }
     }
 
@@ -96,7 +101,7 @@ class ActivityScanBarcodeFromFile : ActivityBase() {
         grantResults: IntArray,
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-//        Logger.i("onRequestPermissionsResult")
+//        android.util.Log.i("roy93~", "onRequestPermissionsResult")
         if (requestCode == PERMISSIONS_REQUEST_CODE && permissionsHelper.areAllPermissionsGranted(grantResults)) {
             imageUri?.apply(::showImage)
         } else {
@@ -111,7 +116,7 @@ class ActivityScanBarcodeFromFile : ActivityBase() {
     }
 
     private fun supportEdgeToEdge() {
-        rootView.applySystemWindowInsets(applyTop = true, applyBottom = true)
+        binding.rootView.applySystemWindowInsets(applyTop = true, applyBottom = true)
     }
 
     private fun showImageFromIntent(): Boolean {
@@ -146,7 +151,7 @@ class ActivityScanBarcodeFromFile : ActivityBase() {
         savedInstanceState: Bundle?,
     ) {
         if (savedInstanceState != null) {
-//            Logger.i("startChooseImageActivity return")
+//            android.util.Log.i("roy93~", "startChooseImageActivity return")
             return
         }
 
@@ -155,25 +160,25 @@ class ActivityScanBarcodeFromFile : ActivityBase() {
         }
 
 //        if (intent.resolveActivity(packageManager) != null) {
-//            Logger.i("startChooseImageActivity if")
+//            android.util.Log.i("roy93~", "startChooseImageActivity if")
 //            startActivityForResult(intent, requestCode)
 //        } else {
-//            Logger.i("startChooseImageActivity else")
+//            android.util.Log.i("roy93~", "startChooseImageActivity else")
 //        }
         startActivityForResult(intent, requestCode)
     }
 
     private fun handleToolbarBackPressed() {
-        toolbar.setNavigationOnClickListener {
+        binding.toolbar.setNavigationOnClickListener {
             finish()
         }
     }
 
     private fun handleToolbarMenuItemClicked() {
-        toolbar.setOnMenuItemClickListener { item ->
+        binding.toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
-                R.id.itemRotateLeft -> cropImageView.rotateImage(CropImageView.RotateDegrees.ROTATE_M90D)
-                R.id.itemRotateRight -> cropImageView.rotateImage(CropImageView.RotateDegrees.ROTATE_90D)
+                R.id.itemRotateLeft -> binding.cropImageView.rotateImage(CropImageView.RotateDegrees.ROTATE_M90D)
+                R.id.itemRotateRight -> binding.cropImageView.rotateImage(CropImageView.RotateDegrees.ROTATE_90D)
                 R.id.itemChangeImage -> startChooseImageActivityAgain()
             }
             return@setOnMenuItemClickListener true
@@ -181,7 +186,7 @@ class ActivityScanBarcodeFromFile : ActivityBase() {
     }
 
     private fun handleImageCropAreaChanged() {
-        cropImageView.touches()
+        binding.cropImageView.touches()
             .filter { it.action == ACTION_UP }
             .debounce(400, TimeUnit.MILLISECONDS)
             .observeOn(AndroidSchedulers.mainThread())
@@ -190,7 +195,7 @@ class ActivityScanBarcodeFromFile : ActivityBase() {
     }
 
     private fun handleScanButtonClicked() {
-        buttonScan.setOnClickListener {
+        binding.buttonScan.setOnClickListener {
             saveScanResult()
         }
     }
@@ -198,7 +203,7 @@ class ActivityScanBarcodeFromFile : ActivityBase() {
     private fun showImage(imageUri: Uri) {
         this.imageUri = imageUri
 
-        cropImageView
+        binding.cropImageView
             .load(imageUri)
             .executeAsCompletable()
             .subscribeOn(Schedulers.io())
@@ -211,7 +216,7 @@ class ActivityScanBarcodeFromFile : ActivityBase() {
     }
 
     private fun showErrorOrRequestPermissions(error: Throwable) {
-//        Logger.i("showErrorOrRequestPermissions error $error")
+//        android.util.Log.i("roy93~", "showErrorOrRequestPermissions error $error")
         when (error) {
             is SecurityException -> permissionsHelper.requestPermissions(this, PERMISSIONS, PERMISSIONS_REQUEST_CODE)
             else -> showError(error)
@@ -225,7 +230,7 @@ class ActivityScanBarcodeFromFile : ActivityBase() {
         scanDisposable.clear()
         lastScanResult = null
 
-        cropImageView
+        binding.cropImageView
             .cropAsSingle()
             .subscribeOn(Schedulers.io())
             .subscribe(::scanCroppedImage, ::showError)
@@ -272,12 +277,12 @@ class ActivityScanBarcodeFromFile : ActivityBase() {
     }
 
     private fun showLoading(isLoading: Boolean) {
-        progressBarLoading.isVisible = isLoading
-        buttonScan.isInvisible = isLoading
+        binding.progressBarLoading.isVisible = isLoading
+        binding.buttonScan.isInvisible = isLoading
     }
 
     private fun showScanButtonEnabled(isEnabled: Boolean) {
-        buttonScan.isEnabled = isEnabled
+        binding.buttonScan.isEnabled = isEnabled
     }
 
     private fun navigateToBarcodeScreen(barcode: Barcode) {

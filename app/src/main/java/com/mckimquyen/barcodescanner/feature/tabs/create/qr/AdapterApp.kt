@@ -4,12 +4,10 @@ import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isInvisible
 import androidx.recyclerview.widget.RecyclerView
-import com.mckimquyen.barcodescanner.R
-import kotlinx.android.synthetic.main.i_app.view.*
+import com.mckimquyen.barcodescanner.databinding.IAppBinding
 
 class AdapterApp(private val listener: Listener) : RecyclerView.Adapter<AdapterApp.ViewHolder>() {
 
@@ -30,8 +28,8 @@ class AdapterApp(private val listener: Listener) : RecyclerView.Adapter<AdapterA
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val itemView = inflater.inflate(R.layout.i_app, parent, false)
-        return ViewHolder(itemView)
+        val binding = IAppBinding.inflate(inflater, parent, false)
+        return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -40,9 +38,9 @@ class AdapterApp(private val listener: Listener) : RecyclerView.Adapter<AdapterA
         holder.show(app, isLastPosition)
     }
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(private val binding: IAppBinding) : RecyclerView.ViewHolder(binding.root) {
         private val packageManager: PackageManager
-            get() = itemView.context.applicationContext.packageManager
+            get() = binding.root.context.applicationContext.packageManager
 
         fun show(
             app: ResolveInfo,
@@ -55,19 +53,19 @@ class AdapterApp(private val listener: Listener) : RecyclerView.Adapter<AdapterA
         }
 
         private fun showName(app: ResolveInfo) {
-            itemView.textView.text = app.loadLabel(packageManager)
+            binding.textView.text = app.loadLabel(packageManager)
         }
 
         private fun showIcon(app: ResolveInfo) {
-            itemView.imageView.setImageDrawable(app.loadIcon(packageManager))
+            binding.imageView.setImageDrawable(app.loadIcon(packageManager))
         }
 
         private fun showDelimiter(isLastPosition: Boolean) {
-            itemView.delimiter.isInvisible = isLastPosition
+            binding.delimiter.isInvisible = isLastPosition
         }
 
         private fun handleItemClicked(app: ResolveInfo) {
-            itemView.setOnClickListener {
+            binding.root.setOnClickListener {
                 listener.onAppClicked(app.activityInfo?.packageName.orEmpty())
             }
         }

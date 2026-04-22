@@ -330,7 +330,7 @@
     <string name="activity_barcode_otp_title">OTP</string>
     <string name="activity_barcode_otp_unable_to_generate_otp">Fehler beim Generieren des Passworts</string>
     <string name="activity_barcode_otp_counter">Zähler: %s</string>
-    <string name="activity_barcode_otp_timer">Noch %s:%s</string>
+    <string name="activity_barcode_otp_timer" formatted="false">Noch %s:%s</string>
     <string name="activity_barcode_otp_refresh_otp">Aktualisieren</string>
 
     <!--Save barcode as text activity-->

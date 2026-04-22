@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.core.view.isVisible
 import com.mckimquyen.barcodescanner.R
+import com.mckimquyen.barcodescanner.databinding.ABarcodeImageBinding
 import com.mckimquyen.barcodescanner.di.barcodeImageGenerator
 import com.mckimquyen.barcodescanner.di.settings
 import com.mckimquyen.barcodescanner.extension.applySystemWindowInsets
@@ -13,11 +14,12 @@ import com.mckimquyen.barcodescanner.extension.unsafeLazy
 import com.mckimquyen.barcodescanner.feature.ActivityBase
 import com.mckimquyen.barcodescanner.model.Barcode
 import com.mckimquyen.barcodescanner.usecase.Logger
-import kotlinx.android.synthetic.main.a_barcode_image.*
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 
 class ActivityBarcodeImage : ActivityBase() {
+    private lateinit var binding: ABarcodeImageBinding
+
 
     companion object {
         private const val BARCODE_KEY = "BARCODE_KEY"
@@ -37,7 +39,8 @@ class ActivityBarcodeImage : ActivityBase() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.a_barcode_image)
+        binding = ABarcodeImageBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         supportEdgeToEdge()
         saveOriginalBrightness()
         handleToolbarBackPressed()
@@ -47,7 +50,7 @@ class ActivityBarcodeImage : ActivityBase() {
     }
 
     private fun supportEdgeToEdge() {
-        rootView.applySystemWindowInsets(applyTop = true, applyBottom = true)
+        binding.rootView.applySystemWindowInsets(applyTop = true, applyBottom = true)
     }
 
     private fun saveOriginalBrightness() {
@@ -55,17 +58,17 @@ class ActivityBarcodeImage : ActivityBase() {
     }
 
     private fun handleToolbarBackPressed() {
-        toolbar.setNavigationOnClickListener {
+        binding.toolbar.setNavigationOnClickListener {
             finish()
         }
     }
 
     private fun handleToolbarMenuItemClicked() {
-        toolbar.setOnMenuItemClickListener { item ->
+        binding.toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.itemIncreaseBrightness -> {
                     increaseBrightnessToMax()
-                    toolbar.menu.apply {
+                    binding.toolbar.menu.apply {
                         findItem(R.id.itemIncreaseBrightness).isVisible = false
                         findItem(R.id.itemDecreaseBrightness).isVisible = true
                     }
@@ -73,7 +76,7 @@ class ActivityBarcodeImage : ActivityBase() {
 
                 R.id.itemDecreaseBrightness -> {
                     restoreOriginalBrightness()
-                    toolbar.menu.apply {
+                    binding.toolbar.menu.apply {
                         findItem(R.id.itemDecreaseBrightness).isVisible = false
                         findItem(R.id.itemIncreaseBrightness).isVisible = true
                     }
@@ -84,7 +87,7 @@ class ActivityBarcodeImage : ActivityBase() {
     }
 
     private fun showMenu() {
-        toolbar.inflateMenu(R.menu.menu_barcode_image)
+        binding.toolbar.inflateMenu(R.menu.menu_barcode_image)
     }
 
     private fun showBarcode() {
@@ -104,12 +107,12 @@ class ActivityBarcodeImage : ActivityBase() {
                 codeColor = settings.barcodeContentColor,
                 backgroundColor = settings.barcodeBackgroundColor
             )
-            imageViewBarcode.setImageBitmap(bitmap)
-            imageViewBarcode.setBackgroundColor(settings.barcodeBackgroundColor)
-            layoutBarcodeImageBackground.setBackgroundColor(settings.barcodeBackgroundColor)
+            binding.imageViewBarcode.setImageBitmap(bitmap)
+            binding.imageViewBarcode.setBackgroundColor(settings.barcodeBackgroundColor)
+            binding.layoutBarcodeImageBackground.setBackgroundColor(settings.barcodeBackgroundColor)
 
             if (settings.isDarkTheme.not() || settings.areBarcodeColorsInversed) {
-                layoutBarcodeImageBackground.setPadding(
+                binding.layoutBarcodeImageBackground.setPadding(
                     /* left = */ 0,
                     /* top = */ 0,
                     /* right = */ 0,
@@ -118,21 +121,21 @@ class ActivityBarcodeImage : ActivityBase() {
             }
         } catch (ex: Exception) {
             Logger.log(ex)
-            imageViewBarcode.isVisible = false
+            binding.imageViewBarcode.isVisible = false
         }
     }
 
     private fun showBarcodeDate() {
-        textViewDate.text = dateFormatter.format(barcode.date)
+        binding.textViewDate.text = dateFormatter.format(barcode.date)
     }
 
     private fun showBarcodeFormat() {
         val format = barcode.format.toStringId()
-        toolbar.setTitle(format)
+        binding.toolbar.setTitle(format)
     }
 
     private fun showBarcodeText() {
-        textViewBarcodeText.text = barcode.text
+        binding.textViewBarcodeText.text = barcode.text
     }
 
     private fun increaseBrightnessToMax() {

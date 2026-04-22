@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" package="com.mckimquyen.barcodescanner">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <!--Normal permissions-->
     <uses-feature android:name="android.hardware.camera" android:required="false" />
@@ -23,7 +23,9 @@
 
         <!-- Khai báo AdMob App ID -->
         <meta-data android:name="com.google.android.gms.ads.APPLICATION_ID" android:value="ca-app-pub-3612191981543807~8467338874" />
-        <!-- Sample AdMob App ID -->
+
+        <!-- AppLovin SDK Key -->
+
 
         <!--        <meta-data-->
         <!-- android:name="io.sentry.dsn"-->

@@ -5,12 +5,11 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
-import com.mckimquyen.barcodescanner.sdkadbmob.Logger
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.view.isVisible
 import com.mckimquyen.barcodescanner.R
+import com.mckimquyen.barcodescanner.databinding.ASaveBarcodeAsImageBinding
 import com.mckimquyen.barcodescanner.di.barcodeImageGenerator
 import com.mckimquyen.barcodescanner.di.barcodeImageSaver
 import com.mckimquyen.barcodescanner.di.permissionsHelper
@@ -23,9 +22,10 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.a_save_barcode_as_image.*
 
 class ActivitySaveBarcodeAsImage : ActivityBase() {
+    private lateinit var binding: ASaveBarcodeAsImageBinding
+
 
     companion object {
         private const val REQUEST_PERMISSIONS_CODE = 101
@@ -51,7 +51,8 @@ class ActivitySaveBarcodeAsImage : ActivityBase() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.a_save_barcode_as_image)
+        binding = ASaveBarcodeAsImageBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         supportEdgeToEdge()
         initToolbar()
         initFormatSpinner()
@@ -64,12 +65,12 @@ class ActivitySaveBarcodeAsImage : ActivityBase() {
         grantResults: IntArray,
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-//        Logger.i("onRequestPermissionsResult")
+//        android.util.Log.i("roy93~", "onRequestPermissionsResult")
         if (permissionsHelper.areAllPermissionsGranted(grantResults)) {
-//            Logger.i("if")
+//            android.util.Log.i("roy93~", "if")
             saveBarcode()
         } else {
-//            Logger.i("else")
+//            android.util.Log.i("roy93~", "else")
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 saveBarcode()
             } else {
@@ -84,17 +85,17 @@ class ActivitySaveBarcodeAsImage : ActivityBase() {
     }
 
     private fun supportEdgeToEdge() {
-        rootView.applySystemWindowInsets(applyTop = true, applyBottom = true)
+        binding.rootView.applySystemWindowInsets(applyTop = true, applyBottom = true)
     }
 
     private fun initToolbar() {
-        toolbar.setNavigationOnClickListener {
+        binding.toolbar.setNavigationOnClickListener {
             finish()
         }
     }
 
     private fun initFormatSpinner() {
-        spinnerSaveAs.adapter = ArrayAdapter.createFromResource(
+        binding.spinnerSaveAs.adapter = ArrayAdapter.createFromResource(
             /* context = */ this,
             /* textArrayResId = */ R.array.activity_save_barcode_as_image_formats,
             /* textViewResId = */ R.layout.i_spinner
@@ -104,14 +105,14 @@ class ActivitySaveBarcodeAsImage : ActivityBase() {
     }
 
     private fun initSaveButton() {
-        buttonSave.setOnClickListener {
-//            Logger.i("setOnClickListener")
+        binding.buttonSave.setOnClickListener {
+//            android.util.Log.i("roy93~", "setOnClickListener")
             requestPermissions()
         }
     }
 
     private fun requestPermissions() {
-//        Logger.i("requestPermissions")
+//        android.util.Log.i("roy93~", "requestPermissions")
         permissionsHelper.requestPermissions(
             activity = this,
             permissions = PERMISSIONS,
@@ -120,7 +121,7 @@ class ActivitySaveBarcodeAsImage : ActivityBase() {
     }
 
     private fun saveBarcode() {
-        val saveFunc = when (spinnerSaveAs.selectedItemPosition) {
+        val saveFunc = when (binding.spinnerSaveAs.selectedItemPosition) {
             0 -> {
                 barcodeImageGenerator.generateBitmapAsync(
                     barcode = barcode,
@@ -171,8 +172,8 @@ class ActivitySaveBarcodeAsImage : ActivityBase() {
     }
 
     private fun showLoading(isLoading: Boolean) {
-        progressBarLoading.isVisible = isLoading
-        scrollView.isVisible = isLoading.not()
+        binding.progressBarLoading.isVisible = isLoading
+        binding.scrollView.isVisible = isLoading.not()
     }
 
     private fun showBarcodeSaved() {

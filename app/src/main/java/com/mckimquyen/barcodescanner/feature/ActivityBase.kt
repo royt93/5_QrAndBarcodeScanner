@@ -5,8 +5,6 @@ import android.content.Context
 import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
-import com.mckimquyen.barcodescanner.sdkadbmob.Logger
 import android.view.Display
 import android.view.View
 import android.view.WindowManager
@@ -15,9 +13,7 @@ import com.google.android.play.core.review.ReviewException
 import com.google.android.play.core.review.ReviewInfo
 import com.google.android.play.core.review.ReviewManagerFactory
 import com.google.android.play.core.review.model.ReviewErrorCode
-import com.mckimquyen.barcodescanner.BuildConfig
 import com.mckimquyen.barcodescanner.di.rotationHelper
-import com.mckimquyen.barcodescanner.di.settings
 import com.mckimquyen.barcodescanner.usecase.LocaleHelper
 import java.util.Calendar
 
@@ -34,7 +30,7 @@ abstract class ActivityBase : AppCompatActivity() {
         // Apply language setting - Read directly from SharedPreferences to avoid initialization issues
         val sharedPreferences = newBase.getSharedPreferences("SHARED_PREFERENCES_NAME", Context.MODE_PRIVATE)
         val language = sharedPreferences.getString("LANGUAGE", "system") ?: "system"
-        Logger.i("attachBaseContext - Language: $language")
+        android.util.Log.i("roy93~", "attachBaseContext - Language: $language")
         val localeContext = LocaleHelper.setLocale(newBase, language)
 
         // Apply font scale override
@@ -46,6 +42,7 @@ abstract class ActivityBase : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        com.roy.sdkadbmob.AdManager.setCurrentActivity(this)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             enableAdaptiveRefreshRate()
         }
@@ -83,11 +80,11 @@ fun Activity.rateAppInApp(forceRateInApp: Boolean = false) {
 
     val sharedPreferences = getSharedPreferences("app_preferences", Context.MODE_PRIVATE)
     val lastReviewTime = sharedPreferences.getLong("last_review_time", 0L)
-//    Logger.i("requestReview lastReviewTime $lastReviewTime")
+//    android.util.Log.i("roy93~", "requestReview lastReviewTime $lastReviewTime")
     val currentTime = Calendar.getInstance().timeInMillis
     val daysSinceLastReview = (currentTime - lastReviewTime) / (1000 * 60 * 60 * 24)
-//    Logger.i("requestReview forceRateInApp $forceRateInApp")
-//    Logger.i("requestReview daysSinceLastReview $daysSinceLastReview")
+//    android.util.Log.i("roy93~", "requestReview forceRateInApp $forceRateInApp")
+//    android.util.Log.i("roy93~", "requestReview daysSinceLastReview $daysSinceLastReview")
     if (daysSinceLastReview >= 7 || forceRateInApp) {
 //    if (daysSinceLastReview >= 7) {
         val reviewManager = ReviewManagerFactory.create(this)
@@ -98,11 +95,11 @@ fun Activity.rateAppInApp(forceRateInApp: Boolean = false) {
                     val reviewInfo: ReviewInfo = task.result
                     reviewManager.launchReviewFlow(this, reviewInfo)
                     sharedPreferences.edit().putLong("last_review_time", currentTime).apply()
-//                    Logger.i("requestReview result ${task.result}")
-//                    Logger.i("requestReview isSuccessful ${task.isSuccessful}")
-//                    Logger.i("requestReview isCanceled ${task.isCanceled}")
-//                    Logger.i("requestReview isComplete ${task.isComplete}")
-//                    Logger.i("requestReview exception ${task.exception}")
+//                    android.util.Log.i("roy93~", "requestReview result ${task.result}")
+//                    android.util.Log.i("roy93~", "requestReview isSuccessful ${task.isSuccessful}")
+//                    android.util.Log.i("roy93~", "requestReview isCanceled ${task.isCanceled}")
+//                    android.util.Log.i("roy93~", "requestReview isComplete ${task.isComplete}")
+//                    android.util.Log.i("roy93~", "requestReview exception ${task.exception}")
                 } else {
                     @ReviewErrorCode val reviewErrorCode = (task.exception as ReviewException?)?.errorCode
 //                    Log.e("roy93~", "requestReview error $reviewErrorCode")

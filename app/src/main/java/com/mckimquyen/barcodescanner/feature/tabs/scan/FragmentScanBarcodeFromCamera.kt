@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,28 +14,43 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import com.budiyev.android.codescanner.*
-import com.mckimquyen.barcodescanner.di.*
-import com.mckimquyen.barcodescanner.extension.*
+import com.budiyev.android.codescanner.AutoFocusMode
+import com.budiyev.android.codescanner.CodeScanner
+import com.budiyev.android.codescanner.DecodeCallback
+import com.budiyev.android.codescanner.ErrorCallback
+import com.budiyev.android.codescanner.ScanMode
+import com.google.zxing.Result
+import com.google.zxing.ResultMetadataType
+import com.mckimquyen.barcodescanner.R
+import com.mckimquyen.barcodescanner.databinding.FScanBarcodeFromCameraBinding
+import com.mckimquyen.barcodescanner.di.barcodeDatabase
+import com.mckimquyen.barcodescanner.di.barcodeParser
+import com.mckimquyen.barcodescanner.di.barcodeSaver
+import com.mckimquyen.barcodescanner.di.permissionsHelper
+import com.mckimquyen.barcodescanner.di.scannerCameraHelper
+import com.mckimquyen.barcodescanner.di.settings
+import com.mckimquyen.barcodescanner.extension.applySystemWindowInsets
+import com.mckimquyen.barcodescanner.extension.equalTo
+import com.mckimquyen.barcodescanner.extension.showError
+import com.mckimquyen.barcodescanner.extension.vibrateOnce
+import com.mckimquyen.barcodescanner.extension.vibrator
 import com.mckimquyen.barcodescanner.feature.barcode.ActivityBarcode
 import com.mckimquyen.barcodescanner.feature.common.dlg.DialogFragmentConfirmBarcode
 import com.mckimquyen.barcodescanner.feature.tabs.scan.file.ActivityScanBarcodeFromFile
 import com.mckimquyen.barcodescanner.model.Barcode
 import com.mckimquyen.barcodescanner.usecase.SupportedBarcodeFormats
 import com.mckimquyen.barcodescanner.usecase.save
-import com.google.zxing.Result
-import com.google.zxing.ResultMetadataType
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.f_scan_barcode_from_camera.*
 import java.util.concurrent.TimeUnit
-import com.mckimquyen.barcodescanner.R
-import android.util.Log
 
 class FragmentScanBarcodeFromCamera : Fragment(), DialogFragmentConfirmBarcode.Listener {
+    private var _binding: FScanBarcodeFromCameraBinding? = null
+    private val binding get() = _binding!!
+
 
     companion object {
         private val PERMISSIONS = arrayOf(
@@ -51,7 +67,7 @@ class FragmentScanBarcodeFromCamera : Fragment(), DialogFragmentConfirmBarcode.L
     private val disposable = CompositeDisposable()
     private var maxZoom: Int = 0
     private val zoomStep = 5
-    private lateinit var codeScanner: CodeScanner
+    private var codeScanner: CodeScanner? = null
     private var toast: Toast? = null
     private var lastResult: Barcode? = null
     
@@ -64,7 +80,8 @@ class FragmentScanBarcodeFromCamera : Fragment(), DialogFragmentConfirmBarcode.L
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-        return inflater.inflate(R.layout.f_scan_barcode_from_camera, container, false)
+        _binding = FScanBarcodeFromCameraBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -86,7 +103,7 @@ class FragmentScanBarcodeFromCamera : Fragment(), DialogFragmentConfirmBarcode.L
         super.onResume()
         if (areAllPermissionsGranted()) {
             initZoomSeekBar()
-            codeScanner.startPreview()
+            codeScanner?.startPreview()
         }
     }
 
@@ -98,7 +115,7 @@ class FragmentScanBarcodeFromCamera : Fragment(), DialogFragmentConfirmBarcode.L
     ) {
         if (requestCode == PERMISSION_REQUEST_CODE && areAllPermissionsGranted(grantResults)) {
             initZoomSeekBar()
-            codeScanner.startPreview()
+            codeScanner?.startPreview()
         }
     }
 
@@ -111,7 +128,7 @@ class FragmentScanBarcodeFromCamera : Fragment(), DialogFragmentConfirmBarcode.L
     }
 
     override fun onPause() {
-        codeScanner.releaseResources()
+        codeScanner?.releaseResources()
         super.onPause()
     }
 
@@ -119,11 +136,14 @@ class FragmentScanBarcodeFromCamera : Fragment(), DialogFragmentConfirmBarcode.L
         super.onDestroyView()
         setLightStatusBar()
         disposable.clear()
+        codeScanner?.releaseResources()
+        codeScanner = null
+        _binding = null
     }
 
     private fun supportEdgeToEdge() {
         // Apply status bar inset to the entire top controls row
-        layoutTopControls.applySystemWindowInsets(applyTop = true)
+        binding.layoutTopControls.applySystemWindowInsets(applyTop = true)
     }
 
     private fun setDarkStatusBar() {
@@ -155,7 +175,7 @@ class FragmentScanBarcodeFromCamera : Fragment(), DialogFragmentConfirmBarcode.L
     }
 
     private fun initScanner() {
-        codeScanner = CodeScanner(requireActivity(), scannerView).apply {
+        codeScanner = CodeScanner(requireActivity(), binding.scannerView).apply {
             camera = if (settings.isBackCamera) {
                 CodeScanner.CAMERA_BACK
             } else {
@@ -179,49 +199,50 @@ class FragmentScanBarcodeFromCamera : Fragment(), DialogFragmentConfirmBarcode.L
     private fun initZoomSeekBar() {
         scannerCameraHelper.getCameraParameters(settings.isBackCamera)?.apply {
             this@FragmentScanBarcodeFromCamera.maxZoom = maxZoom
-            seekBarZoom.max = maxZoom
-            seekBarZoom.progress = zoom
+            binding.seekBarZoom.max = maxZoom
+            binding.seekBarZoom.progress = zoom
         }
     }
 
     private fun initFlashButton() {
-        layoutFlashContainer.setOnClickListener {
+        binding.layoutFlashContainer.setOnClickListener {
             toggleFlash()
         }
-        imageViewFlash.isActivated = settings.flash
+        binding.imageViewFlash.isActivated = settings.flash
     }
 
     private fun updateBatchScanVisual() {
         if (isBatchScanMode) {
             // ON: blue pill background + white tint on icon
-            layoutBatchScanContainer.setBackgroundResource(R.drawable.bg_batch_scan_active)
-            imageViewBatchScan.setColorFilter(
+            binding.layoutBatchScanContainer.setBackgroundResource(R.drawable.bg_batch_scan_active)
+            binding.imageViewBatchScan.setColorFilter(
                 android.graphics.Color.parseColor("#00B1FF"),
                 android.graphics.PorterDuff.Mode.SRC_IN
             )
-            textViewBatchScan.setTextColor(android.graphics.Color.parseColor("#00B1FF"))
+            binding.textViewBatchScan.setTextColor(android.graphics.Color.parseColor("#00B1FF"))
         } else {
             // OFF: transparent + white (default)
-            layoutBatchScanContainer.setBackgroundResource(android.R.color.transparent)
-            imageViewBatchScan.clearColorFilter()
-            textViewBatchScan.setTextColor(android.graphics.Color.WHITE)
+            binding.layoutBatchScanContainer.setBackgroundResource(android.R.color.transparent)
+            binding.imageViewBatchScan.clearColorFilter()
+            binding.textViewBatchScan.setTextColor(android.graphics.Color.WHITE)
         }
     }
 
     private fun initBatchScanButton() {
-        layoutBatchScanContainer.setOnClickListener {
+        binding.layoutBatchScanContainer.setOnClickListener {
             isBatchScanMode = !isBatchScanMode
             updateBatchScanVisual()
             Log.d(TAG, "Batch Scan toggle: isBatchScanMode=$isBatchScanMode")
 
             if (isBatchScanMode) {
-                if (recyclerViewBatch.adapter == null) {
-                    recyclerViewBatch.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(requireContext())
-                    recyclerViewBatch.adapter = batchAdapter
+                if (binding.recyclerViewBatch.adapter == null) {
+                    binding.recyclerViewBatch.layoutManager =
+                        androidx.recyclerview.widget.LinearLayoutManager(requireContext())
+                    binding.recyclerViewBatch.adapter = batchAdapter
                     // Fix 2: disable RecyclerView touch interception so card-level click works
-                    recyclerViewBatch.isClickable = false
-                    recyclerViewBatch.isFocusable = false
-                    recyclerViewBatch.isNestedScrollingEnabled = false
+                    binding.recyclerViewBatch.isClickable = false
+                    binding.recyclerViewBatch.isFocusable = false
+                    binding.recyclerViewBatch.isNestedScrollingEnabled = false
                 }
                 // Show helper dialog; panel will appear only after first successful scan
                 val dialog = DialogFragmentScanHelper()
@@ -231,14 +252,14 @@ class FragmentScanBarcodeFromCamera : Fragment(), DialogFragmentConfirmBarcode.L
                 dialog.show(childFragmentManager, "BatchHelper")
             } else {
                 Log.d(TAG, "Batch Scan OFF → hiding panel, clearing list")
-                layoutBatchListPanel.isVisible = false
+                binding.layoutBatchListPanel.isVisible = false
             }
         }
 
         // Export on button click
-        buttonExportCsv.setOnClickListener { triggerExport() }
+        binding.buttonExportCsv.setOnClickListener { triggerExport() }
         // Card click exports (works because RecyclerView is non-clickable)
-        layoutBatchListPanel.setOnClickListener { triggerExport() }
+        binding.layoutBatchListPanel.setOnClickListener { triggerExport() }
     }
 
     private fun triggerExport() {
@@ -268,7 +289,7 @@ class FragmentScanBarcodeFromCamera : Fragment(), DialogFragmentConfirmBarcode.L
             .subscribe({ count ->
                 batchList.clear()
                 batchAdapter.notifyDataSetChanged()
-                layoutBatchListPanel.isVisible = false
+                binding.layoutBatchListPanel.isVisible = false
                 Log.d(TAG, "triggerExport success: DB + CSV done, panel hidden. count=$count")
                 com.mckimquyen.barcodescanner.feature.tabs.scan.ActivityBatchExportResult.start(requireContext(), count, fileName)
             }, { error: Throwable ->
@@ -279,13 +300,13 @@ class FragmentScanBarcodeFromCamera : Fragment(), DialogFragmentConfirmBarcode.L
     }
 
     private fun handleScanFromFileClicked() {
-        layoutScanFromFileContainer.setOnClickListener {
+        binding.layoutScanFromFileContainer.setOnClickListener {
             navigateToScanFromFileScreen()
         }
     }
 
     private fun handleZoomChanged() {
-        seekBarZoom.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        binding.seekBarZoom.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
             override fun onProgressChanged(
@@ -294,43 +315,43 @@ class FragmentScanBarcodeFromCamera : Fragment(), DialogFragmentConfirmBarcode.L
                 fromUser: Boolean,
             ) {
                 if (fromUser) {
-                    codeScanner.zoom = progress
+                    codeScanner?.zoom = progress
                 }
             }
         })
     }
 
     private fun handleDecreaseZoomClicked() {
-        buttonDecreaseZoom.setOnClickListener {
+        binding.buttonDecreaseZoom.setOnClickListener {
             decreaseZoom()
         }
     }
 
     private fun handleIncreaseZoomClicked() {
-        buttonIncreaseZoom.setOnClickListener {
+        binding.buttonIncreaseZoom.setOnClickListener {
             increaseZoom()
         }
     }
 
     private fun decreaseZoom() {
-        codeScanner.apply {
+        codeScanner?.apply {
             if (zoom > zoomStep) {
                 zoom -= zoomStep
             } else {
                 zoom = 0
             }
-            seekBarZoom.progress = zoom
+            binding.seekBarZoom.progress = zoom
         }
     }
 
     private fun increaseZoom() {
-        codeScanner.apply {
+        codeScanner?.apply {
             if (zoom < maxZoom - zoomStep) {
                 zoom += zoomStep
             } else {
                 zoom = maxZoom
             }
-            seekBarZoom.progress = zoom
+            binding.seekBarZoom.progress = zoom
         }
     }
 
@@ -386,11 +407,11 @@ class FragmentScanBarcodeFromCamera : Fragment(), DialogFragmentConfirmBarcode.L
                 if (!isDuplicate) {
                     batchList.add(0, barcode)
                     batchAdapter.notifyItemInserted(0)
-                    recyclerViewBatch.scrollToPosition(0)
+                    binding.recyclerViewBatch.scrollToPosition(0)
                     Log.d(TAG, "saveScannedBarcode [BATCH]: added '${barcode.text}', total=${batchList.size}")
                     // Show panel on very first successful scan
-                    if (!layoutBatchListPanel.isVisible) {
-                        layoutBatchListPanel.isVisible = true
+                    if (!binding.layoutBatchListPanel.isVisible) {
+                        binding.layoutBatchListPanel.isVisible = true
                         Log.d(TAG, "saveScannedBarcode [BATCH]: revealing panel on first scan")
                     }
                 } else {
@@ -432,13 +453,13 @@ class FragmentScanBarcodeFromCamera : Fragment(), DialogFragmentConfirmBarcode.L
 
     private fun restartPreview() {
         activity?.runOnUiThread {
-            codeScanner.startPreview()
+            codeScanner?.startPreview()
         }
     }
 
     private fun toggleFlash() {
-        imageViewFlash.isActivated = imageViewFlash.isActivated.not()
-        codeScanner.isFlashEnabled = codeScanner.isFlashEnabled.not()
+        binding.imageViewFlash.isActivated = binding.imageViewFlash.isActivated.not()
+        codeScanner?.isFlashEnabled = codeScanner?.isFlashEnabled?.not() ?: false
     }
 
     private fun showToast(stringId: Int) {

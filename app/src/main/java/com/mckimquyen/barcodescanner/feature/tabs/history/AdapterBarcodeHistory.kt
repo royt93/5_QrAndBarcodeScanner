@@ -2,7 +2,6 @@ package com.mckimquyen.barcodescanner.feature.tabs.history
 
 import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
@@ -11,14 +10,13 @@ import androidx.core.view.isVisible
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.mckimquyen.barcodescanner.R
+import com.mckimquyen.barcodescanner.databinding.IBarcodeHistoryBinding
 import com.mckimquyen.barcodescanner.extension.toColorId
 import com.mckimquyen.barcodescanner.extension.toImageId
 import com.mckimquyen.barcodescanner.extension.toStringId
 import com.mckimquyen.barcodescanner.model.Barcode
-import kotlinx.android.synthetic.main.i_barcode_history.view.*
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 
 class AdapterBarcodeHistory(private val listener: Listener) :
     PagedListAdapter<Barcode, AdapterBarcodeHistory.ViewHolder>(DiffUtilCallback) {
@@ -31,8 +29,8 @@ class AdapterBarcodeHistory(private val listener: Listener) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val view = inflater.inflate(R.layout.i_barcode_history, parent, false)
-        return ViewHolder(view)
+        val binding = IBarcodeHistoryBinding.inflate(inflater, parent, false)
+        return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -44,7 +42,7 @@ class AdapterBarcodeHistory(private val listener: Listener) :
         }
     }
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(private val binding: IBarcodeHistoryBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun show(
             barcode: Barcode,
@@ -61,40 +59,40 @@ class AdapterBarcodeHistory(private val listener: Listener) :
         }
 
         private fun showDate(barcode: Barcode) {
-            itemView.textViewDate.text = dateFormatter.format(barcode.date)
+            binding.textViewDate.text = dateFormatter.format(barcode.date)
         }
 
         private fun showFormat(barcode: Barcode) {
-            itemView.text_view_format.setText(barcode.format.toStringId())
+            binding.textViewFormat.setText(barcode.format.toStringId())
         }
 
         private fun showText(barcode: Barcode) {
-            itemView.textViewText.text = barcode.name ?: barcode.formattedText
+            binding.textViewText.text = barcode.name ?: barcode.formattedText
         }
 
         private fun showImage(barcode: Barcode) {
             val imageId = barcode.schema.toImageId() ?: barcode.format.toImageId()
-            val image = AppCompatResources.getDrawable(itemView.context, imageId)
-            itemView.imageViewSchema.setImageDrawable(image)
+            val image = AppCompatResources.getDrawable(binding.root.context, imageId)
+            binding.imageViewSchema.setImageDrawable(image)
         }
 
         private fun showImageBackgroundColor(barcode: Barcode) {
             val colorId = barcode.format.toColorId()
-//            val color = itemView.context.resources.getColor(colorId)
-            val color = ContextCompat.getColor(itemView.context, colorId)
-            (itemView.layoutImage.background.mutate() as GradientDrawable).setColor(color)
+//            val color = binding.root.context.resources.getColor(colorId)
+            val color = ContextCompat.getColor(binding.root.context, colorId)
+            (binding.layoutImage.background.mutate() as GradientDrawable).setColor(color)
         }
 
         private fun showIsFavorite(barcode: Barcode) {
-            itemView.imageViewFavorite.isVisible = barcode.isFavorite
+            binding.imageViewFavorite.isVisible = barcode.isFavorite
         }
 
         private fun showOrHideDelimiter(isLastItem: Boolean) {
-            itemView.delimiter.isInvisible = isLastItem
+            binding.delimiter.isInvisible = isLastItem
         }
 
         private fun setClickListener(barcode: Barcode) {
-            itemView.setOnClickListener {
+            binding.root.setOnClickListener {
                 listener.onBarcodeClicked(barcode)
             }
         }

@@ -330,7 +330,7 @@
     <string name="activity_barcode_otp_title">OTP</string>
     <string name="activity_barcode_otp_unable_to_generate_otp">無法生成密碼</string>
     <string name="activity_barcode_otp_counter">計時：%s</string>
-    <string name="activity_barcode_otp_timer">還剩 %s:%s</string>
+    <string name="activity_barcode_otp_timer" formatted="false">還剩 %s:%s</string>
     <string name="activity_barcode_otp_refresh_otp">刷新</string>
 
     <!--Save barcode as text activity-->

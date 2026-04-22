@@ -3,14 +3,14 @@ package com.mckimquyen.barcodescanner.feature.tabs.create.barcode
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import com.mckimquyen.barcodescanner.R
+import com.google.zxing.BarcodeFormat
+import com.mckimquyen.barcodescanner.databinding.ACreateBarcodeAllBinding
 import com.mckimquyen.barcodescanner.extension.applySystemWindowInsets
 import com.mckimquyen.barcodescanner.feature.ActivityBase
 import com.mckimquyen.barcodescanner.feature.tabs.create.ActivityCreateBarcode
-import com.google.zxing.BarcodeFormat
-import kotlinx.android.synthetic.main.a_create_barcode_all.*
 
 class ActivityCreateBarcodeAll : ActivityBase() {
+    private lateinit var binding: ACreateBarcodeAllBinding
 
     companion object {
 
@@ -22,57 +22,58 @@ class ActivityCreateBarcodeAll : ActivityBase() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.a_create_barcode_all)
+        binding = ACreateBarcodeAllBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         supportEdgeToEdge()
         handleToolbarBackClicked()
         handleButtonsClicked()
     }
 
     private fun supportEdgeToEdge() {
-        rootView.applySystemWindowInsets(applyTop = true, applyBottom = true)
+        binding.rootView.applySystemWindowInsets(applyTop = true, applyBottom = true)
     }
 
     private fun handleToolbarBackClicked() {
-        toolbar.setNavigationOnClickListener {
+        binding.toolbar.setNavigationOnClickListener {
             finish()
         }
     }
 
     private fun handleButtonsClicked() {
-        buttonDataMatrix.setOnClickListener {
+        binding.buttonDataMatrix.setOnClickListener {
             ActivityCreateBarcode.start(context = this, barcodeFormat = BarcodeFormat.DATA_MATRIX)
         }
-        buttonAztec.setOnClickListener {
+        binding.buttonAztec.setOnClickListener {
             ActivityCreateBarcode.start(context = this, barcodeFormat = BarcodeFormat.AZTEC)
         }
-        buttonPdf417.setOnClickListener {
+        binding.buttonPdf417.setOnClickListener {
             ActivityCreateBarcode.start(context = this, barcodeFormat = BarcodeFormat.PDF_417)
         }
-        buttonCodabar.setOnClickListener {
+        binding.buttonCodabar.setOnClickListener {
             ActivityCreateBarcode.start(context = this, barcodeFormat = BarcodeFormat.CODABAR)
         }
-        buttonCode39.setOnClickListener {
+        binding.buttonCode39.setOnClickListener {
             ActivityCreateBarcode.start(context = this, barcodeFormat = BarcodeFormat.CODE_39)
         }
-        buttonCode93.setOnClickListener {
+        binding.buttonCode93.setOnClickListener {
             ActivityCreateBarcode.start(context = this, barcodeFormat = BarcodeFormat.CODE_93)
         }
-        buttonCode128.setOnClickListener {
+        binding.buttonCode128.setOnClickListener {
             ActivityCreateBarcode.start(context = this, barcodeFormat = BarcodeFormat.CODE_128)
         }
-        buttonEan8.setOnClickListener {
+        binding.buttonEan8.setOnClickListener {
             ActivityCreateBarcode.start(context = this, barcodeFormat = BarcodeFormat.EAN_8)
         }
-        buttonEan13.setOnClickListener {
+        binding.buttonEan13.setOnClickListener {
             ActivityCreateBarcode.start(context = this, barcodeFormat = BarcodeFormat.EAN_13)
         }
-        buttonItf14.setOnClickListener {
+        binding.buttonItf14.setOnClickListener {
             ActivityCreateBarcode.start(context = this, barcodeFormat = BarcodeFormat.ITF)
         }
-        buttonUpcA.setOnClickListener {
+        binding.buttonUpcA.setOnClickListener {
             ActivityCreateBarcode.start(context = this, barcodeFormat = BarcodeFormat.UPC_A)
         }
-        buttonUpcE.setOnClickListener {
+        binding.buttonUpcE.setOnClickListener {
             ActivityCreateBarcode.start(context = this, barcodeFormat = BarcodeFormat.UPC_E)
         }
     }

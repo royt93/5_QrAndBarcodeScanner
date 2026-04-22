@@ -2,15 +2,12 @@ package com.mckimquyen.barcodescanner
 
 import android.util.Log
 import androidx.multidex.MultiDexApplication
-import com.google.android.gms.ads.MobileAds
+import com.applovin.sdk.AppLovinSdk
 import com.mckimquyen.barcodescanner.di.settings
-import com.mckimquyen.barcodescanner.sdkadbmob.AdMobManager
-import com.mckimquyen.barcodescanner.sdkadbmob.Logger
-import com.mckimquyen.barcodescanner.usecase.Logger as UsecaseLogger
+import com.roy.sdkadbmob.AdManager
+import com.roy.sdkadbmob.AdSdkConfig
 import io.reactivex.plugins.RxJavaPlugins
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.mckimquyen.barcodescanner.usecase.Logger as UsecaseLogger
 
 //TODO roy93~ finger print
 //TODO roy93~ why you see ad
@@ -47,43 +44,47 @@ class RApp : MultiDexApplication() {
     }
 
     private fun setupAdmob() {
-        CoroutineScope(Dispatchers.IO).launch {
-            MobileAds.initialize(this@RApp) {}
-            AdMobManager.init(this@RApp) { success, gaidCurrent ->
-                Logger.i("AdMobManager init success $success, gaidCurrent $gaidCurrent")
+        val adConfig = AdSdkConfig(
+            isEnableAdmob = false,
+            isDebug = BuildConfig.DEBUG,
+            admobBannerId = "",
+            admobInterstitialId = "",
+            admobAppOpenId = "",
+            applovinBannerId = BuildConfig.BANNER,
+            applovinInterstitialId = BuildConfig.INTER,
+            applovinAppOpenId = BuildConfig.APPOPEN
+        )
+
+        AdManager.setConfig(adConfig)
+        AdManager.earlyInit(this)
+
+        if (false) {
+            com.google.android.gms.ads.MobileAds.initialize(this) {
+                initAdManager(adConfig)
+            }
+        } else {
+            Log.d("RApp", "AppLovin mode, initializing AppLovinSdk")
+            val initConfig = com.applovin.sdk.AppLovinSdkInitializationConfiguration.builder(
+                BuildConfig.APPLOVIN_SDK_KEY,
+                this
+            )
+                .setMediationProvider(com.applovin.sdk.AppLovinMediationProvider.MAX)
+                .build()
+            AppLovinSdk.getInstance(this).initialize(initConfig) {
+                initAdManager(adConfig)
             }
         }
-//        registerActivityLifecycleCallbacks(
-//            AppLifecycleListener(
-//                { isForeground, activity ->
-//                    if (isForeground) {
-//                        Logger.i("App moved to Foreground")
-//                        Logger.i("activity.localClassName ${activity.localClassName}")
-//                        Logger.i(
-//                            "SplashActivity::class.java.simpleName ${SplashActivity::class.java.simpleName}"
-//                        )
-//                        if (activity.localClassName == SplashActivity::class.java.simpleName) {
-//                            //do nothing
-//                        } else {
-////                            AdMobManager.showAppOpenAd(activity)
-//                        }
-//                    } else {
-//                        Logger.i("App moved to Background")
-//                    }
-//                }, { activity ->
-//                    Logger.i("callbackActivityCreated ${activity.localClassName}")
-//                    if (activity.localClassName == SplashActivity::class.java.simpleName) {
-//                        //do nothing
-//                    } else {
-////                        AdMobManager.loadAppOpenAd(
-////                            context = this,
-////                            adUnitId = BuildConfig.ADMOB_APP_OPEN_ID,
-////                            onAdLoaded = {},
-////                        )
-//                    }
-//                }
-//            )
-//        )
+    }
+
+    private fun initAdManager(adConfig: AdSdkConfig) {
+        AdManager.init(this@RApp, adConfig) { success, gaid ->
+            Log.d("RApp", "AdManager start success=$success, gaid=$gaid")
+            if (success) {
+                android.os.Handler(android.os.Looper.getMainLooper()).post {
+                    AdManager.registerAppOpenAdLifecycle(this@RApp)
+                }
+            }
+        }
     }
 
     private fun applyTheme() {

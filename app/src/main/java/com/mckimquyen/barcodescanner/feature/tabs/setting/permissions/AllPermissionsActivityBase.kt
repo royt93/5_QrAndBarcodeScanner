@@ -3,12 +3,13 @@ package com.mckimquyen.barcodescanner.feature.tabs.setting.permissions
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import com.mckimquyen.barcodescanner.R
+import com.mckimquyen.barcodescanner.databinding.AAllPermissionsBinding
 import com.mckimquyen.barcodescanner.extension.applySystemWindowInsets
 import com.mckimquyen.barcodescanner.feature.ActivityBase
-import kotlinx.android.synthetic.main.a_all_permissions.*
 
 class AllPermissionsActivityBase : ActivityBase() {
+    private lateinit var binding: AAllPermissionsBinding
+
 
     companion object {
         fun start(context: Context) {
@@ -19,8 +20,9 @@ class AllPermissionsActivityBase : ActivityBase() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.a_all_permissions)
-        rootView.applySystemWindowInsets(applyTop = true, applyBottom = true)
-        toolbar.setNavigationOnClickListener { finish() }
+        binding = AAllPermissionsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        binding.rootView.applySystemWindowInsets(applyTop = true, applyBottom = true)
+        binding.toolbar.setNavigationOnClickListener { finish() }
     }
 }

@@ -3,7 +3,7 @@ package com.mckimquyen.barcodescanner.feature.tabs.setting.language
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import com.mckimquyen.barcodescanner.sdkadbmob.Logger
+
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -102,7 +102,7 @@ class ChooseLanguageActivity : ActivityBase(), DialogFragmentChangeLanguage.List
     override fun onLanguageChangeConfirmed(languageCode: String) {
         val sharedPreferences = getSharedPreferences("SHARED_PREFERENCES_NAME", MODE_PRIVATE)
         val success = sharedPreferences.edit().putString("LANGUAGE", languageCode).commit()
-        Logger.i("Saved language: $languageCode, success: $success")
+        android.util.Log.i("roy93~", "Saved language: $languageCode, success: $success")
         settings.language = languageCode
         restartApp()
     }

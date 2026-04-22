@@ -4,36 +4,43 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.mckimquyen.barcodescanner.R
+import com.mckimquyen.barcodescanner.databinding.FCreateQrCodeVeventBinding
 import com.mckimquyen.barcodescanner.extension.textString
 import com.mckimquyen.barcodescanner.feature.tabs.create.FragmentBaseCreateBarcode
 import com.mckimquyen.barcodescanner.model.schema.Schema
 import com.mckimquyen.barcodescanner.model.schema.VEvent
-import kotlinx.android.synthetic.main.f_create_qr_code_vevent.*
 
 class FragmentCreateQrCodeEvent : FragmentBaseCreateBarcode() {
+    private var _binding: FCreateQrCodeVeventBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-        return inflater.inflate(R.layout.f_create_qr_code_vevent, container, false)
+        _binding = FCreateQrCodeVeventBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        editTextTitle.requestFocus()
+        binding.editTextTitle.requestFocus()
         parentActivity.isCreateBarcodeButtonEnabled = true
     }
 
     override fun getBarcodeSchema(): Schema {
         return VEvent(
-            uid = editTextTitle.textString,
-            organizer = editTextOrganizer.textString,
-            summary = editTextSummary.textString,
-            startDate = buttonDateTimeStart.dateTime,
-            endDate = button_date_time_end.dateTime
+            uid = binding.editTextTitle.textString,
+            organizer = binding.editTextOrganizer.textString,
+            summary = binding.editTextSummary.textString,
+            startDate = binding.buttonDateTimeStart.dateTime,
+            endDate = binding.buttonDateTimeEnd.dateTime
         )
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
