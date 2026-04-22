@@ -388,4 +388,7 @@
     <string name="activity_batch_export_button_continue">繼續掃描</string>
     <string name="activity_batch_export_button_history">查看歷史記錄</string>
     <string name="activity_batch_export_button_open_file">打开文件</string>
+    <string name="helper_batch_scan_got_it">明白了</string>
+    <string name="dialog_edit_barcode_name_hint">名称</string>
+    <string name="dialog_delete_title">删除</string>
 </resources>

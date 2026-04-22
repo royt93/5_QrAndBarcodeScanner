@@ -361,4 +361,7 @@
     <string name="activity_batch_export_button_continue">Продолжить сканирование</string>
     <string name="activity_batch_export_button_history">Просмотр истории</string>
     <string name="activity_batch_export_button_open_file">Открыть файл</string>
+    <string name="helper_batch_scan_got_it">Понятно</string>
+    <string name="dialog_edit_barcode_name_hint">Имя</string>
+    <string name="dialog_delete_title">Удалить</string>
 </resources>

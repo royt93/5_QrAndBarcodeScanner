@@ -1,19 +1,31 @@
 package com.mckimquyen.barcodescanner.feature.common.dlg
 
-import android.app.Activity
 import android.app.Dialog
 import android.os.Bundle
+import android.view.ContextThemeWrapper
 import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
+import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
-import androidx.appcompat.app.AlertDialog
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import androidx.core.content.ContextCompat
-import androidx.fragment.app.DialogFragment
+import android.widget.Button
+import android.widget.TextView
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.textfield.TextInputEditText
 import com.mckimquyen.barcodescanner.R
-import kotlinx.android.synthetic.main.dlg_edit_barcode_name.view.*
 
-class DialogFragmentEditBarcodeName : DialogFragment() {
+/**
+ * BottomSheet dialog for editing a barcode name.
+ *
+ * KEY: The app base theme is Theme.AppCompat (not MaterialComponents).
+ * TextInputLayout requires MaterialComponents theme → inflate with ContextThemeWrapper.
+ *
+ * KEYBOARD: SOFT_INPUT_ADJUST_RESIZE + match_parent layout ensures
+ * the button row stays pinned above the keyboard at all times.
+ */
+class DialogFragmentEditBarcodeName : BottomSheetDialogFragment() {
 
     interface Listener {
         fun onNameConfirmed(name: String)
@@ -31,43 +43,90 @@ class DialogFragmentEditBarcodeName : DialogFragment() {
         }
     }
 
+    // View refs stored to allow cleanup in onDestroyView
+    private var keyboardRunnable: Runnable? = null
+    private var editText: TextInputEditText? = null
+
+    override fun getTheme(): Int = R.style.BottomSheetM3
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val listener = requireActivity() as? Listener
-        val name = arguments?.getString(NAME_KEY).orEmpty()
-
-        val view = LayoutInflater
-            .from(requireContext())
-            .inflate(R.layout.dlg_edit_barcode_name, null, false)
-
-        val dialog = MaterialAlertDialogBuilder(requireActivity(), R.style.DialogTheme)
-            .setTitle(R.string.dialog_edit_barcode_name_title)
-            .setView(view)
-            .setPositiveButton(R.string.dialog_edit_barcode_name_positive_button) { _, _ ->
-                val newName = view.editTextBarcodeName.text.toString()
-                listener?.onNameConfirmed(newName)
-            }
-            .setNegativeButton(R.string.dialog_edit_barcode_name_negative_button, null)
-            .create()
-
-        dialog.setOnShowListener {
-            initNameEditText(view.editTextBarcodeName, name)
-            dialog.getButton(AlertDialog.BUTTON_POSITIVE)
-                .setTextColor(ContextCompat.getColor(requireContext(), R.color.blue))
-            dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
-                .setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
-        }
-
+        val dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
+        dialog.behavior.skipCollapsed = true
+        // ADJUST_RESIZE: window shrinks when keyboard opens → buttons stay above keyboard
+        dialog.window?.setSoftInputMode(
+            WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
+        )
         return dialog
     }
 
-    private fun initNameEditText(editText: EditText, name: String) {
-        editText.apply {
+    /**
+     * Wrap the context with Theme.MaterialComponents before inflating,
+     * so that TextInputLayout can resolve its required theme attributes.
+     */
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View {
+        val materialContext = ContextThemeWrapper(
+            requireContext(),
+            com.google.android.material.R.style.Theme_MaterialComponents_DayNight
+        )
+        val materialInflater = inflater.cloneInContext(materialContext)
+        return materialInflater.inflate(R.layout.bs_edit_barcode_name, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val listener = requireActivity() as? Listener
+        val name = arguments?.getString(NAME_KEY).orEmpty()
+
+        view.findViewById<TextView>(R.id.textViewTitle).text =
+            getString(R.string.dialog_edit_barcode_name_title)
+
+        editText = view.findViewById<TextInputEditText>(R.id.editTextBarcodeName).apply {
             setText(name)
             setSelection(name.length)
             requestFocus()
+            // "Done" key on keyboard triggers Save — same as tapping buttonPositive
+            setOnEditorActionListener { _, actionId, _ ->
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    val newName = text?.toString().orEmpty()
+                    listener?.onNameConfirmed(newName)
+                    dismiss()
+                    true
+                } else false
+            }
         }
 
-        val manager = requireContext().getSystemService(Activity.INPUT_METHOD_SERVICE) as? InputMethodManager
-        manager?.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
+        // Show soft keyboard — store runnable so we can cancel it in onDestroyView
+        keyboardRunnable = Runnable {
+            val et = editText ?: return@Runnable
+            if (!isAdded || context == null) return@Runnable
+            val imm = requireContext().getSystemService(InputMethodManager::class.java)
+            imm?.showSoftInput(et, InputMethodManager.SHOW_IMPLICIT)
+        }
+        editText?.postDelayed(keyboardRunnable!!, 200)
+
+        view.findViewById<Button>(R.id.buttonNegative).apply {
+            text = getString(R.string.dialog_edit_barcode_name_negative_button)
+            setOnClickListener { dismiss() }
+        }
+        view.findViewById<Button>(R.id.buttonPositive).apply {
+            text = getString(R.string.dialog_edit_barcode_name_positive_button)
+            setOnClickListener {
+                val newName = editText?.text?.toString().orEmpty()
+                listener?.onNameConfirmed(newName)
+                dismiss()
+            }
+        }
+    }
+
+    override fun onDestroyView() {
+        // Cancel pending keyboard runnable and release view references to avoid leak
+        keyboardRunnable?.let { editText?.removeCallbacks(it) }
+        keyboardRunnable = null
+        editText = null
+        super.onDestroyView()
     }
 }

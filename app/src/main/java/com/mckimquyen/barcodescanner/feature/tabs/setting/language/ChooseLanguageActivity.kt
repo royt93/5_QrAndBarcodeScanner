@@ -3,10 +3,7 @@ package com.mckimquyen.barcodescanner.feature.tabs.setting.language
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import com.mckimquyen.barcodescanner.sdkadbmob.Logger
-import androidx.appcompat.app.AlertDialog
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -17,7 +14,7 @@ import com.mckimquyen.barcodescanner.feature.ActivityBase
 import com.mckimquyen.barcodescanner.feature.common.view.RadioButtonSettings
 import com.mckimquyen.barcodescanner.usecase.LocaleHelper
 
-class ChooseLanguageActivity : ActivityBase() {
+class ChooseLanguageActivity : ActivityBase(), DialogFragmentChangeLanguage.Listener {
 
     companion object {
         fun start(context: Context) {
@@ -27,6 +24,8 @@ class ChooseLanguageActivity : ActivityBase() {
     }
 
     private val languageButtons = mutableListOf<RadioButtonSettings>()
+    private var pendingLanguageCode: String? = null
+    private var pendingSelectedButton: RadioButtonSettings? = null
     private lateinit var rootView: CoordinatorLayout
     private lateinit var toolbar: Toolbar
     private lateinit var languagesContainer: LinearLayoutCompat
@@ -86,31 +85,33 @@ class ChooseLanguageActivity : ActivityBase() {
     }
 
     private fun showLanguageChangeDialog(newLanguageCode: String, selectedButton: RadioButtonSettings) {
-        MaterialAlertDialogBuilder(this, R.style.DialogTheme)
-            .setTitle(getString(R.string.dialog_change_language_title))
-            .setMessage(getString(R.string.dialog_change_language_message))
-            .setPositiveButton(getString(R.string.dialog_change_language_positive)) { _, _ ->
-                // Save new language directly to SharedPreferences to ensure it's saved
-                val sharedPreferences = getSharedPreferences("SHARED_PREFERENCES_NAME", MODE_PRIVATE)
-                val success = sharedPreferences.edit()
-                    .putString("LANGUAGE", newLanguageCode)
-                    .commit() // Use commit() instead of apply() to ensure synchronous save
+        // Store selected button tag so we can revert on cancel
+        pendingLanguageCode = newLanguageCode
+        pendingSelectedButton = selectedButton
+        val bs = DialogFragmentChangeLanguage.newInstance(
+            languageCode = newLanguageCode,
+            title = getString(R.string.dialog_change_language_title),
+            message = getString(R.string.dialog_change_language_message),
+            positive = getString(R.string.dialog_change_language_positive),
+            negative = getString(R.string.dialog_change_language_negative),
+        )
+        bs.show(supportFragmentManager, "ChangeLanguage")
+    }
 
-                Logger.i("Saved language: $newLanguageCode, success: $success")
+    // Rotation-safe: called by DialogFragmentChangeLanguage.Listener interface
+    override fun onLanguageChangeConfirmed(languageCode: String) {
+        val sharedPreferences = getSharedPreferences("SHARED_PREFERENCES_NAME", MODE_PRIVATE)
+        val success = sharedPreferences.edit().putString("LANGUAGE", languageCode).commit()
+        Logger.i("Saved language: $languageCode, success: $success")
+        settings.language = languageCode
+        restartApp()
+    }
 
-                // Also save via Settings for consistency
-                settings.language = newLanguageCode
-
-                // Restart app to apply language
-                restartApp()
-            }
-            .setNegativeButton(getString(R.string.dialog_change_language_negative)) { _, _ ->
-                // User cancelled, revert selection
-                selectedButton.isChecked = false
-                showInitialSettings()
-            }
-            .setCancelable(false)
-            .show()
+    override fun onLanguageChangeCancelled() {
+        pendingSelectedButton?.isChecked = false
+        pendingSelectedButton = null
+        pendingLanguageCode = null
+        showInitialSettings()
     }
 
     private fun restartApp() {

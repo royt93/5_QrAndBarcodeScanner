@@ -388,4 +388,7 @@
     <string name="activity_batch_export_button_continue">Continuer le scan</string>
     <string name="activity_batch_export_button_history">Voir l\'historique</string>
     <string name="activity_batch_export_button_open_file">Ouvrir le fichier</string>
+    <string name="helper_batch_scan_got_it">Compris</string>
+    <string name="dialog_edit_barcode_name_hint">Nom</string>
+    <string name="dialog_delete_title">Supprimer</string>
 </resources>

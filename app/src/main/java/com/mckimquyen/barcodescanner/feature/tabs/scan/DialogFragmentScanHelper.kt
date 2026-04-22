@@ -2,83 +2,63 @@ package com.mckimquyen.barcodescanner.feature.tabs.scan
 
 import android.app.Dialog
 import android.content.DialogInterface
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
-import android.view.WindowManager
-import android.view.animation.AnimationUtils
-import androidx.fragment.app.DialogFragment
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.mckimquyen.barcodescanner.R
 
-class DialogFragmentScanHelper : DialogFragment() {
+/**
+ * Material You Bottom Sheet dialog for Batch Scan onboarding.
+ * Uses BottomSheetDialogFragment for the native M3 slide-up animation,
+ * drag-to-dismiss gesture, scrim dimming, and 28dp top rounded corners.
+ */
+class DialogFragmentScanHelper : BottomSheetDialogFragment() {
 
     var onDismissCallback: (() -> Unit)? = null
+
+    override fun getTheme(): Int = R.style.BottomSheetM3
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
+        // Expand fully on open — don't stop at half-expanded state
+        dialog.behavior.apply {
+            skipCollapsed = true
+            isDraggable = true
+        }
+        Log.d("roy93~", "DialogFragmentScanHelper: BottomSheetDialog created")
+        return dialog
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View {
-        return inflater.inflate(R.layout.dialog_batch_scan_helper, container, false)
-    }
+    ): View = inflater.inflate(R.layout.dialog_batch_scan_helper, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         // X close button
         view.findViewById<View>(R.id.buttonCloseBatchHelper)?.setOnClickListener {
-            Log.d("roy93~", "DialogFragmentScanHelper: close button tapped")
+            Log.d("roy93~", "DialogFragmentScanHelper: X button tapped → dismiss")
             dismiss()
         }
 
-        // Play premium slide-up + scale enter animation on the dialog card
-        val enterAnim = AnimationUtils.loadAnimation(requireContext(), R.anim.anim_dialog_enter)
-        view.startAnimation(enterAnim)
-    }
-
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return Dialog(requireContext()).apply {
-            requestWindowFeature(Window.FEATURE_NO_TITLE)
-            window?.apply {
-                setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-                // dim the background
-                addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
-                attributes = attributes.also { it.dimAmount = 0.55f }
-            }
+        // "Got It" primary button — same as closing
+        view.findViewById<View>(R.id.buttonGotIt)?.setOnClickListener {
+            Log.d("roy93~", "DialogFragmentScanHelper: Got It tapped → dismiss")
+            dismiss()
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        dialog?.window?.setLayout(
-            (resources.displayMetrics.widthPixels * 0.88).toInt(),
-            ViewGroup.LayoutParams.WRAP_CONTENT
-        )
-    }
-
-    override fun dismiss() {
-        // Play exit animation before dismissing
-        view?.let { v ->
-            val exitAnim = AnimationUtils.loadAnimation(requireContext(), R.anim.anim_dialog_exit)
-            exitAnim.setAnimationListener(object : android.view.animation.Animation.AnimationListener {
-                override fun onAnimationStart(a: android.view.animation.Animation?) {}
-                override fun onAnimationRepeat(a: android.view.animation.Animation?) {}
-                override fun onAnimationEnd(a: android.view.animation.Animation?) {
-                    super@DialogFragmentScanHelper.dismiss()
-                }
-            })
-            v.startAnimation(exitAnim)
-        } ?: super.dismiss()
     }
 
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
-        Log.d("roy93~", "DialogFragmentScanHelper: onDismiss triggered")
+        Log.d("roy93~", "DialogFragmentScanHelper: onDismiss triggered → invoking callback")
         onDismissCallback?.invoke()
+        onDismissCallback = null
     }
 }

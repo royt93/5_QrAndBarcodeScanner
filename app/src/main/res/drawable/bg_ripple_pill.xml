@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="?attr/colorControlHighlight">
+    <!-- The mask ensures the ripple is confined to the pill shape -->
+    <item android:id="@android:id/mask">
+        <shape android:shape="rectangle">
+            <corners android:radius="100dp" />
+            <solid android:color="@android:color/white" />
+        </shape>
+    </item>
+    <!-- A very subtle base state background if needed, but normally transparent is fine for TextButtons -->
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="100dp" />
+            <solid android:color="#00000000" />
+        </shape>
+    </item>
+</ripple>

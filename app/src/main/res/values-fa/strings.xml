@@ -81,4 +81,7 @@
     <string name="activity_batch_export_button_continue">ادامه اسکن</string>
     <string name="activity_batch_export_button_history">مشاهده تاریخچه</string>
     <string name="activity_batch_export_button_open_file">باز کردن فایل</string>
+    <string name="helper_batch_scan_got_it">متوجه شدم</string>
+    <string name="dialog_edit_barcode_name_hint">نام</string>
+    <string name="dialog_delete_title">حذف</string>
 </resources>

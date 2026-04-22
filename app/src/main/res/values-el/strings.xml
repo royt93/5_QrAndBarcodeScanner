@@ -388,4 +388,7 @@
     <string name="activity_batch_export_button_continue">Συνέχεια σάρωσης</string>
     <string name="activity_batch_export_button_history">Προβολή ιστορικού</string>
     <string name="activity_batch_export_button_open_file">Άνοιγμα αρχείου</string>
+    <string name="helper_batch_scan_got_it">Κατανοητό</string>
+    <string name="dialog_edit_barcode_name_hint">Όνομα</string>
+    <string name="dialog_delete_title">Διαγραφή</string>
 </resources>

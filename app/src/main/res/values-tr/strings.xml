@@ -388,4 +388,7 @@
     <string name="activity_batch_export_button_continue">Taramaya devam et</string>
     <string name="activity_batch_export_button_history">Geçmişi görüntüle</string>
     <string name="activity_batch_export_button_open_file">Dosyayı aç</string>
+    <string name="helper_batch_scan_got_it">Anladım</string>
+    <string name="dialog_edit_barcode_name_hint">Ad</string>
+    <string name="dialog_delete_title">Sil</string>
 </resources>

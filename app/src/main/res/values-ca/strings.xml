@@ -402,4 +402,7 @@
     <string name="activity_batch_export_button_continue">Continua l\'escaneig</string>
     <string name="activity_batch_export_button_history">Veure historial</string>
     <string name="activity_batch_export_button_open_file">Obrir fitxer</string>
+    <string name="helper_batch_scan_got_it">Entès</string>
+    <string name="dialog_edit_barcode_name_hint">Nom</string>
+    <string name="dialog_delete_title">Elimina</string>
 </resources>

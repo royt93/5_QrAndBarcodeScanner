@@ -402,4 +402,7 @@
     <string name="activity_batch_export_button_continue">המשך סריקה</string>
     <string name="activity_batch_export_button_history">הצג היסטוריה</string>
     <string name="activity_batch_export_button_open_file">פתח קובץ</string>
+    <string name="helper_batch_scan_got_it">הבנתי</string>
+    <string name="dialog_edit_barcode_name_hint">שם</string>
+    <string name="dialog_delete_title">מחק</string>
 </resources>

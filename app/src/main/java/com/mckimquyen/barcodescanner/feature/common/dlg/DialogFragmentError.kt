@@ -3,17 +3,21 @@ package com.mckimquyen.barcodescanner.feature.common.dlg
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
-import androidx.appcompat.app.AlertDialog
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import androidx.core.content.ContextCompat
-import androidx.fragment.app.DialogFragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.mckimquyen.barcodescanner.R
 
-class DialogFragmentError : DialogFragment() {
-
-    interface Listener {
-        fun onErrorDialogPositiveButtonClicked()
-    }
+/**
+ * Error BottomSheet — shows an error message with a single dismiss button.
+ * No Listener interface needed: callers only show this to inform the user;
+ * dismissing is the only action.
+ */
+class DialogFragmentError : BottomSheetDialogFragment() {
 
     companion object {
         private const val ERROR_MESSAGE_KEY = "ERROR_MESSAGE_KEY"
@@ -32,28 +36,33 @@ class DialogFragmentError : DialogFragment() {
         }
     }
 
-    private var listener: Listener? = null
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        listener = context as? Listener
-    }
+    override fun getTheme(): Int = R.style.BottomSheetM3
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
+        dialog.behavior.isDraggable = false
+        dialog.behavior.skipCollapsed = true
+        return dialog
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View = inflater.inflate(R.layout.bs_alert, container, false)
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         val message = arguments?.getString(ERROR_MESSAGE_KEY).orEmpty()
 
-        val dialog = MaterialAlertDialogBuilder(requireActivity(), R.style.DialogTheme)
-            .setTitle(R.string.error_dialog_title)
-            .setMessage(message)
-            .setCancelable(false)
-            .setPositiveButton(R.string.error_dialog_positive_button_text) { _, _ -> listener?.onErrorDialogPositiveButtonClicked() }
-            .create()
+        view.findViewById<TextView>(R.id.textViewTitle).text =
+            getString(R.string.error_dialog_title)
+        view.findViewById<TextView>(R.id.textViewMessage).text = message
 
-        dialog.setOnShowListener {
-            dialog.getButton(AlertDialog.BUTTON_POSITIVE)
-                .setTextColor(ContextCompat.getColor(requireContext(), R.color.blue))
+        // OK button simply dismisses the dialog — no callback needed
+        view.findViewById<Button>(R.id.buttonPositive).apply {
+            text = getString(R.string.error_dialog_positive_button_text)
+            setOnClickListener { dismiss() }
         }
-
-        return dialog
     }
 }
