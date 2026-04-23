@@ -16,7 +16,7 @@ class RecentScansWidgetProvider : AppWidgetProvider() {
     override fun onUpdate(
         context: Context,
         appWidgetManager: AppWidgetManager,
-        appWidgetIds: IntArray
+        appWidgetIds: IntArray,
     ) {
         for (appWidgetId in appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId)
@@ -26,7 +26,7 @@ class RecentScansWidgetProvider : AppWidgetProvider() {
     private fun updateAppWidget(
         context: Context,
         appWidgetManager: AppWidgetManager,
-        appWidgetId: Int
+        appWidgetId: Int,
     ) {
         val views = RemoteViews(context.packageName, R.layout.widget_recent_scans)
 
