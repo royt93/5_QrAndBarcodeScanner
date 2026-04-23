@@ -7,25 +7,23 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.paging.PagedList
-import androidx.paging.RxPagedListBuilder
+import androidx.lifecycle.lifecycleScope
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.cachedIn
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mckimquyen.barcodescanner.databinding.AMyQrWidgetConfigBinding
 import com.mckimquyen.barcodescanner.di.barcodeDatabase
-import com.mckimquyen.barcodescanner.extension.showError
 import com.mckimquyen.barcodescanner.feature.tabs.history.AdapterBarcodeHistory
 import com.mckimquyen.barcodescanner.model.Barcode
-import io.reactivex.BackpressureStrategy
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class MyQrWidgetConfigActivity : AppCompatActivity(), AdapterBarcodeHistory.Listener {
     private lateinit var binding: AMyQrWidgetConfigBinding
 
 
     private var appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
-    private val disposable = CompositeDisposable()
     private val scanHistoryAdapter: AdapterBarcodeHistory by lazy { AdapterBarcodeHistory(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,22 +64,21 @@ class MyQrWidgetConfigActivity : AppCompatActivity(), AdapterBarcodeHistory.List
     }
 
     private fun loadHistory() {
-        val config = PagedList.Config.Builder()
-            .setEnablePlaceholders(false)
-            .setPageSize(20)
-            .build()
+        val config = PagingConfig(
+            pageSize = 20,
+            enablePlaceholders = false
+        )
 
-        RxPagedListBuilder(barcodeDatabase.getAll(), config)
-            .buildFlowable(BackpressureStrategy.LATEST)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                { list ->
-                    scanHistoryAdapter.submitList(list)
-                    updateEmptyState(list.isEmpty())
-                },
-                ::showError
-            )
-            .addTo(disposable)
+        val pager = Pager(config) { barcodeDatabase.getAll() }
+
+        lifecycleScope.launch {
+            pager.flow
+                .cachedIn(lifecycleScope)
+                .collectLatest { pagingData ->
+                    scanHistoryAdapter.submitData(pagingData)
+                    updateEmptyState(scanHistoryAdapter.itemCount == 0)
+                }
+        }
     }
 
     private fun updateEmptyState(isEmpty: Boolean) {
@@ -106,7 +103,6 @@ class MyQrWidgetConfigActivity : AppCompatActivity(), AdapterBarcodeHistory.List
 
     override fun onDestroy() {
         super.onDestroy()
-        disposable.clear()
     }
 
     companion object {

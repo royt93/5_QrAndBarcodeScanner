@@ -14,11 +14,11 @@ import com.mckimquyen.barcodescanner.extension.unsafeLazy
 import com.mckimquyen.barcodescanner.feature.tabs.create.FragmentBaseCreateBarcode
 import com.mckimquyen.barcodescanner.model.schema.App
 import com.mckimquyen.barcodescanner.model.schema.Schema
-import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Single
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.kotlin.addTo
+import io.reactivex.rxjava3.schedulers.Schedulers
 
 class FragmentCreateQrCodeApp : FragmentBaseCreateBarcode() {
     private val disposable = CompositeDisposable()

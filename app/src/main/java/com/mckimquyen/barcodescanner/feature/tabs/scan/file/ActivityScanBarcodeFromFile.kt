@@ -21,15 +21,17 @@ import com.mckimquyen.barcodescanner.di.barcodeParser
 import com.mckimquyen.barcodescanner.di.permissionsHelper
 import com.mckimquyen.barcodescanner.di.settings
 import com.mckimquyen.barcodescanner.extension.applySystemWindowInsets
+import com.mckimquyen.barcodescanner.extension.cropAsSingle3
+import com.mckimquyen.barcodescanner.extension.executeAsCompletable3
 import com.mckimquyen.barcodescanner.extension.showError
 import com.mckimquyen.barcodescanner.feature.ActivityBase
 import com.mckimquyen.barcodescanner.feature.barcode.ActivityBarcode
 import com.mckimquyen.barcodescanner.model.Barcode
 import com.mckimquyen.barcodescanner.usecase.save
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.kotlin.addTo
+import io.reactivex.rxjava3.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
 class ActivityScanBarcodeFromFile : ActivityBase() {
@@ -205,7 +207,7 @@ class ActivityScanBarcodeFromFile : ActivityBase() {
 
         binding.cropImageView
             .load(imageUri)
-            .executeAsCompletable()
+            .executeAsCompletable3()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
@@ -231,7 +233,7 @@ class ActivityScanBarcodeFromFile : ActivityBase() {
         lastScanResult = null
 
         binding.cropImageView
-            .cropAsSingle()
+            .cropAsSingle3()
             .subscribeOn(Schedulers.io())
             .subscribe(::scanCroppedImage, ::showError)
             .addTo(scanDisposable)

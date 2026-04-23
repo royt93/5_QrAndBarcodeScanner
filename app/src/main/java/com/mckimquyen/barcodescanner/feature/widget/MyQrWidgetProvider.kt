@@ -8,14 +8,13 @@ import android.content.Intent
 import android.graphics.Color
 import android.widget.RemoteViews
 import com.mckimquyen.barcodescanner.R
-import com.mckimquyen.barcodescanner.di.barcodeDatabase
 import com.mckimquyen.barcodescanner.feature.barcode.ActivityBarcode
 import com.mckimquyen.barcodescanner.model.Barcode
 import com.mckimquyen.barcodescanner.usecase.BarcodeImageGenerator
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.kotlin.addTo
+import io.reactivex.rxjava3.schedulers.Schedulers
 
 class MyQrWidgetProvider : AppWidgetProvider() {
 

@@ -40,11 +40,11 @@ import com.mckimquyen.barcodescanner.feature.tabs.scan.file.ActivityScanBarcodeF
 import com.mckimquyen.barcodescanner.model.Barcode
 import com.mckimquyen.barcodescanner.usecase.SupportedBarcodeFormats
 import com.mckimquyen.barcodescanner.usecase.save
-import io.reactivex.Completable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.kotlin.addTo
+import io.reactivex.rxjava3.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
 class FragmentScanBarcodeFromCamera : Fragment(), DialogFragmentConfirmBarcode.Listener {
@@ -270,7 +270,7 @@ class FragmentScanBarcodeFromCamera : Fragment(), DialogFragmentConfirmBarcode.L
         Log.d(TAG, "triggerExport: saving ${snapshot.size} items to database + CSV")
 
         // Step 1: save all batch items to the barcode database so they appear in History
-        io.reactivex.Observable.fromIterable(snapshot)
+        io.reactivex.rxjava3.core.Observable.fromIterable(snapshot)
             .flatMapSingle { barcode ->
                 barcodeDatabase.save(barcode, settings.doNotSaveDuplicates)
                     .doOnSuccess { id -> Log.d(TAG, "triggerExport: saved '${barcode.text}' to DB id=$id") }
@@ -282,7 +282,7 @@ class FragmentScanBarcodeFromCamera : Fragment(), DialogFragmentConfirmBarcode.L
                 Log.d(TAG, "triggerExport: DB saves complete, exporting CSV")
                 (requireActivity() as AppCompatActivity).barcodeSaver
                     .saveBarcodeHistoryAsCsv(requireContext(), fileName, exportList)
-                    .andThen(io.reactivex.Single.just(snapshot.size))
+                    .andThen(io.reactivex.rxjava3.core.Single.just(snapshot.size))
             }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

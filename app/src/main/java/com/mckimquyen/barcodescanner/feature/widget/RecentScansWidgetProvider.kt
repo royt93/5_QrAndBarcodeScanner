@@ -6,14 +6,10 @@ import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.view.View
 import android.widget.RemoteViews
 import com.mckimquyen.barcodescanner.R
 import com.mckimquyen.barcodescanner.feature.barcode.ActivityBarcode
 import com.mckimquyen.barcodescanner.model.Barcode
-import com.mckimquyen.barcodescanner.usecase.BarcodeDatabase
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 
 class RecentScansWidgetProvider : AppWidgetProvider() {
 

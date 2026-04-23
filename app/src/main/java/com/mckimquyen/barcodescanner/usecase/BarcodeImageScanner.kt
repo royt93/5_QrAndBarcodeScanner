@@ -1,15 +1,15 @@
 package com.mckimquyen.barcodescanner.usecase
 
 import android.graphics.Bitmap
-import com.mckimquyen.barcodescanner.extension.orZero
 import com.google.zxing.BinaryBitmap
 import com.google.zxing.MultiFormatReader
 import com.google.zxing.RGBLuminanceSource
 import com.google.zxing.Result
 import com.google.zxing.common.HybridBinarizer
-import io.reactivex.Single
-import io.reactivex.SingleEmitter
-import io.reactivex.schedulers.Schedulers
+import com.mckimquyen.barcodescanner.extension.orZero
+import io.reactivex.rxjava3.core.Single
+import io.reactivex.rxjava3.core.SingleEmitter
+import io.reactivex.rxjava3.schedulers.Schedulers
 
 object BarcodeImageScanner {
     private var bitmapBuffer: IntArray? = null

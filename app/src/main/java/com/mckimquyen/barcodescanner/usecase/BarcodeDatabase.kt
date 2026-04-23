@@ -1,16 +1,23 @@
 package com.mckimquyen.barcodescanner.usecase
 
 import android.content.Context
-import androidx.paging.DataSource
-import androidx.room.*
+import androidx.paging.PagingSource
+import androidx.room.Dao
+import androidx.room.Database
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.Room
+import androidx.room.RoomDatabase
+import androidx.room.TypeConverter
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.google.zxing.BarcodeFormat
 import com.mckimquyen.barcodescanner.model.Barcode
 import com.mckimquyen.barcodescanner.model.ExportBarcode
 import com.mckimquyen.barcodescanner.model.schema.BarcodeSchema
-import com.google.zxing.BarcodeFormat
-import io.reactivex.Completable
-import io.reactivex.Single
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Single
 
 
 class BarcodeDatabaseTypeConverter {
@@ -65,13 +72,13 @@ interface BarcodeDatabase {
     }
 
     @Query("SELECT * FROM codes ORDER BY date DESC")
-    fun getAll(): DataSource.Factory<Int, Barcode>
+    fun getAll(): PagingSource<Int, Barcode>
 
     @Query("SELECT * FROM codes ORDER BY date DESC LIMIT :limit")
     fun getRecentScans(limit: Int): List<Barcode>
 
     @Query("SELECT * FROM codes WHERE isFavorite = 1 ORDER BY date DESC")
-    fun getFavorites(): DataSource.Factory<Int, Barcode>
+    fun getFavorites(): PagingSource<Int, Barcode>
 
     @Query("SELECT date, format, text FROM codes ORDER BY date DESC")
     fun getAllForExport(): Single<List<ExportBarcode>>

@@ -6,7 +6,7 @@ import com.applovin.sdk.AppLovinSdk
 import com.mckimquyen.barcodescanner.di.settings
 import com.roy.sdkadbmob.AdManager
 import com.roy.sdkadbmob.AdSdkConfig
-import io.reactivex.plugins.RxJavaPlugins
+import io.reactivex.rxjava3.plugins.RxJavaPlugins
 import com.mckimquyen.barcodescanner.usecase.Logger as UsecaseLogger
 
 //TODO roy93~ finger print

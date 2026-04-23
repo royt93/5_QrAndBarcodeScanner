@@ -6,13 +6,13 @@ import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import androidx.annotation.RequiresApi
+import com.google.zxing.BarcodeFormat
 import com.mckimquyen.barcodescanner.extension.endsWithIgnoreCase
 import com.mckimquyen.barcodescanner.extension.formatOrNull
 import com.mckimquyen.barcodescanner.extension.unsafeLazy
 import com.mckimquyen.barcodescanner.model.Barcode
 import com.mckimquyen.barcodescanner.model.ExportBarcode
-import com.google.zxing.BarcodeFormat
-import io.reactivex.Completable
+import io.reactivex.rxjava3.core.Completable
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
@@ -20,7 +20,7 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.io.OutputStream
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 
 object SaverBarcode {
     private const val JSON_MIME_TYPE = "application/json"

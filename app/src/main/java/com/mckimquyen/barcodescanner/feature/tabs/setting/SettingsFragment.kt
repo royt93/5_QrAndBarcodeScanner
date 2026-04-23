@@ -27,10 +27,10 @@ import com.mckimquyen.barcodescanner.feature.tabs.setting.permissions.AllPermiss
 import com.mckimquyen.barcodescanner.feature.tabs.setting.search.ChooseSearchEngineActivityBase
 import com.mckimquyen.barcodescanner.feature.tabs.setting.theme.ChooseThemeActivityBase
 import com.roy.sdkadbmob.AdManager
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.kotlin.addTo
+import io.reactivex.rxjava3.schedulers.Schedulers
 
 class SettingsFragment : Fragment(), DialogFragmentDeleteConfirmation.Listener {
     private var _binding: FSettingsBinding? = null

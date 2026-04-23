@@ -8,7 +8,7 @@ import com.google.zxing.MultiFormatWriter
 import com.google.zxing.common.BitMatrix
 import com.journeyapps.barcodescanner.BarcodeEncoder
 import com.mckimquyen.barcodescanner.model.Barcode
-import io.reactivex.Single
+import io.reactivex.rxjava3.core.Single
 
 object BarcodeImageGenerator {
     private val encoder = BarcodeEncoder()

@@ -7,7 +7,7 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
-import androidx.paging.PagedListAdapter
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.mckimquyen.barcodescanner.databinding.IBarcodeHistoryBinding
@@ -19,7 +19,7 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 class AdapterBarcodeHistory(private val listener: Listener) :
-    PagedListAdapter<Barcode, AdapterBarcodeHistory.ViewHolder>(DiffUtilCallback) {
+    PagingDataAdapter<Barcode, AdapterBarcodeHistory.ViewHolder>(DiffUtilCallback) {
 
     interface Listener {
         fun onBarcodeClicked(barcode: Barcode)

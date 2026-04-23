@@ -49,6 +49,12 @@ android {
         buildConfig true
     }
 
+    packaging {
+        resources {
+            excludes += ['META-INF/rxjava.properties']
+        }
+    }
+
     signingConfigs {
         release {
             storeFile file(project.property("RELEASE_STORE_FILE"))
@@ -127,34 +133,37 @@ android {
 
 dependencies {
     api fileTree(dir: 'libs', include: ['*.jar'])
-    api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.7.21"
-    api 'androidx.core:core-ktx:1.13.1'
-    api 'androidx.appcompat:appcompat:1.4.1'
-    api 'com.google.android.material:material:1.5.0'
-    api 'androidx.constraintlayout:constraintlayout:2.1.4'
+    api "org.jetbrains.kotlin:kotlin-stdlib:2.1.0"
+    api 'androidx.core:core-ktx:1.15.0'
+    api 'androidx.appcompat:appcompat:1.7.0'
+    api 'com.google.android.material:material:1.12.0'
+    api 'androidx.constraintlayout:constraintlayout:2.2.0'
     implementation 'androidx.multidex:multidex:2.0.1'
     //noinspection KaptUsageInsteadOfKsp
     kapt "androidx.room:room-compiler:2.6.1"
     api "androidx.room:room-runtime:2.6.1"
-    api "androidx.room:room-rxjava2:2.6.1"
-    api "android.arch.paging:runtime:1.0.1"
-    api "android.arch.paging:rxjava2:1.0.1"
+    api "androidx.room:room-rxjava3:2.6.1"
+    api "androidx.room:room-paging:2.6.1"
+    api "androidx.paging:paging-runtime-ktx:3.3.5"
+    api "androidx.paging:paging-rxjava3:3.3.5"
 //    api 'com.budiyev.android:code-scanner:2.1.2'
     api 'com.github.yuriy-budiyev:code-scanner:2.3.2'
     api 'com.journeyapps:zxing-android-embedded:4.3.0'
     api 'com.googlecode.ez-vcard:ez-vcard:0.12.1'
     api "commons-codec:commons-codec:1.16.0"
     api "dev.turingcomplete:kotlin-onetimepassword:2.0.1"
-    api "io.reactivex.rxjava2:rxkotlin:2.4.0"
-    api "com.jakewharton.rxbinding2:rxbinding-appcompat-v7-kotlin:2.2.0"
+    api "io.reactivex.rxjava3:rxkotlin:3.0.1"
+    api "io.reactivex.rxjava3:rxjava:3.1.10"
+    api "com.jakewharton.rxbinding4:rxbinding:4.0.0"
+    api "com.github.akarnokd:rxjava3-interop:3.0.0"
 //    api 'com.isseiaoki:simplecropview:1.1.8'
     api 'com.github.igreenwood:SimpleCropView:v1.1.6'
 //    api 'com.github.florent37:singledateandtimepicker:2.2.6'
     api 'com.github.florent37:singledateandtimepicker:2.2.7'
     implementation("com.github.royt93:AdmobWrapper:1.1.2")
-    implementation("com.google.android.gms:play-services-ads:23.3.0")
-    implementation("com.google.ads.mediation:applovin:13.0.0.0")
-    implementation("com.google.android.play:review:2.0.1")
-    implementation("com.google.android.play:review-ktx:2.0.1")
-    implementation("androidx.lifecycle:lifecycle-process:2.4.1")
+    implementation("com.google.android.gms:play-services-ads:23.6.0")
+    implementation("com.google.ads.mediation:applovin:13.0.1.0")
+    implementation("com.google.android.play:review:2.0.2")
+    implementation("com.google.android.play:review-ktx:2.0.2")
+    implementation("androidx.lifecycle:lifecycle-process:2.8.7")
 }

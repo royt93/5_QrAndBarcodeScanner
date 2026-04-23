@@ -5,19 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.paging.PagedList
-import androidx.paging.RxPagedListBuilder
+import androidx.lifecycle.lifecycleScope
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.cachedIn
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mckimquyen.barcodescanner.databinding.FBarcodeHistoryListBinding
 import com.mckimquyen.barcodescanner.di.barcodeDatabase
 import com.mckimquyen.barcodescanner.extension.orZero
-import com.mckimquyen.barcodescanner.extension.showError
 import com.mckimquyen.barcodescanner.feature.barcode.ActivityBarcode
 import com.mckimquyen.barcodescanner.model.Barcode
-import io.reactivex.BackpressureStrategy
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class FragmentBarcodeHistoryList : Fragment(), AdapterBarcodeHistory.Listener {
     private var _binding: FBarcodeHistoryListBinding? = null
@@ -47,7 +46,6 @@ class FragmentBarcodeHistoryList : Fragment(), AdapterBarcodeHistory.Listener {
         }
     }
 
-    private val disposable = CompositeDisposable()
     private val scanHistoryAdapter = AdapterBarcodeHistory(this)
 
     override fun onCreateView(
@@ -71,7 +69,6 @@ class FragmentBarcodeHistoryList : Fragment(), AdapterBarcodeHistory.Listener {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        disposable.clear()
         _binding = null
     }
 
@@ -83,28 +80,25 @@ class FragmentBarcodeHistoryList : Fragment(), AdapterBarcodeHistory.Listener {
     }
 
     private fun loadHistory() {
-        val config = PagedList.Config.Builder()
-            .setEnablePlaceholders(false)
-            .setPageSize(PAGE_SIZE)
-            .build()
+        val config = PagingConfig(
+            pageSize = PAGE_SIZE,
+            enablePlaceholders = false
+        )
 
-        val dataSource = when (arguments?.getInt(TYPE_KEY).orZero()) {
-            TYPE_ALL -> barcodeDatabase.getAll()
-            TYPE_FAVORITES -> barcodeDatabase.getFavorites()
+        val pager = when (arguments?.getInt(TYPE_KEY).orZero()) {
+            TYPE_ALL -> Pager(config) { barcodeDatabase.getAll() }
+            TYPE_FAVORITES -> Pager(config) { barcodeDatabase.getFavorites() }
             else -> return
         }
 
-        RxPagedListBuilder(dataSource, config)
-            .buildFlowable(BackpressureStrategy.LATEST)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                { list ->
-                    scanHistoryAdapter.submitList(list)
-                    updateEmptyState(list.isEmpty())
-                },
-                ::showError
-            )
-            .addTo(disposable)
+        lifecycleScope.launch {
+            pager.flow
+                .cachedIn(lifecycleScope)
+                .collectLatest { pagingData ->
+                    scanHistoryAdapter.submitData(pagingData)
+                    updateEmptyState(scanHistoryAdapter.itemCount == 0)
+                }
+        }
     }
 
     private fun updateEmptyState(isEmpty: Boolean) {

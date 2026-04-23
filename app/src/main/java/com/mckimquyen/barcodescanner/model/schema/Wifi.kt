@@ -1,8 +1,11 @@
 package com.mckimquyen.barcodescanner.model.schema
 
 import androidx.annotation.Keep
-import com.mckimquyen.barcodescanner.extension.*
-import java.util.*
+import com.mckimquyen.barcodescanner.extension.appendIfNotNullOrBlank
+import com.mckimquyen.barcodescanner.extension.joinToStringNotNullOrBlankWithLineSeparator
+import com.mckimquyen.barcodescanner.extension.startsWithIgnoreCase
+import com.mckimquyen.barcodescanner.extension.unescape
+import java.util.Locale
 
 @Keep
 class Wifi(
@@ -39,7 +42,7 @@ class Wifi(
             val keysAndValues = PAIR_REGEX
                 .findAll(keysAndValuesSubstring)
                 .map { pair ->
-                    "${pair.groupValues[1].toUpperCase(Locale.US)}:" to pair.groupValues[2]
+                    "${pair.groupValues[1].uppercase(Locale.US)}:" to pair.groupValues[2]
                 }
                 .toMap()
 

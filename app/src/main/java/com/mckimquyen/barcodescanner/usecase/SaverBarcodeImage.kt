@@ -8,7 +8,7 @@ import android.provider.MediaStore.Images
 import androidx.core.content.FileProvider
 import com.mckimquyen.barcodescanner.model.Barcode
 import com.mckimquyen.barcodescanner.model.ParsedBarcode
-import io.reactivex.Completable
+import io.reactivex.rxjava3.core.Completable
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream

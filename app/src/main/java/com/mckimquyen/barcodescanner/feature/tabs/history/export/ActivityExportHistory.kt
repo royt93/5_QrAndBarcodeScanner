@@ -18,10 +18,10 @@ import com.mckimquyen.barcodescanner.extension.isNotBlank
 import com.mckimquyen.barcodescanner.extension.showError
 import com.mckimquyen.barcodescanner.extension.textString
 import com.mckimquyen.barcodescanner.feature.ActivityBase
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.kotlin.addTo
+import io.reactivex.rxjava3.schedulers.Schedulers
 
 class ActivityExportHistory : ActivityBase() {
     private lateinit var binding: AExportHistoryBinding

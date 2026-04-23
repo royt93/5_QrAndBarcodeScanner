@@ -8,8 +8,8 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import com.mckimquyen.barcodescanner.extension.toCaps
 import com.mckimquyen.barcodescanner.extension.wifiManager
-import io.reactivex.Completable
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.schedulers.Schedulers
 
 object WifiConnector {
     private val hexRegex = """^[0-9a-f]+$""".toRegex(RegexOption.IGNORE_CASE)
