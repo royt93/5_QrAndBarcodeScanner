@@ -1,6 +1,6 @@
 org.gradle.configureondemand=true
 kapt.use.worker.api=true
-org.gradle.jvmargs=-Xmx2048m
+org.gradle.jvmargs=-Xmx4096m
 org.gradle.caching=true
 room.incremental=true
 org.gradle.unsafe.watch-fs=true

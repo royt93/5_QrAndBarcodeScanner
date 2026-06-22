@@ -95,3 +95,6 @@ atlassian-ide-plugin.xml
 
 # Sentry
 /sentry.properties
+
+# Claude Code local settings (YOLO/bypassPermissions — không commit)
+.claude/settings.local.json
