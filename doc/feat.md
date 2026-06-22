@@ -1,23 +1,64 @@
-# Đề Xuất Tính Năng Mới Cho QR & Barcode Scanner App
+# Đề Xuất Tính Năng Mới — QR & Barcode Scanner
 
-Dựa trên việc kiểm tra lại đúng thư mục dự án của anh (app chuyên quét QR với các dependency như `zxing-android-embedded`, `code-scanner`, `ez-vcard`, `kotlin-onetimepassword`), em xin đưa ra 2 tính năng thực tế, cực kỳ trending trên thị trường và hoàn toàn nằm gọn trong khả năng của bộ source code hiện tại:
-
-## 1. Chế Độ Cửa Hàng / Kho Bãi: Batch Scanning & CSV Export (Quét Liên Tục & Xuất File)
-
-**Mô tả:**  
-Đa số các app máy quét cơ bản trên thị trường đều hoạt động theo cơ chế: Quét 1 lần -> Nhảy sang màn hình kết quả -> User phải bấm "Back" mở lại camera để quét món thứ hai. Rất bất tiện và chậm cho dân kiểm kho hay chủ shop. Tính năng **Batch Scanning** sẽ biến app của anh thành một chiếc "Máy quét siêu thị" chuyên nghiệp.
-
-**Tính khả thi & Cách triển khai:**  
-- **Logic:** Khi quét thành công một mã, thay vì stop camera preview, app chỉ phát âm báo "Bíp" và lưu thẳng nội dung vừa quét vào Room Database (hoặc List in-memory) kèm dấu thời gian.
-- **Tiện ích mở rộng:** Sau khi người dùng gom đủ 50-100 mã hàng hoá, cho phép họ ấn nút **Export CSV/Excel**. App dùng các hàm IO cơ bản để đẩy list text này vào file và gọi Share Intent để gửi qua Zalo/Email cho đối tác. Tính năng này chắc chắn sẽ "ăn đứt" các app free khác và thu hút người dùng B2B tải về sử dụng thường xuyên.
+> **Cập nhật:** 2026-06-22  
+> **Legend:** ✅ Implemented · 🟡 In progress · 📋 Picked · ⏸️ Deferred · ❌ Skipped · 💭 Ideas
 
 ---
 
-## 2. Smart Security Shield: Chống Lừa Đảo Phishing (Quishing) & Rich Action Parser
+## ✅ 1. Batch Scanning & CSV Export
 
-**Mô tả:**  
-Bạn có thể dễ dàng thấy sự bùng nổ của nạn lừa đảo qua mã QR giả mạo dán chồng lên QR thanh toán ở các nhà hàng/quán cafe (vấn nạn Quishing). Người dùng rất sợ việc lỡ quét QR và bị dẫn tới trang web giả mạo ngân hàng.
+**Trạng thái:** Implemented
 
-**Tính khả thi & Cách triển khai:**  
-- **Cảnh báo URL Thông Minh:** Khi decode ra một URL, thay vì tự động kích hoạt `Intent.ACTION_VIEW` để chạy thẳng sang trình duyệt, ứng dụng sẽ chặn lại một nhịp ở BottomSheet. Tại đây phân tích: nếu không phải là các domain tài chính quen thuộc, app sẽ hiển thị URL dạng thô kèm biểu tượng "Cảnh báo đỏ" để hỏi user có chắc chắn truy cập không.
-- **Bộ Phân Tích Hành Động (Action Parser):** Tận dụng tối đa bộ thư viện `ez-vcard` và `kotlin-onetimepassword` anh đang gắn vào, tự động móc nối giao diện: Truy xuất số điện thoại (VCard) hiện luôn nút `Call/Save To Contact` to tướng, cấu hình thẻ WiFi hiện ngay nút `Kết nối mạng này` thay vì bắt người dùng chép tay password.
+**Mô tả:** Quét liên tục nhiều mã mà không cần back về màn hình kết quả. Sau khi gom đủ số lượng, xuất ra file CSV và
+chia sẻ.
+
+**Đã implement:**
+
+- `FragmentScanBarcodeFromCamera.kt` — batch mode toggle + auto-append to list sau mỗi lần quét
+- `DialogFragmentScanHelper.kt` — onboarding BottomSheet M3 giải thích batch mode
+- `ActivityBatchExportResult.kt` — màn hình kết quả sau export (có animation scale_pop + slide_up_fade)
+- Layout: `dialog_batch_scan_helper.xml`, `a_batch_export_result.xml`
+
+---
+
+## 📋 2. Smart Security Shield — Chống Phishing QR (Quishing)
+
+**Trạng thái:** Picked (chưa implement)
+
+**Mô tả:** Phân tích URL từ QR trước khi mở trình duyệt. Hiển thị cảnh báo nếu domain đáng ngờ.
+
+**Kế hoạch:**
+
+- Chặn `Intent.ACTION_VIEW` auto-open bằng một bước confirm BottomSheet
+- Phân tích domain: whitelist tài chính/banking quen thuộc → OK, còn lại → show cảnh báo đỏ
+- Tận dụng `ez-vcard` + `kotlin-onetimepassword` cho Smart Action Parser:
+    - VCard/MeCard → nút **Call** / **Save Contact** to tướng
+    - WiFi QR → nút **Kết nối mạng ngay**
+    - OTP URI → điều hướng thẳng đến `ActivityOtp`
+
+---
+
+## 💭 3. QR Code Customization — QR có màu & logo
+
+**Trạng thái:** Ideas
+
+**Mô tả:** Thêm màu sắc và logo vào QR khi tạo. Hiện tại QR chỉ là đen trắng cơ bản.
+
+**Hướng implement:** Custom renderer bằng ZXing + Canvas overlay logo, color fill cho data modules.
+
+---
+
+## 💭 4. Predictive Back Gesture (Android 14+)
+
+**Trạng thái:** Ideas
+
+**Mô tả:** Hỗ trợ predictive back animation tiêu chuẩn Android 14+. Hiện tại không có `OnBackPressedCallback` pattern ở
+hầu hết Activities.
+
+---
+
+## 💭 5. Live QR Preview while typing
+
+**Trạng thái:** Ideas
+
+**Mô tả:** Sinh QR realtime khi user gõ nội dung trong form tạo QR, thay vì phải nhấn "Create".

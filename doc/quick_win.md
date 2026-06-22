@@ -1,18 +1,41 @@
-# Quick Wins Implementation Status
+# Quick Wins — Implementation Status
 
-### 1. 🚀 Migrate từ Kotlin Synthetics sang ViewBinding
+> **Cập nhật:** 2026-06-22
 
-- **Trạng thái:** Đang xử lý.
-- **Chi tiết:** Đã khảo sát và phát hiện **57 file Kotlin** đang sử dụng `kotlinx.android.synthetic`. Do số lượng file quá lớn, việc chuyển đổi thủ công sẽ tốn rất nhiều thời gian và rủi ro sai sót sót. Đang chờ xác nhận phương án tự động hoá (dùng Python script) hoặc chuyển đổi theo từng cụm tính năng.
+---
 
-### 2. 🧹 Đồng bộ kiến trúc bất đồng bộ (Coroutines/Flow)
+### 1. ✅ Migrate từ Kotlin Synthetics sang ViewBinding
 
-- **Trạng thái:** Chưa bắt đầu.
+- **Trạng thái:** Hoàn thành
+- **Xác nhận:** Grep `kotlinx.android.synthetic` toàn project → **0 match**. Tất cả UI files đều dùng `ViewBinding`.
+
+---
+
+### 2. 🟡 Đồng bộ kiến trúc bất đồng bộ (Coroutines/Flow)
+
+- **Trạng thái:** Đang chờ (chưa bắt đầu)
 - **Chi tiết:** Kế hoạch loại bỏ `RxJava` và đồng bộ hoàn toàn với `Coroutines/Flow`.
 
-### 3. 🎯 Dọn dẹp `doc/init.md` và chuẩn hoá version
+---
 
-- **Trạng thái:** **Hoàn thành ✅**
-- **Chi tiết:**
-  - Đã gỡ bỏ các tiêu chuẩn Flutter không liên quan trong `doc/init.md` và thay bằng Guideline chuẩn cho dự án Android Native (ViewBinding, Coroutines, v.v.).
-  - Đã hạ `compileSdkVersion` và `targetSdkVersion` trong `app/build.gradle` từ bản thử nghiệm 36 xuống bản ổn định 34 để tránh lọt lỗi experimental.
+### 3. ✅ Dọn dẹp `doc/init.md` và chuẩn hoá version
+
+- **Trạng thái:** Hoàn thành
+- **Chi tiết:** Đã loại bỏ tiêu chuẩn Flutter, thay bằng guideline Android Native. Version chuẩn hoá 2026.06.23.
+
+---
+
+### 4. 🟡 Animation đồng bộ giữa các màn hình
+
+- **Trạng thái:** Đang thiếu
+- **Chi tiết:** Chỉ có Splash→Main dùng `fade_in/fade_out`. Các Activity transition khác không có animation. Cần bổ sung
+  `overridePendingTransition` hoặc Activity transition API.
+- **Xem thêm:** `doc/test/animation_test_cases.md`
+
+---
+
+### 5. ✅ Multi-language support
+
+- **Trạng thái:** Hoàn thành
+- **Chi tiết:** App hỗ trợ nhiều ngôn ngữ: en, vi, de, es, fr, it, ja, zh, zh-rTW, ru, ca, el, + nhiều ngôn ngữ khác qua
+  `values-*/strings.xml`.
