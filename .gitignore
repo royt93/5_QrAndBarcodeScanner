@@ -98,3 +98,6 @@ atlassian-ide-plugin.xml
 
 # Claude Code local settings (YOLO/bypassPermissions — không commit)
 .claude/settings.local.json
+
+# AdMob app id + ad unit IDs thật — backup riêng ở github.com/royt93/myKeyStore
+doc/ad/id.MD

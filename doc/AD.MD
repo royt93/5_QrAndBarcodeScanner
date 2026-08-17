@@ -193,10 +193,9 @@ chỉ đổi API; (2) **VIP screen — tạo mới hoàn toàn** (mandatory theo
 
 ## 6. THÔNG TIN CÒN THIẾU / QUYẾT ĐỊNH BỔ SUNG (2026-08-17, sau khi code xong Bước 1-8)
 
-1. **4 AdMob Ad Unit ID thật**: user xác nhận **dùng Google test ad unit ID trước** để build/QA, sẽ cấp bộ ID
-   production thật sau. Đã set trong `app/build.gradle` (cả debug lẫn release, cả 2 flavor) —
-   `ca-app-pub-3940256099942544/...` (test ID chính thức của Google, an toàn cho dev). ⚠️ **BLOCKER release**:
-   PHẢI thay bằng ID thật trước khi build bản phát hành — xem cảnh báo inline trong `app/build.gradle`.
+1. ✅ **4 AdMob Ad Unit ID thật**: **ĐÃ RESOLVED 2026-08-17 (phiên sau)** — user cấp đủ ID thật qua
+   `doc/ad/id.MD`, đã thay vào `app/build.gradle` (debug + release). Chi tiết đầy đủ + fix app id liên quan:
+   xem mục 12.
 2. **VIP entry point**: đã chốt — thêm 1 row "VIP / Premium" trong `SettingsFragment` (nhóm mới ở đầu danh
    sách, trên "Appearance"), dùng lại custom view `ButtonSettings` có sẵn của app. Không thêm toolbar/badge
    riêng ở `ActivityBottomTabs`.
@@ -204,9 +203,9 @@ chỉ đổi API; (2) **VIP screen — tạo mới hoàn toàn** (mandatory theo
    `AdManager.setTestDeviceIds(...)` trong code cho case này — AppLovin debug tự truyền GAID qua
    `isDebug=true` sẵn. Comment gợi ý trong `RApp.kt` giữ lại (không bắt buộc) phòng khi cần thêm máy QA khác
    sau này mà không tiện vào Console.
-4. **Bước 7 (AdMob Console + AppLovin dashboard)**: chưa làm — ngoài phạm vi code, cần người có quyền truy cập
-   `apps.admob.com` + `dash.applovin.com` thực hiện thủ công theo checklist ở mục Step 8 (phần PHẦN B của
-   `AD_PROMPT_AOS.MD`).
+4. ⏳ **Bước 7 (AdMob Console + AppLovin dashboard)**: **vẫn chưa làm** — ngoài phạm vi code, cần người có
+   quyền truy cập `apps.admob.com` + `dash.applovin.com` thực hiện thủ công. Checklist chi tiết từng bước +
+   tên file screenshot cần chụp: xem mục 12.4.
 5. **Privacy Policy URL**: dùng lại `URL_POLICY_NOTION` có sẵn (`extension/ext/Context.kt:50`) — không tạo
    URL mới, đã wire vào `applovinPrivacyPolicyUrl` (RApp.kt) và footer màn VIP qua `openBrowserPolicy()`.
 6. **Child-directed**: user xác nhận **Không** — app không hướng trẻ em, giữ AppLovin song song hợp lệ, không
@@ -416,3 +415,75 @@ Settings/toàn app chuyển tối đúng, riêng màn VIP giữ nguyên giao di�
 contrast, không clash màu, chỉ đơn giản là "không đổi theo theme". Đây là lựa chọn thiết kế cố ý (mirror
 đúng bản gốc SDK) — không sửa, không coi là bug, trừ khi user muốn tự làm bộ màu dark riêng sau này
 (sẽ lệch thiết kế gốc).
+
+## 12. AD UNIT ID THẬT + FIX APP ID + CHECKLIST BƯỚC 7 (2026-08-17, phiên sau)
+
+### 12.1 — 4 ad unit ID thật đã set
+
+User cấp qua `doc/ad/id.MD` (không track git từ đây, xem 12.3). Đã thay vào `app/build.gradle`
+(`ADMOB_BANNER_ID`/`ADMOB_INTERSTITIAL_ID`/`ADMOB_APP_OPEN_ID`/`ADMOB_REWARDED_ID`, cả debug lẫn
+release) — thay hẳn 4 Google test ID (`ca-app-pub-3940256099942544/...`) cũ. Blocker ở mục 6 item 1
+coi như **đã resolved**.
+
+⚠️ **Trước khi QA click ad thật**: đọc lại `doc/AD_PROMPT_AOS.MD` Bước 3b (đăng ký GAID máy dev/QA) —
+mục 6 item 3 ghi "đã đăng ký qua AdMob Console" nhưng đó là lúc app id trong manifest còn SAI (xem
+12.2) — **cần xác nhận lại Test Devices đã đăng ký đúng dưới property `ca-app-pub-3004713799155145`**
+(app id đúng, khớp publisher number với 4 ad unit ID trên), không phải property cũ.
+
+### 12.2 — Fix bug: `APPLICATION_ID` trong manifest KHÔNG khớp publisher của ad unit ID
+
+Phát hiện khi audit `doc/ad/id.MD`: `AndroidManifest.xml` khai
+`com.google.android.gms.ads.APPLICATION_ID = ca-app-pub-3612191981543807~8467338874` — publisher
+number (`3612191981543807`) **khác hẳn** publisher number của 4 ad unit ID thật
+(`3004713799155145`, xem `doc/ad/id.MD`). App id cũ nhiều khả năng là leftover từ project/template
+khác, không phải property AdMob thật của app này.
+
+**Đã fix**: đổi `APPLICATION_ID` sang `ca-app-pub-3004713799155145~1379368107` (đúng app id trong
+`doc/ad/id.MD`, cùng publisher number với ad unit ID) — `app/src/main/AndroidManifest.xml`.
+
+Cũng đã thêm `ADMOB_NATIVE_ID` (`ca-app-pub-3004713799155145/8683143050`) vào `app/build.gradle` —
+**chưa wire** vào `AdSdkConfig`/`AdManager` vì `AdmobApplovinWrapper:1.6.16` không có API native ad
+format nào (đối chiếu trực tiếp `AdSdkConfig.kt` source — không có field `admobNativeId`). Field giữ
+sẵn cho tương lai nếu SDK ra bản hỗ trợ native, hoặc app tự build native ad bằng AdMob SDK riêng.
+
+### 12.3 — `doc/ad/id.MD` ngừng track git, backup riêng
+
+`doc/ad/id.MD` (chứa app id + 5 ad unit ID) đã thêm vào `.gitignore` + `git rm --cached` — theo đúng
+convention bảo mật đã dùng cho keystore (mục 9.3). Backup tại
+`github.com/royt93/myKeyStore/com.mckimquyen.barcodescanner/admob-id.MD` (private repo).
+
+Lưu ý: ad unit ID vẫn nằm trong `app/build.gradle` (tracked, public repo) và sẽ nằm trong APK biên
+dịch — không phải bí mật kiểu keystore password, đây chỉ là dọn tài liệu tham chiếu, không phải
+security fix triệt để như mục 9.2.
+
+### 12.4 — Checklist Bước 7 chi tiết (AdMob Console + AppLovin dashboard) — VẪN CHƯA LÀM
+
+Trích từ `doc/AD_PROMPT_AOS.MD` mục "Việc cần làm — Bật xin phép quảng cáo", chuyển thành checklist
+tick-able. Cần người có quyền truy cập `dash.applovin.com` + `apps.admob.com`.
+
+**Phần 1 — `dash.applovin.com`** (chọn đúng app thật, không phải app test):
+- [ ] "Consent Flow"/"CMP" → bật **Enabled**, điền Privacy Policy URL (dùng lại `URL_POLICY_NOTION`,
+  xem `extension/ext/Context.kt:50`) → chụp `anh_1_applovin_consent.png`
+- [ ] "Privacy"/"GDPR & CCPA" → bật cả 3: TCF 2.0, Google Additional Consent, CCPA/US Privacy →
+  chụp `anh_2_applovin_gdpr.png`
+- [ ] Kiểm tra dòng "app-ads.txt" — nếu có cảnh báo ⚠️, báo người quản lý website công ty (ngoài
+  phạm vi dev) → chụp `anh_3_applovin_appads.png`
+
+  ⚠️ **Lưu ý riêng cho app này**: công tắc Consent Flow AppLovin ở bước 1 chỉ có tác dụng runtime nếu
+  `AdSdkConfig.applovinUseNativeCmp = true` trong code. Đã verify trực tiếp source SDK
+  (`AdManager.kt`: `isEnabled = applovinUseNativeCmp && !GmsBridge.isAdmobSupported`, và
+  `GmsBridge.isAdmobSupported = true` cố định compile-time trên flavor `gms` mà app này đang dùng) —
+  **cờ này LUÔN no-op trên app này bất kể set gì**, vì app build trên `gms`. Vẫn nên bật công tắc
+  dashboard cho đủ compliance account-level, nhưng đừng kỳ vọng nó đổi hành vi runtime của app.
+
+**Phần 2 — `apps.admob.com`** (chọn đúng app thật):
+- [ ] "Privacy & messaging" → "European regulations"/"GDPR" → **Publish** (phải thấy "Published",
+  không phải "Draft") → chụp `anh_4_admob_gdpr.png`
+- [ ] "US states" → publish tương tự (app phân phối toàn cầu, bắt buộc theo quyết định mục 5) →
+  chụp `anh_5_admob_us.png`
+- [ ] "Settings" trong "Privacy & messaging" → bật **IAB TCF v2** + **Additional Consent Mode** →
+  chụp `anh_6_admob_tcf.png`
+- [ ] "app-ads.txt" → trạng thái phải **Found** hoặc **Authorized** → chụp `anh_7_admob_appads.png`
+
+**Xong**: gửi đủ 7 ảnh `anh_1...` → `anh_7...` cho người phụ trách kỹ thuật lưu vào repo (hoặc đính
+kèm PR) làm bằng chứng đã bật.
