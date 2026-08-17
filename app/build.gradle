@@ -11,6 +11,14 @@ plugins {
 //    autoUploadProguardMapping = true
 //}
 
+// VIP secret/public-key đọc từ local.properties (gitignored) — KHÔNG dùng gradle.properties, file đó
+// đang bị track trong git (đã có RELEASE_STORE_PASSWORD lộ sẵn trong history, xem cảnh báo báo cáo).
+def localProps = new Properties()
+def localPropsFile = rootProject.file("local.properties")
+if (localPropsFile.exists()) {
+    localProps.load(new FileInputStream(localPropsFile))
+}
+
 android {
     compileSdkVersion 37
     namespace "com.mckimquyen.barcodescanner"
@@ -66,28 +74,43 @@ android {
 
     buildTypes {
         debug {
-            buildConfigField "Boolean", "IS_ENABLE_ADMOB", "false"
+            // Provider: AdMob (IS_ENABLE_ADMOB=true) — AppLovin kept wired as fallback/comparison per plan (doc/AD.MD).
+            buildConfigField "Boolean", "IS_ENABLE_ADMOB", "true"
             buildConfigField "String", "APPLOVIN_SDK_KEY", "\"e75FnQfS9XTTqM1Kne69U7PW_MBgAnGQTFvtwVVui6kRPKs5L7ws9twr5IQWwVfzPKZ5pF2IfDa7lguMgGlCyt\""
             buildConfigField "String", "APPLOVIN_BANNER_ID", "\"1cfc3df1cd94473a\""
             buildConfigField "String", "APPLOVIN_INTERSTITIAL_ID", "\"2f81cf4ca355cdac\""
             buildConfigField "String", "APPLOVIN_APP_OPEN_ID", "\"5baea98f19f13cf2\""
             buildConfigField "String", "APPLOVIN_REWARD_ID", "\"260b02ff9724a4ec\""
 
-            buildConfigField "String", "ADMOB_BANNER_ID", "\"\""
-            buildConfigField "String", "ADMOB_INTERSTITIAL_ID", "\"\""
-            buildConfigField "String", "ADMOB_APP_OPEN_ID", "\"\""
+            // ⚠️ Google TEST ad unit IDs — user xác nhận dùng test ID để build/QA trước, SẼ thay bằng ID
+            // production thật của app trước khi release (xem doc/AD.MD mục 6.1). KHÔNG ship debug test ID
+            // này lên bản release.
+            buildConfigField "String", "ADMOB_BANNER_ID", "\"ca-app-pub-3940256099942544/6300978111\""
+            buildConfigField "String", "ADMOB_INTERSTITIAL_ID", "\"ca-app-pub-3940256099942544/1033173712\""
+            buildConfigField "String", "ADMOB_APP_OPEN_ID", "\"ca-app-pub-3940256099942544/9257395921\""
+            buildConfigField "String", "ADMOB_REWARDED_ID", "\"ca-app-pub-3940256099942544/5224354917\""
+
+            buildConfigField "String", "VIP_KEY_SECRET", "\"${localProps.getProperty('VIP_KEY_SECRET', '')}\""
+            buildConfigField "String", "VIP_TOKEN_PUBLIC_KEY", "\"${localProps.getProperty('VIP_TOKEN_PUBLIC_KEY', '')}\""
         }
         release {
-            buildConfigField "Boolean", "IS_ENABLE_ADMOB", "false"
+            // Provider: AdMob (IS_ENABLE_ADMOB=true) — AppLovin kept wired as fallback/comparison per plan (doc/AD.MD).
+            buildConfigField "Boolean", "IS_ENABLE_ADMOB", "true"
             buildConfigField "String", "APPLOVIN_SDK_KEY", "\"e75FnQfS9XTTqM1Kne69U7PW_MBgAnGQTFvtwVVui6kRPKs5L7ws9twr5IQWwVfzPKZ5pF2IfDa7lguMgGlCyt\""
             buildConfigField "String", "APPLOVIN_BANNER_ID", "\"1cfc3df1cd94473a\""
             buildConfigField "String", "APPLOVIN_INTERSTITIAL_ID", "\"2f81cf4ca355cdac\""
             buildConfigField "String", "APPLOVIN_APP_OPEN_ID", "\"5baea98f19f13cf2\""
             buildConfigField "String", "APPLOVIN_REWARD_ID", "\"260b02ff9724a4ec\""
 
-            buildConfigField "String", "ADMOB_BANNER_ID", "\"\""
-            buildConfigField "String", "ADMOB_INTERSTITIAL_ID", "\"\""
-            buildConfigField "String", "ADMOB_APP_OPEN_ID", "\"\""
+            // 🚨 VẪN LÀ TEST ID — chờ user cấp 4 ad unit ID production thật (doc/AD.MD mục 6.1) rồi thay
+            // trước khi build release thật. Build release hiện tại CHỈ dùng để build/QA nội bộ.
+            buildConfigField "String", "ADMOB_BANNER_ID", "\"ca-app-pub-3940256099942544/6300978111\""
+            buildConfigField "String", "ADMOB_INTERSTITIAL_ID", "\"ca-app-pub-3940256099942544/1033173712\""
+            buildConfigField "String", "ADMOB_APP_OPEN_ID", "\"ca-app-pub-3940256099942544/9257395921\""
+            buildConfigField "String", "ADMOB_REWARDED_ID", "\"ca-app-pub-3940256099942544/5224354917\""
+
+            buildConfigField "String", "VIP_KEY_SECRET", "\"${localProps.getProperty('VIP_KEY_SECRET', '')}\""
+            buildConfigField "String", "VIP_TOKEN_PUBLIC_KEY", "\"${localProps.getProperty('VIP_TOKEN_PUBLIC_KEY', '')}\""
 
             debuggable false
             minifyEnabled true
@@ -104,23 +127,11 @@ android {
             buildConfigField "Boolean", "build_debug", "true"
             dimension "type"
             buildConfigField("String", "FLAVOR_buildEnv", '"dev"')
-
-            buildConfigField("String", "SDK_KEY", '"e75FnQfS9XTTqM1Kne69U7PW_MBgAnGQTFvtwVVui6kRPKs5L7ws9twr5IQWwVfzPKZ5pF2IfDa7lguMgGlCyt"')
-            buildConfigField("String", "BANNER", '"1cfc3df1cd94473a"')
-            buildConfigField("String", "INTER", '"2f81cf4ca355cdac"')
-            buildConfigField("String", "APPOPEN", '"5baea98f19f13cf2"')
-            buildConfigField("String", "REWARD", '"260b02ff9724a4ec"')
         }
         production {
             buildConfigField "Boolean", "build_debug", "false"
             dimension "type"
             buildConfigField("String", "FLAVOR_buildEnv", '"prod"')
-
-            buildConfigField("String", "SDK_KEY", '"e75FnQfS9XTTqM1Kne69U7PW_MBgAnGQTFvtwVVui6kRPKs5L7ws9twr5IQWwVfzPKZ5pF2IfDa7lguMgGlCyt"')
-            buildConfigField("String", "BANNER", '"1cfc3df1cd94473a"')
-            buildConfigField("String", "INTER", '"2f81cf4ca355cdac"')
-            buildConfigField("String", "APPOPEN", '"5baea98f19f13cf2"')
-            buildConfigField("String", "REWARD", '"260b02ff9724a4ec"')
         }
     }
 
@@ -161,10 +172,11 @@ dependencies {
     api 'com.github.igreenwood:SimpleCropView:v1.1.6'
 //    api 'com.github.florent37:singledateandtimepicker:2.2.6'
     api 'com.github.florent37:singledateandtimepicker:2.2.7'
-    implementation("com.github.royt93:AdmobWrapper:1.1.2")
+    implementation("com.github.royt93:AdmobApplovinWrapper:1.6.16")
     implementation("com.google.android.play:review:2.0.2")
     implementation("com.google.android.play:review-ktx:2.0.2")
     implementation("androidx.lifecycle:lifecycle-process:2.11.0")
+    implementation("nl.dionsegijn:konfetti-xml:2.0.5") // VIP screen success confetti (UI mirrors SDK's own reference demo)
 
     testImplementation "junit:junit:4.13.2"
 

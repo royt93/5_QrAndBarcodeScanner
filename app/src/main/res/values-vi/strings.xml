@@ -200,6 +200,59 @@
     <string name="activity_export_history_export">Xuất</string>
     <string name="activity_export_history_exported">Đã lưu vào Downloads</string>
 
+    <string name="ad_attribution_label">Mạng quảng cáo (AdMob / AppLovin MAX)</string>
+
+    <!--VIP screen — UI mirror theo SDK reference demo-->
+    <string name="vip_toolbar_title">VIP Member</string>
+    <string name="fragment_settings_vip_entry">VIP / Premium</string>
+    <string name="vip_eyebrow">THÀNH VIÊN CAO CẤP</string>
+    <string name="vip_active">VIP đang kích hoạt</string>
+    <string name="vip_free_user">Người dùng miễn phí</string>
+    <string name="vip_until">Hết hạn: %1$s</string>
+    <string name="vip_activated_at">Kích hoạt: %1$s</string>
+    <string name="vip_expires_at">Hết hạn: %1$s</string>
+    <string name="vip_remaining">%1$dd %2$02dh %3$02dm %4$02ds</string>
+    <string name="vip_redeem_label">Nhập mã VIP</string>
+    <string name="vip_redeem_hint">Dán token VIP của bạn vào đây</string>
+    <string name="vip_redeem_helper">Dán token VIP được cấp để mở khoá không quảng cáo</string>
+    <string name="vip_redeem_button">Kích hoạt</string>
+    <string name="vip_premium_packages">Gói cao cấp</string>
+    <string name="vip_watch_ad_3d">Xem quảng cáo → 3 ngày VIP</string>
+    <string name="vip_buy_30d_locked">Mua VIP 30 ngày — sắp ra mắt</string>
+    <string name="vip_buy_90d_locked">Mua VIP 90 ngày — sắp ra mắt</string>
+    <string name="vip_buy_1y_locked">Mua VIP 1 năm — sắp ra mắt</string>
+    <string name="vip_buy_lifetime_locked">Mua VIP trọn đời — sắp ra mắt</string>
+    <string name="vip_restore_locked">Khôi phục mua hàng — sắp ra mắt</string>
+    <string name="vip_revoke_all_button">Thu hồi VIP</string>
+    <string name="vip_revoke_all_confirm_title">Xác nhận thu hồi</string>
+    <string name="vip_revoke_all_confirm_message">Thu hồi VIP và quay về tài khoản Free?</string>
+    <string name="vip_revoked_message">Đã thu hồi VIP</string>
+    <string name="vip_entry_first_install">🎁 Quà tặng cài đặt mới</string>
+    <plurals name="vip_entry_redeemed">
+        <item quantity="other">VIP %1$d ngày</item>
+    </plurals>
+    <string name="vip_verifying_title">Đang xác minh…</string>
+    <string name="vip_success_title">Thành công</string>
+    <plurals name="vip_success_message">
+        <item quantity="other">Đã kích hoạt VIP thêm %1$d ngày!</item>
+    </plurals>
+    <string name="vip_failed_title">Thất bại</string>
+    <string name="vip_failed_message">Token VIP không hợp lệ. Vui lòng thử lại.</string>
+    <string name="vip_token_no_effect_title">Token không có tác dụng</string>
+    <string name="vip_token_no_effect_message">Token hợp lệ, nhưng VIP hiện tại của bạn đã dài hơn số ngày token này cấp — không có ngày nào được cộng thêm.</string>
+    <string name="vip_queued_title">Đang xử lý…</string>
+    <string name="vip_queued_message">Token có vẻ hợp lệ, nhưng SDK quảng cáo đang khởi động. Token sẽ tự động được áp dụng sau vài giây — đây KHÔNG phải lỗi. Không cần làm gì thêm.</string>
+    <string name="vip_no_ad_title">Không có quảng cáo</string>
+    <string name="vip_no_ad_message">Hiện không có quảng cáo nào khả dụng. Vui lòng kiểm tra kết nối internet rồi thử lại sau.</string>
+    <string name="vip_no_reward_title">Lần này không có thưởng</string>
+    <string name="vip_no_reward_message">Quảng cáo chưa xem xong nên chưa được cấp thưởng VIP lần này. Vui lòng thử lại.</string>
+    <string name="vip_open_link_error">Không thể mở liên kết</string>
+    <string name="loading">Đang tải…</string>
+    <string name="please_wait">Vui lòng chờ…</string>
+    <string name="cancel">Huỷ</string>
+    <string name="confirm">Xác nhận</string>
+    <string name="ok">OK</string>
+
     <!--Settings fragment-->
     <string name="fragment_settings_title">Cài đặt</string>
     <string name="fragment_settings_appearance_settings">Giao diện</string>

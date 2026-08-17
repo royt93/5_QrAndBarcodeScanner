@@ -22,8 +22,13 @@ class SplashActivity : AppCompatActivity() {
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        AdManager.initSplashScreen(this) {
-            handleAdLoadCompleted()
+        // Consent (UMP/GDPR) BẮT BUỘC hoàn tất trước khi splash chạy App Open — bỏ bước này = SDK
+        // fail-closed, 0 ad. `canRequestAds` không cần check ở đây: initSplashScreen tự biết chặn ad
+        // nếu consent chưa đủ, chỉ cần đảm bảo consent đã được request trước.
+        AdManager.requestConsentInfoUpdate(this) { canRequestAds ->
+            AdManager.initSplashScreen(this) {
+                handleAdLoadCompleted()
+            }
         }
     }
 

@@ -24,6 +24,24 @@
             android:orientation="vertical"
             android:paddingBottom="56dp">
 
+            <!--VIP-->
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textViewVipTitle"
+                style="@style/SettingsGroupTitleTextViewStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin"
+                android:layout_marginTop="@dimen/margin"
+                android:layout_marginBottom="@dimen/margin_small"
+                android:text="@string/vip_toolbar_title" />
+
+            <com.mckimquyen.barcodescanner.feature.common.view.ButtonSettings
+                android:id="@+id/buttonVip"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:isSwitchVisible="false"
+                app:text="@string/fragment_settings_vip_entry" />
+
             <!--Appearance-->
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/textViewAppearanceTitle"

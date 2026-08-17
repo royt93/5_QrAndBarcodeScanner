@@ -6,7 +6,6 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.MenuItem
-import android.view.View
 import android.widget.FrameLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -33,18 +32,7 @@ class ActivityBottomTabs : ActivityBase(), BottomNavigationView.OnNavigationItem
         private const val ACTION_HISTORY = "${BuildConfig.APPLICATION_ID}.HISTORY"
     }
 
-    private var adView: View? = null
     private val handler = Handler(Looper.getMainLooper())
-
-    override fun onResume() {
-        super.onResume()
-        AdManager.bannerResume(adView)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        AdManager.bannerPause(adView)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,7 +47,9 @@ class ActivityBottomTabs : ActivityBase(), BottomNavigationView.OnNavigationItem
         }
         val bannerContainer = findViewById<FrameLayout>(R.id.bannerContainer)
         val tvLabelAd = findViewById<TextView>(R.id.tvLabelAd)
-        adView = AdManager.loadBanner(
+        // autoManageLifecycle=true (mặc định) — SDK tự hook resume/pause/destroy qua
+        // ActivityLifecycleCallbacks, KHÔNG tự gọi bannerResume/bannerPause/bannerDestroy nữa.
+        AdManager.loadBanner(
             context = this,
             container = bannerContainer,
             tvLabelAd = tvLabelAd,
@@ -68,7 +58,6 @@ class ActivityBottomTabs : ActivityBase(), BottomNavigationView.OnNavigationItem
 
     override fun onDestroy() {
         handler.removeCallbacksAndMessages(null)
-        AdManager.bannerDestroy(adView)
         super.onDestroy()
     }
 

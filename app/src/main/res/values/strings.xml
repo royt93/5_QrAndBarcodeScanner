@@ -200,6 +200,61 @@
     <string name="activity_export_history_export">Export</string>
     <string name="activity_export_history_exported">Saved to Downloads</string>
 
+    <string name="ad_attribution_label">Ad Networks (AdMob / AppLovin MAX)</string>
+
+    <!--VIP screen — UI mirrors SDK reference demo (royt93/AdmobApplovinWrapper app/src/main/res/values/strings.xml)-->
+    <string name="vip_toolbar_title">VIP Member</string>
+    <string name="fragment_settings_vip_entry">VIP / Premium</string>
+    <string name="vip_eyebrow">PREMIUM MEMBERSHIP</string>
+    <string name="vip_active">VIP Active</string>
+    <string name="vip_free_user">Free User</string>
+    <string name="vip_until">Expires: %1$s</string>
+    <string name="vip_activated_at">Activated: %1$s</string>
+    <string name="vip_expires_at">Expires: %1$s</string>
+    <string name="vip_remaining">%1$dd %2$02dh %3$02dm %4$02ds</string>
+    <string name="vip_redeem_label">Enter VIP Token</string>
+    <string name="vip_redeem_hint">Paste your VIP token</string>
+    <string name="vip_redeem_helper">Paste the VIP token you were given to unlock ad-free</string>
+    <string name="vip_redeem_button">Activate</string>
+    <string name="vip_premium_packages">Premium Packages</string>
+    <string name="vip_watch_ad_3d">Watch ad → 3 days VIP</string>
+    <string name="vip_buy_30d_locked">Buy 30-day VIP — Coming Soon</string>
+    <string name="vip_buy_90d_locked">Buy 90-day VIP — Coming Soon</string>
+    <string name="vip_buy_1y_locked">Buy 1-year VIP — Coming Soon</string>
+    <string name="vip_buy_lifetime_locked">Buy Lifetime VIP — Coming Soon</string>
+    <string name="vip_restore_locked">Restore Purchase — Coming Soon</string>
+    <string name="vip_revoke_all_button">Revoke VIP</string>
+    <string name="vip_revoke_all_confirm_title">Confirm Revocation</string>
+    <string name="vip_revoke_all_confirm_message">Revoke VIP and go back to a Free account?</string>
+    <string name="vip_revoked_message">VIP Revoked</string>
+    <string name="vip_entry_first_install">🎁 First Install Gift</string>
+    <plurals name="vip_entry_redeemed">
+        <item quantity="one">VIP %1$d Day</item>
+        <item quantity="other">VIP %1$d Days</item>
+    </plurals>
+    <string name="vip_verifying_title">Verifying…</string>
+    <string name="vip_success_title">Success</string>
+    <plurals name="vip_success_message">
+        <item quantity="one">Successfully activated VIP for %1$d day!</item>
+        <item quantity="other">Successfully activated VIP for %1$d days!</item>
+    </plurals>
+    <string name="vip_failed_title">Failed</string>
+    <string name="vip_failed_message">Invalid VIP token. Please try again.</string>
+    <string name="vip_token_no_effect_title">Token Already Covered</string>
+    <string name="vip_token_no_effect_message">This token is valid, but your current VIP already lasts longer than what it grants — no extra days were added.</string>
+    <string name="vip_queued_title">Processing…</string>
+    <string name="vip_queued_message">Your token looks valid, but the ads SDK is still starting up. It will be applied automatically in a few seconds — this is NOT a failure. No action needed.</string>
+    <string name="vip_no_ad_title">No Ad Available</string>
+    <string name="vip_no_ad_message">No ad is available right now. Please check your internet connection and try again later.</string>
+    <string name="vip_no_reward_title">No Reward Earned</string>
+    <string name="vip_no_reward_message">The rewarded ad wasn\'t completed, so no VIP reward was earned this time. Please try again.</string>
+    <string name="vip_open_link_error">Unable to open link</string>
+    <string name="loading">Loading…</string>
+    <string name="please_wait">Please wait…</string>
+    <string name="cancel">Cancel</string>
+    <string name="confirm">Confirm</string>
+    <string name="ok">OK</string>
+
     <!--Settings fragment-->
     <string name="fragment_settings_title">Settings</string>
     <string name="fragment_settings_appearance_settings">Appearance</string>

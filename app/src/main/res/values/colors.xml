@@ -63,4 +63,10 @@
     <color name="grey">#979796</color>
     <color name="badge_red">#FF3B30</color>
     <color name="scan_flash_white">#FFFFFFFF</color>
+
+    <!-- VIP screen -->
+    <color name="vip_gold">#FFD60A</color>
+    <color name="vip_gold_dark">#C99400</color>
+    <color name="vip_gray_free">#9BA0A6</color>
+    <color name="vip_gray_free_dark">#6B7075</color>
 </resources>

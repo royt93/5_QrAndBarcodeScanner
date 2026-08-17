@@ -22,6 +22,28 @@
 
     <style name="AppTheme" parent="BaseAppTheme" />
 
+    <!-- App theme chính là Theme.AppCompat (không phải Theme.Material3) — MaterialCardView/
+         Widget.Material3.Button.* (dùng trong a_vip_management.xml, mirror UI từ SDK reference demo
+         app/src/main/java/com/roy/admobwrapper/vip/) enforce cứng phải chạy trên MaterialComponents
+         theme trở lên (ThemeEnforcement.checkMaterialTheme), throw IllegalArgumentException nếu
+         không — và cần Material3 cụ thể (không chỉ MaterialComponents) để colorSurfaceContainerLow/
+         colorOnSurfaceVariant (dùng ở v_progress_dialog.xml) resolve được. Theme riêng cho
+         ActVipManagement (android:theme trong Manifest) — không đổi theme toàn app để tránh ảnh
+         hưởng các màn hình khác. -->
+    <style name="VipTheme" parent="Theme.Material3.Light.NoActionBar">
+        <item name="colorPrimary">@color/color_primary</item>
+        <item name="colorPrimaryDark">@color/color_primary_dark</item>
+        <item name="colorAccent">@color/color_accent</item>
+        <item name="android:colorBackground">@color/color_background</item>
+        <item name="android:textColor">@color/default_text_color</item>
+        <item name="android:textColorSecondary">@color/text_color_secondary</item>
+        <item name="android:statusBarColor">@color/transparent</item>
+        <item name="android:navigationBarColor">@color/navigation_bar_color</item>
+        <item name="alertDialogTheme">@style/AppAlertDialogTheme</item>
+        <item name="colorSurface">@color/dialog_background_color</item>
+        <item name="colorOnSurface">@color/default_text_color</item>
+    </style>
+
     <!-- Material You BottomSheet: 28dp top rounded corners, M3 standard -->
     <style name="BottomSheetM3" parent="Theme.MaterialComponents.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/BottomSheetM3Style</item>

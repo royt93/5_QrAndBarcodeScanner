@@ -2,10 +2,14 @@ package com.mckimquyen.barcodescanner
 
 import android.util.Log
 import androidx.multidex.MultiDexApplication
-import com.applovin.sdk.AppLovinSdk
 import com.mckimquyen.barcodescanner.di.settings
+import com.mckimquyen.barcodescanner.extension.ext.URL_POLICY_NOTION
+import com.mckimquyen.barcodescanner.feature.SplashActivity
 import com.roy.sdkadbmob.AdManager
+import com.roy.sdkadbmob.AdSafetyLimits
 import com.roy.sdkadbmob.AdSdkConfig
+import com.roy.sdkadbmob.ErrorReporter
+import com.roy.sdkadbmob.PaidEventListener
 import io.reactivex.rxjava3.plugins.RxJavaPlugins
 import com.mckimquyen.barcodescanner.usecase.Logger as UsecaseLogger
 
@@ -39,50 +43,57 @@ class RApp : MultiDexApplication() {
         handleUnhandledRxJavaErrors()
         applyTheme()
         super.onCreate()
-//        this.setupApplovinAd()
-        setupAdmob()
+        setupAds()
     }
 
-    private fun setupAdmob() {
+    private fun setupAds() {
+        // Provider: AdMob (BuildConfig.IS_ENABLE_ADMOB=true) — AppLovin vẫn set đủ ID để giữ song song
+        // làm phương án dự phòng/so sánh doanh thu (quyết định 2026-08-17, xem doc/AD.MD mục 5).
         val adConfig = AdSdkConfig(
-            isEnableAdmob = false,
+            isEnableAdmob = BuildConfig.IS_ENABLE_ADMOB,
             isDebug = BuildConfig.DEBUG,
-            admobBannerId = "",
-            admobInterstitialId = "",
-            admobAppOpenId = "",
-            applovinBannerId = BuildConfig.BANNER,
-            applovinInterstitialId = BuildConfig.INTER,
-            applovinAppOpenId = BuildConfig.APPOPEN
+
+            admobBannerId = BuildConfig.ADMOB_BANNER_ID,
+            admobInterstitialId = BuildConfig.ADMOB_INTERSTITIAL_ID,
+            admobAppOpenId = BuildConfig.ADMOB_APP_OPEN_ID,
+            admobRewardedId = BuildConfig.ADMOB_REWARDED_ID,
+
+            applovinSdkKey = BuildConfig.APPLOVIN_SDK_KEY,
+            applovinBannerId = BuildConfig.APPLOVIN_BANNER_ID,
+            applovinInterstitialId = BuildConfig.APPLOVIN_INTERSTITIAL_ID,
+            applovinAppOpenId = BuildConfig.APPLOVIN_APP_OPEN_ID,
+            applovinRewardedId = BuildConfig.APPLOVIN_REWARD_ID,
+            applovinPrivacyPolicyUrl = URL_POLICY_NOTION,
+            // applovinHasUserConsent: giữ null — flavor gms dùng UMP ở SplashActivity quyết định qua
+            // requestConsentInfoUpdate(), KHÔNG set cứng ở đây.
+
+            vipKeySecret = BuildConfig.VIP_KEY_SECRET,
+            vipTokenPublicKey = BuildConfig.VIP_TOKEN_PUBLIC_KEY,
+
+            appOpenExcludedActivities = listOf(SplashActivity::class.java),
+
+            safety = if (BuildConfig.DEBUG) AdSafetyLimits.TEST else AdSafetyLimits.UTILITY,
         )
 
         AdManager.setConfig(adConfig)
-        AdManager.earlyInit(this)
 
-        if (false) {
-            com.google.android.gms.ads.MobileAds.initialize(this) {
-                initAdManager(adConfig)
-            }
-        } else {
-            Log.d("RApp", "AppLovin mode, initializing AppLovinSdk")
-            val initConfig = com.applovin.sdk.AppLovinSdkInitializationConfiguration.builder(
-                BuildConfig.APPLOVIN_SDK_KEY,
-                this
-            )
-                .setMediationProvider(com.applovin.sdk.AppLovinMediationProvider.MAX)
-                .build()
-            AppLovinSdk.getInstance(this).initialize(initConfig) {
-                initAdManager(adConfig)
-            }
+        // 💰 paidEventListener PHẢI set ở Application.onCreate (KHÔNG set trong Activity) — SDK tự xoá
+        // listener khi Activity "chủ sở hữu" lúc set bị destroy.
+        AdManager.paidEventListener = PaidEventListener { adType, valueMicros, currency, precision, adSource ->
+            Log.d("AdsRevenue", "$adType $valueMicros $currency $precision $adSource")
         }
-    }
+        AdManager.errorReporter = ErrorReporter { throwable, _ ->
+            UsecaseLogger.log(throwable)
+        }
+        // setPendingVipTokenResultListener KHÔNG set ở đây — SDK gán "chủ sở hữu" listener theo
+        // currentActivity, mà ở Application.onCreate() chưa có Activity nào cả. ActVipManagement tự
+        // đăng ký/gỡ listener này trong onCreate()/onDestroy() của chính nó (xem class đó).
 
-    private fun initAdManager(adConfig: AdSdkConfig) {
-        AdManager.init(this@RApp, adConfig) { success, gaid ->
-            Log.d("RApp", "AdManager start success=$success, gaid=$gaid")
-            if (success) {
-                android.os.Handler(android.os.Looper.getMainLooper()).post {
-                    AdManager.registerAppOpenAdLifecycle(this@RApp)
-                }
+        AdManager.initialize(this) { success, gaid ->
+            Log.d("RApp", "AdManager initialize success=$success, gaid=$gaid")
+            if (BuildConfig.DEBUG) {
+                // ⚠️ THAY bằng GAID thật của máy dev/QA trước khi tự click ad test — xem doc/AD.MD mục 6.
+                // AdManager.setTestDeviceIds("GAID_MAY_DEV", "GAID_MAY_QA")
             }
         }
     }
