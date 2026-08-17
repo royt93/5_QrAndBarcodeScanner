@@ -13,6 +13,9 @@ out/
 
 # Gradle files
 .gradle
+
+# Kotlin compiler daemon session cache (machine-specific, ephemeral)
+.kotlin/
 gradle/wrapper/gradle.wrapper.jar
 build/
 gradlew*
