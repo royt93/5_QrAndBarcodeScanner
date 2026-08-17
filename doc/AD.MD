@@ -328,3 +328,59 @@ private key mẫu không phù hợp đưa vào app thật). Thêm dependency `nl
   code đã biết trước — Bước 7 + ad unit ID production — không phải thiếu sót của phần code).
 - Không trừ thêm: mọi bug tìm được (5 từ code review + 4 từ smoke test, gồm 1 lỗi bảo mật nghiêm trọng)
   đều đã fix và verify lại bằng build xanh + test lại trên máy thật, không chỉ sửa suông.
+
+---
+
+## 9. TOKEN THẬT — VERIFY END-TO-END + FIX BẢO MẬT KEYSTORE (2026-08-17)
+
+### 9.1 — Đúc + verify token VIP thật trên Pixel 7 Pro
+
+Dùng chính private key ECDSA đã sinh (mục 8), tự đúc 2 token thật (offline, openssl, không qua app —
+đối chiếu đúng format thật từ source `VipSecurity.signToken()`: `base64url(payload).base64url(chữ ký
+SHA256withECDSA)`, `payload="v2|<expiryMs>|*"` không bind thiết bị/app) — 1 token 3 ngày, 1 token 30
+ngày. Dán token 3 ngày vào app trên **Pixel 7 Pro** (S24 Ultra rớt kết nối USB giữa chừng, đổi máy) →
+kết quả:
+
+- ✅ Dialog "Thành công — Đã kích hoạt VIP thêm 3 ngày!"
+- ✅ Header chuyển gold active state đúng, badge "✦ VIP", crown trắng có glow, confetti thật (Konfetti)
+  bắn ra đúng lúc
+- ✅ Progress bar rỗng lúc vừa kích hoạt (elapsed semantic đúng), countdown "2d 23h 53m 25s" chạy đúng
+- ✅ Card "VIP 3 ngày" + ngày kích hoạt/hết hạn khớp chính xác phép tính (17/08 → 20/08)
+- ✅ "Thu hồi VIP" → dialog xác nhận → "Đã thu hồi VIP" → về đúng free state
+
+→ Xác nhận **toàn bộ chuỗi** (private key thật + format ký tay + `activateVipByToken` +
+`bindUi()`/countdown/progress/badge/confetti/haptic + `clearVipByKey`) hoạt động đúng 100% trên máy
+thật, không chỉ đường token-sai đã test ở mục 8. Token 30 ngày đã đúc nhưng chưa redeem (còn mới).
+Cả 2 token đã backup vào `myKeyStore` (mục 9.3).
+
+### 9.2 — Fix bảo mật: keystore + password bị track trong git
+
+Phát hiện khi chuẩn bị backup: `app/keystore.jks` **và** `gradle.properties` (chứa
+`RELEASE_STORE_PASSWORD`/`RELEASE_KEY_ALIAS`/`RELEASE_KEY_PASSWORD` dạng plaintext) đã bị commit vào
+git — repo app (`tplloi/QrAndBarcodeScanner`, giờ redirect `royt93/5_QrAndBarcodeScanner`) là **public**.
+`*.jks` đã có trong `.gitignore` nhưng file bị commit từ TRƯỚC khi rule đó tồn tại nên vẫn ở lại tracked.
+
+**Đã fix (theo lựa chọn "chỉ chặn lộ tiếp tục" của user)**:
+- `git rm --cached app/keystore.jks` — untrack, giữ file local, `*.jks` gitignore lo phần còn lại.
+- Dời `RELEASE_STORE_FILE`/`RELEASE_STORE_PASSWORD`/`RELEASE_KEY_ALIAS`/`RELEASE_KEY_PASSWORD` từ
+  `gradle.properties` (tracked) sang `local.properties` (gitignored).
+- `app/build.gradle` `signingConfigs.release` đọc qua `Properties()` loader (`localProps`, tái dùng
+  loader đã thêm cho VIP secret) thay vì `project.property(...)`.
+- Verify `assembleProductionRelease` vẫn build + ký APK bình thường sau khi đổi nguồn đọc credential.
+- Commit `ab55f56`, đã push lên `dev`.
+
+⚠️ **Chưa fix**: keystore + password CŨ vẫn còn trong git history public (commit cũ), ai đã clone/xem
+history trước đó vẫn lấy được. User đã chọn KHÔNG purge history/rotate password ở vòng này (biết rủi
+ro, chấp nhận vì đã có backup riêng) — có thể quay lại xử lý sau nếu cần.
+
+### 9.3 — Backup vào `github.com/royt93/myKeyStore` (private repo, đã verify trước khi push)
+
+Folder `com.mckimquyen.barcodescanner/` (theo đúng convention sẵn có của user, xem
+`com.galaxyjoy.hexviewer/` cùng repo):
+- `keystore.jks` + `keystore.properties` (store/key password, alias)
+- `vip.properties` — VIP secret, public key, **private key** (bản duy nhất), và 2 token mẫu (3 ngày +
+  30 ngày) kèm ghi chú token 3 ngày đã redeem trên Pixel 7 Pro (còn dùng lại được trên máy/app-install
+  khác vì chống-replay là per-device, không phải server-side).
+
+Commit `9503d38`/`ffe4c4c` (cũ, hexviewer) + `00bff4e` (keystore mới) + `bf1d0cb` (token mẫu) — đã push
+lên `main`.
