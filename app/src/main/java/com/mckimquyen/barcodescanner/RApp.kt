@@ -91,23 +91,26 @@ class RApp : MultiDexApplication() {
 
         AdManager.initialize(this) { success, gaid ->
             Log.d("RApp", "AdManager initialize success=$success, gaid=$gaid")
-            if (BuildConfig.DEBUG) {
-                // ⚠️ THAY bằng GAID thật của máy dev/QA trước khi tự click ad test — xem doc/AD.MD mục 6.
-                // AdManager.setTestDeviceIds("GAID_MAY_DEV", "GAID_MAY_QA")
-            }
         }
 
-        // TEMP TEST ONLY — GAID máy Pixel 7 Pro đổi (nghi do reset Advertising ID), không còn khớp
-        // Test Device cũ trên AdMob Console → round test release vừa rồi vô tình request ad THẬT.
-        // Đăng ký tạm qua code để test release an toàn tiếp. REVERT trước khi commit.
-        // setTestDeviceIds() gọi thẳng RequestConfiguration.Builder().setTestDeviceIds() gốc của
-        // Google — API này cần HASH (chuỗi logcat gợi ý "Use ...setTestDeviceIds(...)"), KHÔNG phải
-        // GAID dạng UUID thô. Thêm cả hash đã biết lẫn nguyên list GAID thô team dùng (từ AdMob
-        // Console Test devices) để verify thực tế cái nào có tác dụng — dòng không khớp sẽ tự bị
-        // Google SDK bỏ qua, không lỗi gì.
+        // Test Device cho build release (ID thật, luôn cần lưới an toàn code-level — debug đã dùng
+        // Google test ad unit ID nên không cần list này). setTestDeviceIds() gọi thẳng
+        // RequestConfiguration.Builder().setTestDeviceIds() gốc của Google — API này chỉ nhận đúng
+        // HASH (dòng logcat "Use RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList(\"...\"))
+        // to get test ads on this device" khi chạy app thật trên máy đó), KHÔNG phải GAID dạng UUID
+        // thô như AdMob Console "Test devices" hiển thị (Console dùng cho Ad Inspector từ xa — KHÔNG
+        // đảm bảo gắn nhãn Test Ad cho request, đã verify thực tế 2026-08-17: máy có GAID trong
+        // Console list vẫn nhận được ad thật cho tới khi thêm đúng hash này qua code).
+        //
+        // ⚠️ CHỈ dòng hash bên dưới đã VERIFY THẬT hoạt động (Pixel 7 Pro, test release 2026-08-17).
+        // 29 dòng GAID thô còn lại (copy từ AdMob Console Test devices, team dùng chung nhiều
+        // project) CHƯA CHẮC có tác dụng cho lưới an toàn Test Ad — giữ lại làm tham chiếu/để dễ
+        // thêm hash đúng khi có, KHÔNG được coi là các máy đó đã an toàn. Muốn 1 máy nào an toàn
+        // thật: cầm đúng máy đó chạy app release này 1 lần, copy dòng hash trong logcat (tag "Ads")
+        // dán đè/thêm vào đây.
         AdManager.setTestDeviceIds(
-            "AB9BC2BCC2E8EC070391DCDD728275A6", // hash Pixel 7 Pro, lấy từ logcat round test vừa rồi
-            "ace2a4fc-bec9-4271-a744-9f10b25f86f9",
+            "AB9BC2BCC2E8EC070391DCDD728275A6", // hash Pixel 7 Pro — ĐÃ VERIFY hoạt động thật
+            "ace2a4fc-bec9-4271-a744-9f10b25f86f9", // chưa verify (raw GAID, có thể không tác dụng)
             "6db38c1e-03cf-43f5-bcc7-61e474e16a74",
             "04b5ae54-8943-472a-bd6c-27774e9d4bf2",
             "34986618-096D-4B6B-86CD-45E30E904686",
