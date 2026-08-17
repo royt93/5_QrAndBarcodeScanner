@@ -74,11 +74,32 @@
             android:background="?selectableItemBackgroundBorderless"
             android:clickable="true"
             android:focusable="true">
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/imageViewBatchScan"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                app:srcCompat="@drawable/ic_scan_white" />
+
+            <FrameLayout
+                android:layout_width="32dp"
+                android:layout_height="32dp">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/imageViewBatchScan"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    app:srcCompat="@drawable/ic_scan_white" />
+
+                <TextView
+                    android:id="@+id/textViewBatchCount"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_gravity="top|end"
+                    android:background="@drawable/shape_background_circle"
+                    android:backgroundTint="@color/badge_red"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="8sp"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+            </FrameLayout>
+
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/textViewBatchScan"
                 android:layout_width="wrap_content"
@@ -196,5 +217,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/buttonDecreaseZoom"
         app:srcCompat="@drawable/ic_plus" />
+
+    <!-- Flash overlay for batch scan success feedback -->
+    <View
+        android:id="@+id/viewScanFlash"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:alpha="0"
+        android:background="@color/scan_flash_white"
+        android:clickable="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

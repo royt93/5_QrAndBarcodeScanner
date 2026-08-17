@@ -19,6 +19,8 @@ import com.budiyev.android.codescanner.CodeScanner
 import com.budiyev.android.codescanner.DecodeCallback
 import com.budiyev.android.codescanner.ErrorCallback
 import com.budiyev.android.codescanner.ScanMode
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.google.zxing.Result
 import com.google.zxing.ResultMetadataType
 import com.mckimquyen.barcodescanner.R
@@ -64,6 +66,9 @@ class FragmentScanBarcodeFromCamera : Fragment(), DialogFragmentConfirmBarcode.L
     }
 
     private val vibrationPattern = arrayOf<Long>(0, 350).toLongArray()
+
+    // Double pulse so batch-scan haptics feel distinct from a single scan
+    private val batchVibrationPattern = arrayOf<Long>(0, 80, 80, 80).toLongArray()
     private val disposable = CompositeDisposable()
     private var maxZoom: Int = 0
     private val zoomStep = 5
@@ -212,6 +217,7 @@ class FragmentScanBarcodeFromCamera : Fragment(), DialogFragmentConfirmBarcode.L
     }
 
     private fun updateBatchScanVisual() {
+        updateBatchCountBadge()
         if (isBatchScanMode) {
             // ON: blue pill background + white tint on icon
             binding.layoutBatchScanContainer.setBackgroundResource(R.drawable.bg_batch_scan_active)
@@ -262,8 +268,66 @@ class FragmentScanBarcodeFromCamera : Fragment(), DialogFragmentConfirmBarcode.L
         binding.layoutBatchListPanel.setOnClickListener { triggerExport() }
     }
 
+    private fun updateBatchCountBadge() {
+        val count = batchList.size
+        if (!isBatchScanMode || count == 0) {
+            binding.textViewBatchCount.visibility = View.GONE
+        } else {
+            binding.textViewBatchCount.visibility = View.VISIBLE
+            binding.textViewBatchCount.text = if (count > 99) "99+" else count.toString()
+        }
+    }
+
+    private fun triggerBatchScanFeedback(text: String) {
+        updateBatchCountBadge()
+
+        // Badge pulse
+        binding.textViewBatchCount.animate()
+            .scaleX(1.5f).scaleY(1.5f).setDuration(80)
+            .withEndAction {
+                binding.textViewBatchCount.animate().scaleX(1f).scaleY(1f).setDuration(100).start()
+            }.start()
+
+        // Screen flash
+        binding.viewScanFlash.animate().cancel()
+        binding.viewScanFlash.alpha = 0f
+        binding.viewScanFlash.animate()
+            .alpha(0.55f).setDuration(70)
+            .withEndAction {
+                binding.viewScanFlash.animate().alpha(0f).setDuration(130).start()
+            }.start()
+
+        // Snackbar with Undo
+        val shortText = if (text.length > 40) text.take(37) + "…" else text
+        Snackbar.make(binding.root, getString(R.string.batch_scan_added, shortText), 3000)
+            .setAction(R.string.action_undo) {
+                if (batchList.isNotEmpty()) {
+                    batchList.removeAt(0)
+                    batchAdapter.notifyItemRemoved(0)
+                    if (batchList.isEmpty()) {
+                        binding.layoutBatchListPanel.isVisible = false
+                    }
+                    updateBatchCountBadge()
+                    Log.d(TAG, "triggerBatchScanFeedback: undo last scan, count=${batchList.size}")
+                }
+            }.show()
+    }
+
     private fun triggerExport() {
         if (batchList.isEmpty()) return
+        if (batchList.size < 2) {
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle(R.string.batch_scan_min_warning_title)
+                .setMessage(R.string.batch_scan_min_warning_message)
+                .setNegativeButton(android.R.string.cancel, null)
+                .setPositiveButton(R.string.action_export) { _, _ -> doExport() }
+                .show()
+            return
+        }
+        doExport()
+    }
+
+    private fun doExport() {
         val snapshot = batchList.toList() // take a snapshot before clearing
         val fileName = "Batch_Scan_${System.currentTimeMillis()}"
         val exportList = snapshot.map { com.mckimquyen.barcodescanner.model.ExportBarcode(it.date, it.format, it.text) }
@@ -389,7 +453,8 @@ class FragmentScanBarcodeFromCamera : Fragment(), DialogFragmentConfirmBarcode.L
         if (settings.vibrate) {
             activity?.apply {
                 runOnUiThread {
-                    applicationContext.vibrator?.vibrateOnce(vibrationPattern)
+                    val pattern = if (isBatchScanMode) batchVibrationPattern else vibrationPattern
+                    applicationContext.vibrator?.vibrateOnce(pattern)
                 }
             }
         }
@@ -409,11 +474,11 @@ class FragmentScanBarcodeFromCamera : Fragment(), DialogFragmentConfirmBarcode.L
                     batchAdapter.notifyItemInserted(0)
                     binding.recyclerViewBatch.scrollToPosition(0)
                     Log.d(TAG, "saveScannedBarcode [BATCH]: added '${barcode.text}', total=${batchList.size}")
-                    // Show panel on very first successful scan
                     if (!binding.layoutBatchListPanel.isVisible) {
                         binding.layoutBatchListPanel.isVisible = true
                         Log.d(TAG, "saveScannedBarcode [BATCH]: revealing panel on first scan")
                     }
+                    triggerBatchScanFeedback(barcode.text)
                 } else {
                     Log.d(TAG, "saveScannedBarcode [BATCH]: duplicate skipped '${barcode.text}'")
                 }

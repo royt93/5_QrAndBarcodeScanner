@@ -1,5 +1,7 @@
 package com.mckimquyen.barcodescanner.feature.tabs.create.qr
 
+import com.mckimquyen.barcodescanner.feature.startActivitySlideRight
+
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -17,7 +19,7 @@ class ActivityCreateQrCodeAll : ActivityBase() {
 
         fun start(context: Context) {
             val intent = Intent(context, ActivityCreateQrCodeAll::class.java)
-            context.startActivity(intent)
+            context.startActivitySlideRight(intent)
         }
     }
 

@@ -50,4 +50,5 @@ Override `onBackPressed()` trong `ActivityBase` để thêm exit transition.
 
 ## Test
 
-Xem `doc/test/animation_test_cases.md` — Section 5.
+- Animation gaps: `doc/test/animation_test_cases.md` — Section 5
+- Full test plan: `doc/test/test_activity_transitions.md`

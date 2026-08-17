@@ -27,6 +27,10 @@ cơ bản.
 - `feature/barcode/QrRenderer.kt` — mới (ZXing BitMatrix → custom Canvas render)
 - `layout/f_qr_customizer.xml` — mới
 
+## Test
+
+Xem `doc/test/test_qr_customization.md`
+
 ## Note
 
 Cần giữ QR readable: test scan lại sau khi thêm màu/logo. Error correction H là bắt buộc khi có logo.

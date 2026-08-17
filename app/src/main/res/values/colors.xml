@@ -61,4 +61,6 @@
     <color name="red">#FB2A2D</color>
     <color name="orange">#FF9700</color>
     <color name="grey">#979796</color>
+    <color name="badge_red">#FF3B30</color>
+    <color name="scan_flash_white">#FFFFFFFF</color>
 </resources>

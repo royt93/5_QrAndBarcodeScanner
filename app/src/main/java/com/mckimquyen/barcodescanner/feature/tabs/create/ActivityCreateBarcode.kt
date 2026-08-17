@@ -22,6 +22,7 @@ import com.mckimquyen.barcodescanner.extension.showError
 import com.mckimquyen.barcodescanner.extension.toStringId
 import com.mckimquyen.barcodescanner.extension.unsafeLazy
 import com.mckimquyen.barcodescanner.feature.ActivityBase
+import com.mckimquyen.barcodescanner.feature.startActivitySlideRight
 import com.mckimquyen.barcodescanner.feature.barcode.ActivityBarcode
 import com.mckimquyen.barcodescanner.feature.tabs.create.barcode.FragmentCreateAztec
 import com.mckimquyen.barcodescanner.feature.tabs.create.barcode.FragmentCreateCodabar

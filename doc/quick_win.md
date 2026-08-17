@@ -25,11 +25,12 @@
 
 ---
 
-### 4. 🟡 Animation đồng bộ giữa các màn hình
+### 4. ✅ Animation đồng bộ giữa các màn hình
 
-- **Trạng thái:** Đang thiếu
-- **Chi tiết:** Chỉ có Splash→Main dùng `fade_in/fade_out`. Các Activity transition khác không có animation. Cần bổ sung
-  `overridePendingTransition` hoặc Activity transition API.
+- **Trạng thái:** Hoàn thành (2026-06-22)
+- **Chi tiết:** 6 anim XML mới (slide right/left/up/down). `ActivityBase.finish()` → slide-left back.
+  `ActivityBarcode` + `ActivityBatchExportResult` → slide-down (modal). 14 `start()` companion methods cập nhật. Build
+  verified ✅
 - **Xem thêm:** `doc/test/animation_test_cases.md`
 
 ---

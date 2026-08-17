@@ -12,6 +12,7 @@ import com.mckimquyen.barcodescanner.extension.applySystemWindowInsets
 import com.mckimquyen.barcodescanner.extension.toStringId
 import com.mckimquyen.barcodescanner.extension.unsafeLazy
 import com.mckimquyen.barcodescanner.feature.ActivityBase
+import com.mckimquyen.barcodescanner.feature.startActivitySlideRight
 import com.mckimquyen.barcodescanner.model.Barcode
 import com.mckimquyen.barcodescanner.usecase.Logger
 import java.text.SimpleDateFormat
@@ -27,7 +28,7 @@ class ActivityBarcodeImage : ActivityBase() {
         fun start(context: Context, barcode: Barcode) {
             val intent = Intent(context, ActivityBarcodeImage::class.java)
             intent.putExtra(BARCODE_KEY, barcode)
-            context.startActivity(intent)
+            context.startActivitySlideRight(intent)
         }
     }
 

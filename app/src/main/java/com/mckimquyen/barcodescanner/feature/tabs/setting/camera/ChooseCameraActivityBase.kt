@@ -7,6 +7,7 @@ import com.mckimquyen.barcodescanner.databinding.AChooseCameraBinding
 import com.mckimquyen.barcodescanner.di.settings
 import com.mckimquyen.barcodescanner.extension.applySystemWindowInsets
 import com.mckimquyen.barcodescanner.feature.ActivityBase
+import com.mckimquyen.barcodescanner.feature.startActivitySlideRight
 
 class ChooseCameraActivityBase : ActivityBase() {
     private lateinit var binding: AChooseCameraBinding
@@ -15,7 +16,7 @@ class ChooseCameraActivityBase : ActivityBase() {
     companion object {
         fun start(context: Context) {
             val intent = Intent(context, ChooseCameraActivityBase::class.java)
-            context.startActivity(intent)
+            context.startActivitySlideRight(intent)
         }
     }
 

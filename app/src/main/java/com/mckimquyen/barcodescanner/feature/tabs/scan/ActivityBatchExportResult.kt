@@ -17,6 +17,7 @@ import androidx.core.content.FileProvider
 import com.mckimquyen.barcodescanner.BuildConfig
 import com.mckimquyen.barcodescanner.R
 import com.mckimquyen.barcodescanner.feature.ActivityBase
+import com.mckimquyen.barcodescanner.feature.startActivitySlideUp
 import com.mckimquyen.barcodescanner.feature.tabs.ActivityBottomTabs
 import java.io.File
 
@@ -33,9 +34,11 @@ class ActivityBatchExportResult : ActivityBase() {
                 putExtra(EXTRA_ITEM_COUNT, itemCount)
                 putExtra(EXTRA_FILE_NAME, fileName)
             }
-            context.startActivity(intent)
+            context.startActivitySlideUp(intent)
         }
     }
+
+    override val exitTransition = 0 to R.anim.slide_out_down
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

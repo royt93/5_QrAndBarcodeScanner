@@ -38,6 +38,10 @@ quyền** — hầu hết app quét QR free trên thị trường đều auto-op
 - `feature/barcode/ActivityBarcode.kt` — thêm intercept URL action
 - `layout/bs_url_safety.xml` — mới
 
+## Test
+
+Xem `doc/test/test_smart_security_shield.md`
+
 ## Whitelist domain sẵn có (gợi ý)
 
 ```

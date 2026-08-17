@@ -1,5 +1,7 @@
 package com.mckimquyen.barcodescanner.feature.tabs.setting.formats
 
+import com.mckimquyen.barcodescanner.feature.startActivitySlideRight
+
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -19,7 +21,7 @@ class SupportedFormatsActivityBase : ActivityBase(), FormatsAdapter.Listener {
     companion object {
         fun start(context: Context) {
             val intent = Intent(context, SupportedFormatsActivityBase::class.java)
-            context.startActivity(intent)
+            context.startActivitySlideRight(intent)
         }
     }
 

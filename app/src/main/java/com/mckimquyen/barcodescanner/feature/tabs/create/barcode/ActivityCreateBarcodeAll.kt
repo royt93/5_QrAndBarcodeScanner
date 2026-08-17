@@ -7,6 +7,7 @@ import com.google.zxing.BarcodeFormat
 import com.mckimquyen.barcodescanner.databinding.ACreateBarcodeAllBinding
 import com.mckimquyen.barcodescanner.extension.applySystemWindowInsets
 import com.mckimquyen.barcodescanner.feature.ActivityBase
+import com.mckimquyen.barcodescanner.feature.startActivitySlideRight
 import com.mckimquyen.barcodescanner.feature.tabs.create.ActivityCreateBarcode
 
 class ActivityCreateBarcodeAll : ActivityBase() {
@@ -16,7 +17,7 @@ class ActivityCreateBarcodeAll : ActivityBase() {
 
         fun start(context: Context) {
             val intent = Intent(context, ActivityCreateBarcodeAll::class.java)
-            context.startActivity(intent)
+            context.startActivitySlideRight(intent)
         }
     }
 

@@ -2,6 +2,7 @@ package com.mckimquyen.barcodescanner.feature
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
@@ -13,6 +14,7 @@ import com.google.android.play.core.review.ReviewException
 import com.google.android.play.core.review.ReviewInfo
 import com.google.android.play.core.review.ReviewManagerFactory
 import com.google.android.play.core.review.model.ReviewErrorCode
+import com.mckimquyen.barcodescanner.R
 import com.mckimquyen.barcodescanner.di.rotationHelper
 import com.mckimquyen.barcodescanner.usecase.LocaleHelper
 import java.util.Calendar
@@ -38,6 +40,15 @@ abstract class ActivityBase : AppCompatActivity() {
         override.fontScale = 1.0f
         applyOverrideConfiguration(override)
         super.attachBaseContext(localeContext)
+    }
+
+    // Override to customize the finish() transition (default: slide-out-right)
+    open val exitTransition: Pair<Int, Int> = R.anim.slide_in_left to R.anim.slide_out_right
+
+    override fun finish() {
+        super.finish()
+        val (enterAnim, exitAnim) = exitTransition
+        overridePendingTransition(enterAnim, exitAnim)
     }
 
     override fun onResume() {
@@ -70,6 +81,17 @@ abstract class ActivityBase : AppCompatActivity() {
             }
         }
     }
+}
+
+fun Context.startActivitySlideRight(intent: Intent) {
+    startActivity(intent)
+    (this as? Activity)?.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+}
+
+fun Context.startActivitySlideUp(intent: Intent) {
+    startActivity(intent)
+    // enterAnim=0: old screen stays in place (modal style); new screen slides up over it
+    (this as? Activity)?.overridePendingTransition(R.anim.slide_in_up, 0)
 }
 
 //rateAppInApp(BuildConfig.DEBUG)

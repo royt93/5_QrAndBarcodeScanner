@@ -1,5 +1,7 @@
 package com.mckimquyen.barcodescanner.feature.tabs.setting.permissions
 
+import com.mckimquyen.barcodescanner.feature.startActivitySlideRight
+
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -14,7 +16,7 @@ class AllPermissionsActivityBase : ActivityBase() {
     companion object {
         fun start(context: Context) {
             val intent = Intent(context, AllPermissionsActivityBase::class.java)
-            context.startActivity(intent)
+            context.startActivitySlideRight(intent)
         }
     }
 

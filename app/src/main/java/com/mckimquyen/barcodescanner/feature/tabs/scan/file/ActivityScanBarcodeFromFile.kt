@@ -1,5 +1,7 @@
 package com.mckimquyen.barcodescanner.feature.tabs.scan.file
 
+import com.mckimquyen.barcodescanner.feature.startActivitySlideRight
+
 import android.Manifest
 import android.content.Context
 import android.content.Intent
@@ -50,7 +52,7 @@ class ActivityScanBarcodeFromFile : ActivityBase() {
 
         fun start(context: Context) {
             val intent = Intent(context, ActivityScanBarcodeFromFile::class.java)
-            context.startActivity(intent)
+            context.startActivitySlideRight(intent)
         }
     }
 

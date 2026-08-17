@@ -1,5 +1,7 @@
 package com.mckimquyen.barcodescanner.feature.tabs.setting.theme
 
+import com.mckimquyen.barcodescanner.feature.startActivitySlideRight
+
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -18,7 +20,7 @@ class ChooseThemeActivityBase : ActivityBase() {
     companion object {
         fun start(context: Context) {
             val intent = Intent(context, ChooseThemeActivityBase::class.java)
-            context.startActivity(intent)
+            context.startActivitySlideRight(intent)
         }
     }
 

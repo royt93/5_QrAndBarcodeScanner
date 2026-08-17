@@ -31,6 +31,7 @@ import com.mckimquyen.barcodescanner.extension.toPhoneType
 import com.mckimquyen.barcodescanner.extension.toStringId
 import com.mckimquyen.barcodescanner.extension.unsafeLazy
 import com.mckimquyen.barcodescanner.feature.ActivityBase
+import com.mckimquyen.barcodescanner.feature.startActivitySlideUp
 import com.mckimquyen.barcodescanner.feature.barcode.otp.ActivityOtp
 import com.mckimquyen.barcodescanner.feature.barcode.save.ActivitySaveBarcodeAsImage
 import com.mckimquyen.barcodescanner.feature.barcode.save.ActivitySaveBarcodeAsText
@@ -67,7 +68,7 @@ class ActivityBarcode : ActivityBase(), DialogFragmentDeleteConfirmation.Listene
                 putExtra(BARCODE_KEY, barcode)
                 putExtra(IS_CREATED, isCreated)
             }
-            context.startActivity(intent)
+            context.startActivitySlideUp(intent)
         }
     }
 
@@ -92,6 +93,8 @@ class ActivityBarcode : ActivityBase(), DialogFragmentDeleteConfirmation.Listene
 
     private var originalBrightness: Float = 0.5f
 
+
+    override val exitTransition = 0 to R.anim.slide_out_down
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

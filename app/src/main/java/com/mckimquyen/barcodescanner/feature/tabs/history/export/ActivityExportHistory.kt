@@ -1,5 +1,7 @@
 package com.mckimquyen.barcodescanner.feature.tabs.history.export
 
+import com.mckimquyen.barcodescanner.feature.startActivitySlideRight
+
 import android.Manifest
 import android.content.Context
 import android.content.Intent
@@ -34,7 +36,7 @@ class ActivityExportHistory : ActivityBase() {
 
         fun start(context: Context) {
             val intent = Intent(context, ActivityExportHistory::class.java)
-            context.startActivity(intent)
+            context.startActivitySlideRight(intent)
         }
     }
 
