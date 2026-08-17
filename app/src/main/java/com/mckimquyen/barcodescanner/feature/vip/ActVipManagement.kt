@@ -85,6 +85,20 @@ class ActVipManagement : ActivityBase() {
             val intent = Intent(context, ActVipManagement::class.java)
             context.startActivitySlideRight(intent)
         }
+
+        /**
+         * 3 mốc trên timeline ngang [grantedAt --- expiresAt]: start=grantedAt (0%), end=expiresAt
+         * (100%), current=now (vị trí fill). Bar RỖNG lúc vừa kích hoạt, ĐẦY DẦN đến lúc hết hạn.
+         * `internal` + companion (không phụ thuộc instance) để unit test trực tiếp không cần
+         * Android runtime — xem ComputeElapsedProgressTest.
+         */
+        @androidx.annotation.VisibleForTesting
+        internal fun computeElapsedProgress(grantedAtMs: Long, expiresAtMs: Long, nowMs: Long): Int {
+            val total = expiresAtMs - grantedAtMs
+            if (total <= 0L) return 100
+            val elapsed = nowMs - grantedAtMs
+            return ((elapsed.toDouble() / total.toDouble()) * 100.0).toInt().coerceIn(0, 100)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -378,17 +392,6 @@ class ActVipManagement : ActivityBase() {
 
             countDownTimer?.cancel(); countDownTimer = null
         }
-    }
-
-    /**
-     * 3 mốc trên timeline ngang [grantedAt --- expiresAt]: start=grantedAt (0%), end=expiresAt
-     * (100%), current=now (vị trí fill). Bar RỖNG lúc vừa kích hoạt, ĐẦY DẦN đến lúc hết hạn.
-     */
-    private fun computeElapsedProgress(grantedAtMs: Long, expiresAtMs: Long, nowMs: Long): Int {
-        val total = expiresAtMs - grantedAtMs
-        if (total <= 0L) return 100
-        val elapsed = nowMs - grantedAtMs
-        return ((elapsed.toDouble() / total.toDouble()) * 100.0).toInt().coerceIn(0, 100)
     }
 
     private fun startCountdown(grantedAtMs: Long, expiryMs: Long) {

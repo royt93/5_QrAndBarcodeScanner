@@ -384,3 +384,35 @@ Folder `com.mckimquyen.barcodescanner/` (theo đúng convention sẵn có của 
 
 Commit `9503d38`/`ffe4c4c` (cũ, hexviewer) + `00bff4e` (keystore mới) + `bf1d0cb` (token mẫu) — đã push
 lên `main`.
+
+## 10. AUTOMATED TEST CHO VIP FLOW (2026-08-17)
+
+Trước đó tính năng VIP (~800 dòng mới) chỉ được verify tay trên máy thật, 0% test coverage. Đã thêm:
+
+- **`ComputeElapsedProgressTest.kt`** (`app/src/test`, unit test JVM thuần) — 6 case cho công thức
+  progress bar (`ActVipManagement.computeElapsedProgress`, dời sang `companion object` +
+  `@VisibleForTesting internal` để test được không cần Android runtime): 0% lúc kích hoạt, 100% lúc
+  hết hạn, 50% giữa chừng, clamp 100% khi `now` vượt hạn, clamp 0% khi lệch giờ về trước
+  `grantedAt`, và case `total <= 0` (tránh chia 0). **6/6 PASS**.
+- **`VipPrefsTest.kt`** (`app/src/androidTest`) — `userRedeemedAtLeastOnce()` mặc định `false`,
+  `markUserRedeemed()` persist đúng qua instance mới.
+- **`ActVipManagementTest.kt`** (`app/src/androidTest`, Espresso) — free-user hiện đúng state +
+  nút Kích hoạt disabled khi field rỗng; gõ token bật nút; dán token rác + bấm Kích hoạt không crash
+  (chỉ assert không crash qua `Lifecycle.State`, KHÔNG assert dialog cụ thể để tránh flaky theo
+  timing CI — luồng activate thật đã verify tay ở mục 9.1).
+
+Đã chạy thật trên **Pixel 7 Pro**: `connectedProductionDebugAndroidTest` — **5/5 PASS** (lần đầu 2/5
+fail `RootViewWithoutFocusException` do cold-start device, retry ngay sau đó xanh hết — quirk quen
+thuộc của Espresso lúc device vừa cài APK test, không phải bug code).
+
+Build lại đủ 4 variant + `testDevDebugUnitTest`/`testProductionDebugUnitTest` sau khi thêm test — xanh
+hết.
+
+## 11. DARK MODE — XÁC NHẬN CỐ Ý, KHÔNG PHẢI BUG
+
+Màn VIP dùng bảng màu cream/gold hardcode hex (giống 100% bản gốc SDK reference), **không** đổi theo
+`values-night` như phần còn lại của app. Đã bật dark mode thật trên Pixel 7 Pro để kiểm tra: màn
+Settings/toàn app chuyển tối đúng, riêng màn VIP giữ nguyên giao diện sáng — không có chữ bị mất
+contrast, không clash màu, chỉ đơn giản là "không đổi theo theme". Đây là lựa chọn thiết kế cố ý (mirror
+đúng bản gốc SDK) — không sửa, không coi là bug, trừ khi user muốn tự làm bộ màu dark riêng sau này
+(sẽ lệch thiết kế gốc).
