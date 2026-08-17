@@ -82,13 +82,15 @@ android {
             buildConfigField "String", "APPLOVIN_APP_OPEN_ID", "\"5baea98f19f13cf2\""
             buildConfigField "String", "APPLOVIN_REWARD_ID", "\"260b02ff9724a4ec\""
 
-            // Production AdMob ad unit IDs (doc/ad/id.MD)
-            buildConfigField "String", "ADMOB_BANNER_ID", "\"ca-app-pub-3004713799155145/6248551408\""
-            buildConfigField "String", "ADMOB_INTERSTITIAL_ID", "\"ca-app-pub-3004713799155145/1211847149\""
-            buildConfigField "String", "ADMOB_APP_OPEN_ID", "\"ca-app-pub-3004713799155145/3071723726\""
-            buildConfigField "String", "ADMOB_REWARDED_ID", "\"ca-app-pub-3004713799155145/1020275459\""
-            // Chưa wire vào wrapper — lib AdmobApplovinWrapper 1.6.16 không hỗ trợ native ad format.
-            buildConfigField "String", "ADMOB_NATIVE_ID", "\"ca-app-pub-3004713799155145/8683143050\""
+            // Google official TEST ad unit IDs — KHÔNG dùng ID thật ở debug (code-review finding
+            // 2026-08-17): debug không có lưới an toàn nào chặn click ad thật ngoài đăng ký thủ công
+            // Test Device trên AdMob Console (dễ quên, không tự bảo vệ máy dev/QA mới). Google test
+            // ID luôn an toàn 100% bất kể máy nào, không cần đăng ký gì thêm.
+            buildConfigField "String", "ADMOB_BANNER_ID", "\"ca-app-pub-3940256099942544/6300978111\""
+            buildConfigField "String", "ADMOB_INTERSTITIAL_ID", "\"ca-app-pub-3940256099942544/1033173712\""
+            buildConfigField "String", "ADMOB_APP_OPEN_ID", "\"ca-app-pub-3940256099942544/9257395921\""
+            buildConfigField "String", "ADMOB_REWARDED_ID", "\"ca-app-pub-3940256099942544/5224354917\""
+            buildConfigField "String", "ADMOB_NATIVE_ID", "\"ca-app-pub-3940256099942544/2247696110\""
 
             buildConfigField "String", "VIP_KEY_SECRET", "\"${localProps.getProperty('VIP_KEY_SECRET', '')}\""
             buildConfigField "String", "VIP_TOKEN_PUBLIC_KEY", "\"${localProps.getProperty('VIP_TOKEN_PUBLIC_KEY', '')}\""
