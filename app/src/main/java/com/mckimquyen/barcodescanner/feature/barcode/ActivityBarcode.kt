@@ -38,12 +38,14 @@ import com.mckimquyen.barcodescanner.feature.barcode.save.ActivitySaveBarcodeAsT
 import com.mckimquyen.barcodescanner.feature.common.dlg.DialogFragmentChooseSearchEngine
 import com.mckimquyen.barcodescanner.feature.common.dlg.DialogFragmentDeleteConfirmation
 import com.mckimquyen.barcodescanner.feature.common.dlg.DialogFragmentEditBarcodeName
+import com.mckimquyen.barcodescanner.feature.common.dlg.DialogFragmentSecurityAlert
 import com.mckimquyen.barcodescanner.model.Barcode
 import com.mckimquyen.barcodescanner.model.ParsedBarcode
 import com.mckimquyen.barcodescanner.model.SearchEngine
 import com.mckimquyen.barcodescanner.model.schema.BarcodeSchema
 import com.mckimquyen.barcodescanner.model.schema.OtpAuth
 import com.mckimquyen.barcodescanner.usecase.Logger
+import com.mckimquyen.barcodescanner.usecase.UrlSafetyChecker
 import com.mckimquyen.barcodescanner.usecase.save
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
@@ -543,28 +545,11 @@ class ActivityBarcode : ActivityBase(), DialogFragmentDeleteConfirmation.Listene
         val url = barcode.url.orEmpty()
         if (url.isBlank()) return
 
-        val safeDomains = listOf(
-            "google.com",
-            "facebook.com",
-            "youtube.com",
-            "vnexpress.net",
-            "github.com",
-            "amazon.com",
-            "apple.com"
-        )
-        var isSafe = false
-        for (domain in safeDomains) {
-            if (url.contains(domain, ignoreCase = true)) {
-                isSafe = true
-                break
-            }
-        }
-
-        if (!isSafe) {
-            val dialog = com.mckimquyen.barcodescanner.feature.common.dlg.DialogFragmentSecurityAlert.newInstance(url)
-            dialog.show(supportFragmentManager, "SecurityAlert")
-        } else {
+        if (UrlSafetyChecker.isDomainSafe(url)) {
             startActivityIfExists(Intent.ACTION_VIEW, url)
+        } else {
+            val dialog = DialogFragmentSecurityAlert.newInstance(url)
+            dialog.show(supportFragmentManager, "SecurityAlert")
         }
     }
 
@@ -761,6 +746,20 @@ class ActivityBarcode : ActivityBase(), DialogFragmentDeleteConfirmation.Listene
             barcode.text
         } else {
             barcode.formattedText
+        }
+        applyLinkStyleIfNeeded()
+    }
+
+    // Route text taps through openLink()'s UrlSafetyChecker gate instead of android:autoLink,
+    // which fires Intent.ACTION_VIEW directly and bypasses the security check entirely.
+    private fun applyLinkStyleIfNeeded() {
+        val isLinkSchema = barcode.schema == BarcodeSchema.URL || barcode.schema == BarcodeSchema.NZCOVIDTRACER
+        if (isLinkSchema.not() || barcode.url.isNullOrBlank()) return
+
+        binding.textViewBarcodeText.apply {
+            paintFlags = paintFlags or android.graphics.Paint.UNDERLINE_TEXT_FLAG
+            setTextColor(ContextCompat.getColor(context, R.color.blue))
+            setOnClickListener { openLink() }
         }
     }
 
